@@ -38,16 +38,22 @@
     .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
     header { position: sticky; top: 0; backdrop-filter: blur(8px); background: color-mix(in srgb, var(--bg) 80%, transparent); border-bottom: 1px solid var(--border); z-index: 10; }
     .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-
-    /* BRAND (updated to use your actual icon) */
-    .brand { display: inline-flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .3px; color: var(--fg); text-decoration: none; }
-    .brand:focus-visible { outline: 3px solid var(--focus); outline-offset: 4px; border-radius: 10px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .3px; }
+    .logo {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+    /* Real logo image (new) */
     .logo-icon {
-      width: 32px; height: 32px; border-radius: 8px; object-fit: cover;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      object-fit: cover;
       box-shadow: 0 6px 16px var(--shadow);
       display: block;
     }
-
+    .brand .logo { display: none; }
     .links a { margin: 0 10px; font-size: 15px; color: var(--muted); }
     .links a.active { color: var(--fg); }
     .cta { display: inline-block; padding: 10px 16px; background: var(--brand); color: #061222; border-radius: 10px; font-weight: 700; }
@@ -74,13 +80,9 @@
     @media (max-width: 900px) {
       .hero { grid-template-columns: 1fr; }
       .features, .how, .footer-grid { grid-template-columns: 1fr; }
-      .links { display: none; } /* optional: hide the nav links on small screens */
     }
     /* Accessibility */
     :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
-    @media (prefers-color-scheme: light) {
-      .brand { color: #111; }
-    }
   </style>
   <script type="application/ld+json">
   {
@@ -103,11 +105,12 @@
 <body>
   <header>
     <div class="container nav">
-      <!-- UPDATED: real logo image + accessible brand link -->
-      <a class="brand" href="/" aria-label="Playlister home">
-        <img src="playlister-icon.png" alt="Playlister logo" class="logo-icon" width="32" height="32" loading="eager" decoding="async">
+      <div class="brand" aria-label="Playlister">
+        <div class="logo" aria-hidden="true"></div>
+        <img src="playlister-icon.png" alt="Playlister logo" class="logo-icon" width="28" height="28" loading="eager" decoding="async"
+             onerror="this.style.display='none'; this.previousElementSibling.style.display='block'">
         <span>Playlister</span>
-      </a>
+      </div>
       <nav class="links" aria-label="Primary">
         <a href="#features" class="active">Features</a>
         <a href="#how">How it Works</a>

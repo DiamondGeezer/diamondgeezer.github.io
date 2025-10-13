@@ -1,0 +1,197 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Playlister — Transfer playlists across music services</title>
+  <meta name="description" content="Playlister by Hagerlabs, LLC helps you transfer and manage playlists across music services like Apple Music and Spotify.">
+  <meta name="theme-color" content="#111111">
+  <link rel="canonical" href="https://hagerlabs.github.io/">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Playlister">
+  <meta property="og:description" content="Transfer playlists across music services. Fast matching, clean reports, zero tracking.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hagerlabs.github.io/">
+  <meta property="og:image" content="">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Playlister">
+  <meta name="twitter:description" content="Transfer playlists across music services. Fast matching, clean reports, zero tracking.">
+  <meta name="twitter:image" content="">
+  <style>
+    :root {
+      --bg: #0b0b0c;
+      --fg: #f2f3f5;
+      --muted: #c8cbd1;
+      --brand: #5bb0ff;
+      --card: #141518;
+      --border: #24262b;
+      --accent: #9ef0a9;
+      --link: #9ecbff;
+      --focus: #ffee88;
+      --shadow: rgba(0,0,0,.4);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover, a:focus { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    header { position: sticky; top: 0; backdrop-filter: blur(8px); background: color-mix(in srgb, var(--bg) 80%, transparent); border-bottom: 1px solid var(--border); z-index: 10; }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .3px; }
+    .logo {
+      width: 28px; height: 28px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--brand), var(--accent));
+      box-shadow: 0 6px 16px var(--shadow);
+    }
+    .links a { margin: 0 10px; font-size: 15px; color: var(--muted); }
+    .links a.active { color: var(--fg); }
+    .cta { display: inline-block; padding: 10px 16px; background: var(--brand); color: #061222; border-radius: 10px; font-weight: 700; }
+    .hero { padding: 72px 0 36px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: center; }
+    .hero h1 { font-size: clamp(32px, 5vw, 54px); line-height: 1.05; margin: 0 0 12px; }
+    .hero p.lead { font-size: clamp(16px, 2.2vw, 20px); color: var(--muted); margin: 0 0 20px; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px var(--shadow); }
+    .screenshot { width: 100%; aspect-ratio: 16/10; background: radial-gradient(120% 120% at 20% 20%, #1a1f29, #0f1217); border-radius: 12px; border: 1px solid var(--border); display: grid; place-items: center; color: var(--muted); font-size: 14px; }
+    .badges { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+    .badge { padding: 8px 12px; background: #0f1720; border: 1px solid var(--border); color: var(--muted); border-radius: 999px; font-size: 13px; }
+    section { padding: 44px 0; }
+    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .feature h3 { margin: 10px 0 6px; font-size: 18px; }
+    .feature p { margin: 0; color: var(--muted); font-size: 15px; }
+    .how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: step; }
+    .step { border-left: 2px solid var(--brand); padding: 12px 12px 12px 14px; border-radius: 8px; background: #0e1116; }
+    .step h4::before { counter-increment: step; content: counter(step) ". "; color: var(--brand); }
+    .faq details { background: #0e1116; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
+    .faq summary { cursor: pointer; font-weight: 600; }
+    footer { border-top: 1px solid var(--border); color: var(--muted); }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; padding-bottom: 40px; }
+    .small { font-size: 13px; color: var(--muted); }
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .features, .how, .footer-grid { grid-template-columns: 1fr; }
+    }
+    /* Accessibility */
+    :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"SoftwareApplication",
+    "name":"Playlister",
+    "applicationCategory":"MobileApplication",
+    "operatingSystem":"iOS",
+    "author":{"@type":"Organization","name":"Hagerlabs, LLC"},
+    "publisher":{"@type":"Organization","name":"Hagerlabs, LLC"},
+    "description":"Transfer playlists across music services with privacy-first matching.",
+    "url":"https://hagerlabs.github.io/",
+    "email":"wes@hagerlabs.com"
+  }
+  </script>
+  <meta name="google-site-verification" content="xrjIY6NJHoZxr3_VSrnlTdqZjvVYcYp83ckXcYegn8s" />
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="brand" aria-label="Playlister">
+        <div class="logo" role="img" aria-label="Playlister logo"></div>
+        <span>Playlister</span>
+      </div>
+      <nav class="links" aria-label="Primary">
+        <a href="#features" class="active">Features</a>
+        <a href="#how">How it Works</a>
+        <a href="#faq">FAQ</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a class="cta" href="#download">Get the App</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div>
+        <h1>Transfer playlists across music services</h1>
+        <p class="lead">Playlister helps you move and manage playlists between Apple Music, Spotify, and more — with fast matching, clean reports, and privacy-first design.</p>
+        <div id="download" class="badges" aria-label="Download badges">
+          <a class="badge" href="#" aria-label="Download on the App Store (coming soon)">App Store (coming soon)</a>
+          <a class="badge" href="mailto:wes@hagerlabs.com">Contact Support</a>
+          <a class="badge" href="privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="screenshot" aria-hidden="true">App screenshots appear here</div>
+      </div>
+    </section>
+
+    <section id="features" class="container">
+      <h2>Why Playlister</h2>
+      <div class="features">
+        <div class="feature card">
+          <h3>Fast, accurate matching</h3>
+          <p>Robust matching engine tuned for titles, artists, remasters, and regional variants.</p>
+        </div>
+        <div class="feature card">
+          <h3>Clear reports</h3>
+          <p>See which tracks matched, which were ignored, and actionable reasons for mis-matches.</p>
+        </div>
+        <div class="feature card">
+          <h3>Privacy-first</h3>
+          <p>No ad SDKs, no third‑party trackers. Minimal data collection required to operate.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" class="container">
+      <h2>How it works</h2>
+      <div class="how">
+        <div class="step">
+          <h4>Connect your services</h4>
+          <p class="small">Authenticate with Apple Music, Spotify, and others using secure tokens.</p>
+        </div>
+        <div class="step">
+          <h4>Select playlists</h4>
+          <p class="small">Pick the lists you want to move or mirror. We read metadata as needed.</p>
+        </div>
+        <div class="step">
+          <h4>Review & confirm</h4>
+          <p class="small">Check the matches, make edits if you like, then transfer with one tap.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="faq" class="container faq">
+      <h2>FAQ</h2>
+      <details>
+        <summary>Do you store my music library?</summary>
+        <div class="small">No. We read metadata to perform transfers and keep only what’s required temporarily to complete the task.</div>
+      </details>
+      <details>
+        <summary>Which services are supported?</summary>
+        <div class="small">Apple Music and Spotify at launch, with others to follow.</div>
+      </details>
+      <details>
+        <summary>How do I get help?</summary>
+        <div class="small">Email <a href="mailto:wes@hagerlabs.com">wes@hagerlabs.com</a> and we’ll get back to you quickly.</div>
+      </details>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <strong>Hagerlabs, LLC</strong><br>
+        <span class="small">Austin, Texas · <a href="mailto:wes@hagerlabs.com">wes@hagerlabs.com</a></span>
+      </div>
+      <div class="small">
+        <a href="privacy.html">Privacy Policy</a><br>
+        <a href="terms.html">Terms of Service</a>
+      </div>
+      <div class="small">
+        <span>© 2025 Hagerlabs, LLC</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

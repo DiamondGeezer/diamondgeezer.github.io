@@ -1,0 +1,74 @@
+{
+  "brandName": "Mixport",
+
+  "assets": {
+    "gradients": {
+      "gradient0": "assets/gradients/gradient_0.png",
+      "gradient1": "assets/gradients/gradient_1.png",
+      "gradient2": "assets/gradients/gradient_2.png",
+      "gradient3": "assets/gradients/gradient_3.png"
+    },
+    "icons": {
+      "premium1": "assets/icons/icon_1.png",
+      "premium2": "assets/icons/icon_2.png",
+      "premium3": "assets/icons/icon_3.png",
+      "glyphTransparent": "assets/icons/icon_transparent.png"
+    },
+    "mockups": {
+      "iphoneEn1": "assets/mockups/iPhone_en_1.PNG",
+      "iphoneEn2": "assets/mockups/iPhone_en_2.PNG",
+      "iphoneEn3": "assets/mockups/iPhone_en_3.PNG",
+      "iphoneEn4": "assets/mockups/iPhone_en_4.PNG",
+      "iphoneEn5": "assets/mockups/iPhone_en_5.PNG",
+      "iphoneEn6": "assets/mockups/iPhone_en_6.PNG"
+    },
+    "screenshots": {
+      "screenshot1": "assets/screenshots/screenshot1.png"
+    },
+    "svgs": {
+      "downloadOnAppStore": "assets/svgs/downloadOnAppStore.svg"
+    },
+    "perks": {
+      "perk0": "assets/perks/perk0.png",
+      "perk1": "assets/perks/perk1.png",
+      "perk2": "assets/perks/perk2.png",
+      "perk3": "assets/perks/perk3.png",
+      "perk4": "assets/perks/perk4.png",
+      "perk5": "assets/perks/perk5.png",
+      "perk6": "assets/perks/perk6.png",
+      "perk7": "assets/perks/perk7.png",
+      "perk8": "assets/perks/perk8.png",
+      "perk9": "assets/perks/perk9.png",
+      "perk10": "assets/perks/perk10.png",
+      "perk11": "assets/perks/perk11.png",
+    }
+  },
+
+  "homepage": {
+    "gradientMap": {
+      "hero": "gradient0",
+      "automaticSync": "gradient1",
+      "monitoring": "gradient2",
+      "finalCTA": "gradient3"
+    },
+    "iconUsage": {
+      "favicon": "glyphTransparent",
+      "heroAccent": "premium1",
+      "featureAccent": "premium2"
+    },
+    "mockupUsage": {
+      "howItWorks": ["iphoneEn1", "iphoneEn2", "iphoneEn3"],
+      "automaticSync": ["iphoneEn4", "iphoneEn5"],
+      "monitoring": ["iphoneEn6"]
+    }
+  },
+
+  "rules": {
+    "allowOnlyListedAssets": true,
+    "doNotInventGradients": true,
+    "doNotInventIcons": true,
+    "doNotInventMockups": true,
+    "preferSystemFonts": true,
+    "respectPrefersReducedMotion": true
+  }
+}

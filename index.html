@@ -1,218 +1,242 @@
-
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mixport — Transfer playlists across music services</title>
-  <meta name="description" content="Mixport by Hagerlabs, LLC helps you transfer and manage playlists across music services like Apple Music, Spotify, YouTube Music, and Amazon Music.">
-  <meta name="theme-color" content="#111111">
-  <link rel="canonical" href="https://www.hagerlabs.com">
-  <!-- Open Graph -->
-  <meta property="og:title" content="Mixport">
-  <meta property="og:description" content="Transfer playlists across music services. Fast matching, clean reports, zero tracking.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://www.hagerlabs.com/">
-  <meta property="og:image" content="">
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Mixport">
-  <meta name="twitter:description" content="Transfer playlists across music services. Fast matching, clean reports, zero tracking.">
-  <meta name="twitter:image" content="">
-  <style>
-    :root {
-      --bg: #0b0b0c;
-      --fg: #f2f3f5;
-      --muted: #c8cbd1;
-      --brand: #5bb0ff;
-      --card: #141518;
-      --border: #24262b;
-      --accent: #9ef0a9;
-      --link: #9ecbff;
-      --focus: #ffee88;
-      --shadow: rgba(0,0,0,.4);
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
-    a { color: var(--link); text-decoration: none; }
-    a:hover, a:focus { text-decoration: underline; }
-    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
-    header { position: sticky; top: 0; backdrop-filter: blur(8px); background: color-mix(in srgb, var(--bg) 80%, transparent); border-bottom: 1px solid var(--border); z-index: 10; }
-    .nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-    .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; letter-spacing: .3px; }
-    .logo {
-      width: 28px; height: 28px; border-radius: 8px;
-      background: linear-gradient(135deg, var(--brand), var(--accent));
-      box-shadow: 0 6px 16px var(--shadow);
-    }
-    .logo-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      object-fit: cover;
-      box-shadow: 0 6px 16px var(--shadow);
-      display: block;
-    }
-    .brand .logo { display: none; }
-    .links a { margin: 0 10px; font-size: 15px; color: var(--muted); }
-    .links a.active { color: var(--fg); }
-    .cta { display: inline-block; padding: 10px 16px; background: var(--brand); color: #061222; border-radius: 10px; font-weight: 700; }
-    .hero { padding: 72px 0 36px; display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 28px; align-items: center; }
-    .hero h1 { font-size: clamp(32px, 5vw, 54px); line-height: 1.05; margin: 0 0 12px; }
-    .hero p.lead { font-size: clamp(16px, 2.2vw, 20px); color: var(--muted); margin: 0 0 20px; }
-    .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; box-shadow: 0 8px 24px var(--shadow); }
-    .screenshot-gallery {
-      display: flex;
-      gap: 10px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      padding: 10px;
-      background: radial-gradient(120% 120% at 20% 20%, #1a1f29, #0f1217);
-    }
-    .screenshot-gallery img {
-      height: 360px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      flex-shrink: 0;
-      scroll-snap-align: start;
-      box-shadow: 0 4px 10px var(--shadow);
-      object-fit: cover;
-    }
-    .badges { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
-    .badge { padding: 8px 12px; background: #0f1720; border: 1px solid var(--border); color: var(--muted); border-radius: 999px; font-size: 13px; }
-    section { padding: 44px 0; }
-    .features { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-    .feature h3 { margin: 10px 0 6px; font-size: 18px; }
-    .feature p { margin: 0; color: var(--muted); font-size: 15px; }
-    .how { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; counter-reset: step; }
-    .step { border-left: 2px solid var(--brand); padding: 12px 12px 12px 14px; border-radius: 8px; background: #0e1116; }
-    .step h4::before { counter-increment: step; content: counter(step) ". "; color: var(--brand); }
-    .faq details { background: #0e1116; border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin-bottom: 10px; }
-    .faq summary { cursor: pointer; font-weight: 600; }
-    footer { border-top: 1px solid var(--border); color: var(--muted); }
-    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 16px; padding-bottom: 40px; }
-    .small { font-size: 13px; color: var(--muted); }
-    @media (max-width: 900px) {
-      .hero { grid-template-columns: 1fr; }
-      .features, .how, .footer-grid { grid-template-columns: 1fr; }
-      .screenshot-gallery img { height: 240px; }
-    }
-    :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 6px; }
-  </style>
-  <meta name="google-site-verification" content="xrjIY6NJHoZxr3_VSrnlTdqZjvVYcYp83ckXcYegn8s" />
-  <link rel="icon" type="image/png" href="playlister-icon.png">
-  <link rel="apple-touch-icon" href="playlister-icon.png">
+  <title>Mixport — Transfer and Sync Playlists</title>
+  <link rel="stylesheet" href="assets/gradients/gradients.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="assets/icons/icon_transparent.png">
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <div class="brand" aria-label="Mixport">
-        <div class="logo" aria-hidden="true"></div>
-        <img src="playlister-icon.png" alt="Mixport logo" class="logo-icon" width="28" height="28"
-             onerror="this.style.display='none'; this.previousElementSibling.style.display='block'">
+  <header class="site-header">
+    <div class="container nav-shell">
+      <a class="logo" href="#top" aria-label="Mixport">
+        <img class="logo-icon" src="assets/icons/icon_1.png" alt="">
         <span>Mixport</span>
-      </div>
-      <nav class="links" aria-label="Primary">
-        <a href="#features" class="active">Features</a>
-        <a href="#how">How it Works</a>
-        <a href="#faq">FAQ</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
-        <a class="cta" href="#download">Get the App</a>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#how-it-works">How it works</a>
+        <a href="#automatic-sync">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#support">Support</a>
+        <a class="button header-cta" href="#download">Download</a>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="hero container">
-      <div>
-        <h1>Transfer playlists across music services</h1>
-        <p class="lead">Mixport helps you move and manage playlists between Apple Music, Spotify, YouTube Music, Amazon Music and more — with fast matching, clean reports, and privacy-first design.</p>
-        <div id="download" class="badges" aria-label="Download badges">
-          <a class="badge" href="#" aria-label="Download on the App Store (coming soon)">App Store (coming soon)</a>
-          <a class="badge" href="mailto:support@hagerlabs.com">Contact Support</a>
-          <a class="badge" href="privacy.html">Privacy Policy</a>
+  <main id="top">
+    <section class="section hero gradient-bg gradient-hero" id="hero">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1><span class="hero-title-highlight">Your Music.</span> Wherever you listen.</h1>
+          <p class="hero-subtitle">Use Mixport to transfer music playlists across streaming platforms and share them with your friends.</p>
+          <div class="cta-row">
+            <a class="app-store-badge" href="#download" aria-label="Download on the App Store">
+              <img src="assets/svgs/downloadOnAppStore.svg" alt="Download on the App Store">
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <img class="hero-screenshot" src="assets/screenshots/screenshot1.png" alt="">
         </div>
       </div>
-      <div class="card">
-        <div class="screenshot-gallery" aria-label="App Screenshots">
-          <img src="screenshot1.png" alt="Playlister app screenshot 1">
-          <img src="screenshot2.png" alt="Playlister app screenshot 2">
-          <img src="screenshot3.png" alt="Playlister app screenshot 3">
-          <img src="screenshot4.png" alt="Playlister app screenshot 4">
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="container">
-      <h2>Why Mixport</h2>
-      <div class="features">
-        <div class="feature card">
-          <h3>Fast, accurate matching</h3>
-          <p>Robust matching engine tuned for titles, artists, remasters, and regional variants.</p>
-        </div>
-        <div class="feature card">
-          <h3>Clear reports</h3>
-          <p>See which tracks matched, which were ignored, and actionable reasons for mis-matches.</p>
-        </div>
-        <div class="feature card">
-          <h3>Privacy-first</h3>
-          <p>No ad SDKs, no third-party trackers. Minimal data collection required to operate.</p>
-        </div>
+      <div class="hero-wave" aria-hidden="true">
+        <svg viewBox="0 0 1440 42" preserveAspectRatio="none" role="presentation">
+          <path d="M0,1 C180,1 180,41 360,41 C540,41 540,1 720,1 C900,1 900,41 1080,41 C1260,41 1260,1 1440,1 L1440,42 L0,42 Z" fill="#000000"></path>
+        </svg>
       </div>
     </section>
 
-    <section id="how" class="container">
-      <h2>How it works</h2>
-      <div class="how">
-        <div class="step">
-          <h4>Connect your services</h4>
-          <p class="small">Authenticate with Apple Music, Spotify, YouTube Music, Amazon Music and others using secure tokens.</p>
+    <div class="page-body">
+      <div class="container black-lede">
+        <p>Mixport is the <em>easiest</em> way to...</p>
+      </div>
+      <div class="container perks-row" aria-label="Mixport perks">
+        <div class="perk-item">
+          <img src="assets/perks/perk9.png" alt="Transfer your music">
+          <h3>Transfer your music</h3>
+          <p>Transfer the music you love to the music provider you want.</p>
         </div>
-        <div class="step">
-          <h4>Select playlists</h4>
-          <p class="small">Pick the lists you want to move or mirror. We read metadata as needed.</p>
+        <div class="perk-item">
+          <img src="assets/perks/perk10.png" alt="Share your playlists">
+          <h3>Share your playlists</h3>
+          <p>Share playlists with anyone, regardless of their music streaming platform.</p>
         </div>
-        <div class="step">
-          <h4>Review & confirm</h4>
-          <p class="small">Check the matches, make edits if you like, then transfer with one tap.</p>
+        <div class="perk-item">
+          <img src="assets/perks/perk11.png" alt="Keep playlists in sync">
+          <h3>Keep playlists in sync</h3>
+          <p>Sync additions from your playlist to your destination music streaming platform.</p>
         </div>
       </div>
-    </section>
+      <section class="section" id="what-you-can-transfer">
+      <div class="container">
+        <div class="section-heading">
+          <h2>What you can transfer</h2>
+        </div>
+        <div class="card-grid">
+          <article class="card">
+            <h3>Playlists</h3>
+          </article>
+          <article class="card">
+            <h3>Albums</h3>
+          </article>
+          <article class="card">
+            <h3>Tracks</h3>
+          </article>
+          <article class="card">
+            <h3>Cross service support</h3>
+          </article>
+        </div>
+      </div>
+      </section>
 
-    <section id="faq" class="container faq">
-      <h2>FAQ</h2>
-      <details>
-        <summary>Do you store my music library?</summary>
-        <div class="small">No. We read metadata to perform transfers and keep only what’s required temporarily to complete the task.</div>
-      </details>
-      <details>
-        <summary>Which services are supported?</summary>
-        <div class="small">Apple Music, Spotify, YouTube Music, Amazon Music at launch, with others to follow.</div>
-      </details>
-      <details>
-        <summary>How do I get help?</summary>
-        <div class="small">Email <a href="mailto:wes@hagerlabs.com">support@hagerlabs.com</a> and we’ll get back to you quickly.</div>
-      </details>
-    </section>
+      <section class="section" id="how-it-works">
+      <div class="container">
+        <div class="section-heading">
+          <h2>How it works</h2>
+        </div>
+        <div class="how-stack">
+          <div class="how-item">
+            <figure class="mockup-frame">
+              <img src="assets/mockups/iPhone_en_1.PNG" alt="Mixport app screenshot" loading="lazy">
+            </figure>
+            <div class="how-copy">
+              <span class="step-number">01</span>
+              <h3>Connect your music services</h3>
+            </div>
+          </div>
+          <div class="how-item reverse">
+            <figure class="mockup-frame">
+              <img src="assets/mockups/iPhone_en_2.PNG" alt="Mixport app screenshot" loading="lazy">
+            </figure>
+            <div class="how-copy">
+              <span class="step-number">02</span>
+              <h3>Choose what to transfer or sync</h3>
+            </div>
+          </div>
+          <div class="how-item">
+            <figure class="mockup-frame">
+              <img src="assets/mockups/iPhone_en_3.PNG" alt="Mixport app screenshot" loading="lazy">
+            </figure>
+            <div class="how-copy">
+              <span class="step-number">03</span>
+              <h3>Mixport handles the rest automatically</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      </section>
+
+      <section class="section split-section gradient-glow gradient-auto-sync" id="automatic-sync">
+      <div class="container split-grid">
+        <div class="split-copy">
+          <div class="section-heading">
+            <h2>Automatic playlist sync</h2>
+          </div>
+          <ul class="feature-list">
+            <li>Ongoing synchronization.</li>
+            <li>Changes on one service update everywhere.</li>
+            <li>No rebuilding playlists.</li>
+          </ul>
+        </div>
+        <div class="split-visual">
+          <div class="mockup-frame">
+            <img src="assets/mockups/iPhone_en_4.PNG" alt="Mixport sync screenshot" loading="lazy">
+            <img class="mockup-hidden" src="assets/mockups/iPhone_en_5.PNG" alt="" aria-hidden="true">
+          </div>
+        </div>
+      </div>
+      </section>
+
+      <section class="section split-section gradient-glow gradient-monitor" id="monitoring">
+      <div class="container split-grid">
+        <div class="split-copy">
+          <div class="section-heading">
+            <h2>Monitor and keep playlists aligned</h2>
+          </div>
+          <ul class="feature-list">
+            <li>Continuous monitoring.</li>
+            <li>Background updates.</li>
+            <li>Designed for evolving playlists.</li>
+          </ul>
+        </div>
+        <div class="split-visual">
+          <div class="mockup-frame">
+            <img src="assets/mockups/iPhone_en_6.PNG" alt="Mixport monitoring screenshot" loading="lazy">
+          </div>
+        </div>
+      </div>
+      </section>
+
+      <section class="section" id="support">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Supported services</h2>
+        </div>
+        <div class="service-grid">
+          <div class="service">Spotify</div>
+          <div class="service">Apple Music</div>
+          <div class="service">YouTube Music</div>
+          <div class="service">Others as supported</div>
+        </div>
+      </div>
+      </section>
+
+      <section class="section" id="pricing">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Pricing</h2>
+        </div>
+        <div class="pricing-grid">
+          <article class="pricing-card">
+            <h3>Free</h3>
+            <p>Free tier overview.</p>
+          </article>
+          <article class="pricing-card highlight">
+            <h3>Pro</h3>
+            <p>Pro features with sync and automation value.</p>
+          </article>
+        </div>
+      </div>
+      </section>
+
+      <section class="section" id="trust">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Trust and reliability</h2>
+        </div>
+        <ul class="trust-list">
+          <li>Accuracy</li>
+          <li>Safe connections</li>
+          <li>Built for reliability</li>
+        </ul>
+      </div>
+      </section>
+
+      <section class="section final-cta gradient-bg gradient-final-cta" id="download">
+      <div class="container">
+        <h2>Download Mixport</h2>
+        <p>Start transferring and syncing.</p>
+        <a class="app-store-badge" href="#top" aria-label="Download on the App Store">
+          <img src="assets/svgs/downloadOnAppStore.svg" alt="Download on the App Store">
+        </a>
+      </div>
+      </section>
+    </div>
   </main>
 
-  <footer>
+  <footer class="site-footer" id="footer">
     <div class="container footer-grid">
-      <div>
-        <strong>Hagerlabs, LLC</strong><br>
-        <span class="small">Austin, Texas · <a href="mailto:wes@hagerlabs.com">support@hagerlabs.com</a></span>
-      </div>
-      <div class="small">
-        <a href="privacy.html">Privacy Policy</a><br>
-        <a href="terms.html">Terms of Service</a>
-      </div>
-      <div class="small">
-        <span>© 2025 Hagerlabs, LLC</span>
-      </div>
+      <p class="footer-brand">© 2026 Hagerlabs, LLC. All Rights Reserved</p>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="privacy.html">View Privacy Policy</a>
+        <span aria-hidden="true">|</span>
+        <a href="terms.html">View Terms of Service</a>
+      </nav>
     </div>
   </footer>
+
+  <script src="main.js"></script>
 </body>
 </html>

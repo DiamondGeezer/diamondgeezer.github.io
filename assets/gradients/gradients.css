@@ -1,0 +1,53 @@
+:root {
+  /* Primary brand gradients (PNG-backed) */
+
+  --gradient-0: url("./gradient_0.png");
+  --gradient-1: url("./gradient_1.png");
+  --gradient-2: url("./gradient_2.png");
+  --gradient-3: url("./gradient_3.png");
+
+  /* Default gradient assignments */
+  --gradient-hero: var(--gradient-0);
+  --gradient-auto-sync: var(--gradient-1);
+  --gradient-monitor: var(--gradient-2);
+  --gradient-final-cta: var(--gradient-3);
+}
+
+/* Utility classes for applying gradients */
+
+.gradient-bg {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.gradient-hero {
+  background-image: var(--gradient-hero);
+}
+
+.gradient-auto-sync {
+  background-image: var(--gradient-auto-sync);
+}
+
+.gradient-monitor {
+  background-image: var(--gradient-monitor);
+}
+
+.gradient-final-cta {
+  background-image: var(--gradient-final-cta);
+}
+
+/* Optional subtle glow overlay for depth */
+.gradient-glow::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background-image: inherit;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  opacity: 0.35;
+  filter: blur(80px);
+  z-index: -1;
+  pointer-events: none;
+}

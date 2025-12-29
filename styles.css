@@ -587,7 +587,7 @@ img {
   }
 
   body {
-    background-size: 2000px auto; /* keep background tall enough at mobile-wide */
+    background-size: 2600px auto; /* keep background tall enough at mobile-wide */
   }
 
   .hero {
@@ -654,6 +654,10 @@ img {
   .hero-screenshot {
     margin: 0 auto;
   }
+
+  .ios-fixed-bg body::before {
+    background-size: 2600px auto;
+  }
 }
 
 @media (max-width: 480px) {
@@ -700,7 +704,7 @@ img {
 
 @media (max-width: 540px) {
   body {
-    background-size: 1800px auto; /* ensure background still covers under wave on narrow screens */
+    background-size: 2400px auto; /* ensure background still covers under wave on narrow screens */
   }
 
   .layout-tag {
@@ -712,7 +716,7 @@ img {
   }
 
   .ios-fixed-bg body::before {
-    background-size: 1800px auto;
+    background-size: 2400px auto;
   }
 }
 

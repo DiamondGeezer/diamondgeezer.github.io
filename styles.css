@@ -185,7 +185,7 @@ img {
   margin-top: 0;
   left: 0;
   right: 0;
-  bottom: 114px; /* moved up by 114px */
+  bottom: 113px; /* moved up by 114px */
   pointer-events: none;
 }
 .hero-wave svg {
@@ -321,6 +321,17 @@ img {
   transform: translateY(-20px);
 }
 
+@media (max-width: 625px) {
+  .perks-row {
+    grid-template-columns: repeat(2, minmax(160px, 1fr));
+  }
+
+  .perk-item:nth-child(3) {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
 
 .card-grid {
   display: grid;
@@ -345,31 +356,6 @@ img {
   font-size: 0.9rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-}
-
-.how-stack {
-  display: grid;
-  gap: 3rem;
-}
-
-.how-item {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 2.5rem;
-  align-items: center;
-}
-
-.how-item.reverse {
-  direction: rtl;
-}
-
-.how-item.reverse > * {
-  direction: ltr;
-}
-
-.how-copy {
-  display: grid;
-  gap: 0.6rem;
 }
 
 .mockup-row {
@@ -414,6 +400,203 @@ img {
 
 .mockup-hidden {
   display: none;
+}
+
+.how-cards {
+  display: grid;
+  gap: 2rem;
+}
+
+.how-card {
+  position: relative;
+  background-image: url("assets/cards/card1.png");
+  background-size: cover;
+  background-position: center;
+  border-radius: 32px;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.4);
+  aspect-ratio: 2124 / 1086;
+  overflow: hidden;
+}
+
+.how-card-inner {
+  position: absolute;
+  inset: 0;
+  padding: clamp(1.6rem, 3vw, 2.8rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: clamp(1.4rem, 3vw, 2.6rem);
+  align-items: center;
+}
+
+.how-card-content {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.how-step {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 2px solid #7fd0ff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #7fd0ff;
+  background: rgba(255, 255, 255, 0.05);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.how-text {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.how-text h3 {
+  font-size: 1.45rem;
+}
+
+.how-text p {
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 1.08rem;
+}
+
+.how-card-visual {
+  height: 100%;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 50px;
+  align-self: stretch;
+}
+
+.how-card-clip {
+  position: relative;
+  width: 100%;
+  height: calc(105% + 140px);
+  margin-bottom: -140px;
+  overflow: hidden;
+}
+
+.how-card-clip img {
+  position: absolute;
+  right: 0;
+  bottom: -35px;
+  height: 105%;
+  width: auto;
+  max-width: none;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  /* keep desktop/tablet layout; no single-column shift here */
+}
+
+@media (max-width: 768px) {
+  .how-card {
+    background-image: url("assets/cards/card_small.png");
+    aspect-ratio: 1426 / 1092;
+  }
+
+  .how-card-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 0.35rem 1rem 0.9rem;
+    gap: 0;
+  }
+
+  .how-card-content {
+    justify-content: flex-start;
+    gap: 0.45rem;
+    width: 100%;
+  }
+
+  .how-card-visual {
+    width: 100%;
+    padding-right: 0;
+    margin-top: 20px;
+    align-self: stretch;
+  }
+
+  .how-card-clip {
+    height: 115%;
+    margin-bottom: -115px;
+  }
+
+  .how-card-clip img {
+    right: 50%;
+    transform: translateX(50%);
+    height: 95%;
+    top: 0;
+    bottom: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .how-card {
+    border-radius: 24px;
+    aspect-ratio: 920 / 1146;
+  }
+
+  .how-card-inner {
+    padding: 1rem;
+    gap: 0.35rem;
+  }
+
+  .how-text h3 {
+    font-size: 1.3rem;
+  }
+
+  .how-text p {
+    font-size: 1.05rem;
+  }
+
+  .how-card-clip {
+    height: 115%;
+    margin-bottom: -115px;
+  }
+
+  .how-card-clip img {
+    height: 95%;
+    top: 0;
+    bottom: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .how-card-inner {
+    padding: 1.2rem;
+    gap: 1rem;
+  }
+
+  .how-text h3 {
+    font-size: 1.2rem;
+  }
+
+  .how-step {
+    width: 50px;
+    height: 50px;
+    font-size: 1.05rem;
+    line-height: 1;
+  }
+
+  .how-card-clip {
+    height: 110%;
+    margin-bottom: -110px;
+  }
+
+  .how-card-clip img {
+    height: 90%;
+    bottom: -40px;
+    right: 50%;
+    transform: translateX(50%);
+    top: 0;
+  }
 }
 
 .service-grid {
@@ -559,7 +742,7 @@ img {
   }
 
   .hero-wave {
-    bottom: 114px; /* align with desktop position to avoid jump */
+    bottom: 113px; /* align with desktop position to avoid jump */
   }
 
   .page-body {

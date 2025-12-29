@@ -26,6 +26,12 @@ body {
   color: var(--text);
   line-height: 1.6;
   font-size: 0.96rem;
+  position: relative;
+  z-index: 0;
+}
+
+.ios-fixed-bg body {
+  background-attachment: scroll;
 }
 
 a {
@@ -532,6 +538,20 @@ img {
   border: 0;
 }
 
+.ios-fixed-bg body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: #000 url("assets/backgrounds/background.png") no-repeat center top;
+  background-size: 2000px auto;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.ios-fixed-bg body {
+  background: transparent;
+}
+
 @media (max-width: 900px) {
   .hero {
     min-height: auto;
@@ -689,6 +709,10 @@ img {
 
   .layout-tag::after {
     content: "M (S)";
+  }
+
+  .ios-fixed-bg body::before {
+    background-size: 1800px auto;
   }
 }
 

@@ -22,3 +22,12 @@
   window.addEventListener('resize', updateLabel, { passive: true });
   updateLabel();
 })();
+
+// Detect iOS WebKit (mobile Safari) to simulate fixed background via overlay
+(() => {
+  const ua = navigator.userAgent || '';
+  const isIOSWebKit = /iP(hone|od|ad).+AppleWebKit/i.test(ua);
+  if (isIOSWebKit) {
+    document.documentElement.classList.add('ios-fixed-bg');
+  }
+})();

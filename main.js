@@ -5,7 +5,9 @@
   const updateLabel = () => {
     const w = Math.round(window.innerWidth);
     let prefix = 'D';
-    if (w <= 540) {
+    if (w <= 480) {
+      prefix = 'M (T)';
+    } else if (w <= 540) {
       prefix = 'M (S)';
     } else if (w <= 768) {
       prefix = 'M (L)';

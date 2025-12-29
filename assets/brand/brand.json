@@ -15,12 +15,12 @@
       "glyphTransparent": "assets/icons/icon_transparent.png"
     },
     "mockups": {
-      "iphoneEn1": "assets/mockups/iPhone_en_1.png",
-      "iphoneEn2": "assets/mockups/iPhone_en_2.png",
-      "iphoneEn3": "assets/mockups/iPhone_en_3.png",
-      "iphoneEn4": "assets/mockups/iPhone_en_4.png",
-      "iphoneEn5": "assets/mockups/iPhone_en_5.png",
-      "iphoneEn6": "assets/mockups/iPhone_en_6.png"
+      "iphoneEn1": "assets/mockups/iPhone_en_1.PNG",
+      "iphoneEn2": "assets/mockups/iPhone_en_2.PNG",
+      "iphoneEn3": "assets/mockups/iPhone_en_3.PNG",
+      "iphoneEn4": "assets/mockups/iPhone_en_4.PNG",
+      "iphoneEn5": "assets/mockups/iPhone_en_5.PNG",
+      "iphoneEn6": "assets/mockups/iPhone_en_6.PNG"
     },
     "screenshots": {
       "screenshot1": "assets/screenshots/screenshot1.png"
@@ -41,7 +41,11 @@
       "perk9": "assets/perks/perk9.png",
       "perk10": "assets/perks/perk10.png",
       "perk11": "assets/perks/perk11.png",
-    }
+    },
+    "cards": {
+      "card1": "assets/cards/card1.png",
+      "card_small": "assets/cards/card_small.png"
+    },
   },
 
   "homepage": {

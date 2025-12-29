@@ -224,6 +224,19 @@ img {
   margin-top: 2.84rem;
 }
 
+.layout-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--outline);
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: var(--text);
+  opacity: 0.3; /* 30% opaque */
+  letter-spacing: 0.02em;
+}
+
 .hero-screenshot {
   max-width: 292px;
   width: 90%;
@@ -548,6 +561,10 @@ img {
 }
 
 @media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
   body {
     background-size: 2000px auto; /* keep background tall enough at mobile-wide */
   }

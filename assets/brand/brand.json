@@ -50,8 +50,8 @@
       "perk11": "assets/perks/perk11.png",
     },
     "cards": {
-      "card1": "assets/cards/card1.png",
-      "card_small": "assets/cards/card_small.png"
+      "card1": "assets/cards/card1.jpg",
+      "card_small": "assets/cards/card_small.jpg"
     },
   },
 

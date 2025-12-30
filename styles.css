@@ -425,7 +425,7 @@ img {
 
 .how-card {
   position: relative;
-  background-image: url("assets/cards/card1.png");
+  background-image: url("assets/cards/card1.jpg");
   background-size: cover;
   background-position: center;
   border-radius: 32px;
@@ -512,7 +512,7 @@ img {
 
 @media (max-width: 768px) {
   .how-card {
-    background-image: url("assets/cards/card_small.png");
+    background-image: url("assets/cards/card_small.jpg");
     aspect-ratio: 1426 / 1092;
   }
 

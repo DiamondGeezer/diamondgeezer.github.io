@@ -7,12 +7,49 @@
   <title>Privacy Policy — Mixport</title>
   <meta name="description" content="Privacy Policy for Mixport by Hagerlabs, LLC">
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background: #0b0b0c; color: #f2f3f5; }
+    html, body { height: 100%; }
+    body {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background: #000;
+      background-image: url("assets/backgrounds/background.jpg");
+      background-image: image-set(
+        url("assets/backgrounds/background.heic") type("image/heic"),
+        url("assets/backgrounds/background.jpg") type("image/jpeg")
+      );
+      background-repeat: no-repeat;
+      background-position: center top;
+      background-size: 2000px auto;
+      background-attachment: fixed;
+      color: #f2f3f5;
+      position: relative;
+      z-index: 0;
+    }
+    .ios-fixed-bg body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: #000 url("assets/backgrounds/background.jpg") no-repeat center top;
+      background-image: image-set(
+        url("assets/backgrounds/background.heic") type("image/heic"),
+        url("assets/backgrounds/background.jpg") type("image/jpeg")
+      );
+      background-size: 2000px auto;
+      background-repeat: repeat-y;
+      background-position: center top;
+      height: calc(120vh + 200px + env(safe-area-inset-bottom, 0px));
+      pointer-events: none;
+      z-index: -1;
+    }
+    .ios-fixed-bg body { background: transparent; }
     .container { max-width: 900px; margin: 0 auto; padding: 24px; }
     a { color: #9ecbff; }
     h1, h2, h3 { line-height: 1.2; }
-    .card { background: #141518; border: 1px solid #24262b; border-radius: 14px; padding: 20px; }
-    header { border-bottom: 1px solid #24262b; background: #0b0b0c; position: sticky; top: 0; }
+    .card { background: rgba(20, 21, 24, 0.75); border: 1px solid rgba(36, 38, 43, 0.8); border-radius: 14px; padding: 20px; backdrop-filter: blur(4px); }
+    header { border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(10,11,14,0.28); backdrop-filter: blur(8px); position: sticky; top: 0; z-index: 10; }
+    main { position: relative; z-index: 0; }
     footer { border-top: 1px solid #24262b; color: #c8cbd1; }
     .small { color: #c8cbd1; font-size: 14px; }
   </style>
@@ -20,7 +57,9 @@
 <body>
 <header>
   <div class="container">
-    <a href="index.html">← Mixport</a>
+    <a href="index.html" style="display: inline-flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+      ← <img src="assets/icons/icon_1.png" alt="Mixport icon" style="width: 28px; height: 28px; border-radius: 26%; vertical-align: middle;"> Mixport
+    </a>
   </div>
 </header>
 <main class="container">
@@ -107,7 +146,18 @@
   </div>
 </main>
 <footer>
-  <div class="container small">© 2025 Hagerlabs, LLC</div>
+  <div class="container small">© 2026 Hagerlabs, LLC</div>
 </footer>
+<script>
+  // Detect iOS WebKit (incl. iPadOS Safari with Mac UA) to enable fixed background overlay
+  (() => {
+    const ua = navigator.userAgent || '';
+    const isIOSWebKit = /iP(hone|od|ad).+AppleWebKit/i.test(ua);
+    const isIPadMacSafari = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
+    if (isIOSWebKit || isIPadMacSafari) {
+      document.documentElement.classList.add('ios-fixed-bg');
+    }
+  })();
+</script>
 </body>
 </html>

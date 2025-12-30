@@ -910,7 +910,8 @@ img {
     url("assets/backgrounds/background.heic") type("image/heic"),
     url("assets/backgrounds/background.jpg") type("image/jpeg")
   );
-  background-size: 2600px auto;
+  background-size: auto 3200px;
+  background-repeat: repeat-y;
   pointer-events: none;
   z-index: -1;
 }
@@ -1030,7 +1031,7 @@ img {
   }
 
   .ios-fixed-bg body::before {
-    background-size: 3000px auto;
+    background-size: auto 3600px;
   }
 }
 
@@ -1091,6 +1092,6 @@ img {
   }
 
   .ios-fixed-bg body::before {
-    background-size: 3200px auto;
+    background-size: auto 4000px;
   }
 }

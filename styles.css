@@ -244,6 +244,14 @@ img {
   letter-spacing: 0.02em;
 }
 
+.layout-tag {
+  display: none;
+}
+
+.show-layout-tag .layout-tag {
+  display: inline-flex;
+}
+
 .hero-screenshot {
   max-width: 292px;
   width: 90%;

@@ -23,7 +23,10 @@
       "iphoneEn6": "assets/mockups/iPhone_en_6.PNG"
     },
     "screenshots": {
-      "screenshot1": "assets/screenshots/screenshot1.png"
+      "screenshot0": "assets/screenshots/screenshot0.png",
+      "screenshot1": "assets/screenshots/screenshot1.png",
+      "screenshot2": "assets/screenshots/screenshot2.png",
+      "screenshot3": "assets/screenshots/screenshot3.png"
     },
     "svgs": {
       "downloadOnAppStore": "assets/svgs/downloadOnAppStore.svg"

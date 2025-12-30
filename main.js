@@ -31,6 +31,56 @@
   }
 })();
 
+// Hero wave subtle amplitude shift on scroll (clipped, no resize)
+(() => {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return;
+
+  const wavePath = document.querySelector('.hero-wave path');
+  if (!wavePath) return;
+
+  const baseAmp = 26; // keeps crest well within viewBox height
+  const maxDelta = 18; // more visible amplitude change
+  const decay = 0.9; // damping when scroll stops
+  const minEnergy = 0.01;
+
+  const buildPath = (amp) => {
+    const crest = Math.min(41, 1 + amp); // cap within viewBox height
+    // fixed x coordinates, scaled for 1800 width
+    return `M0,1 C225,1 225,${crest} 450,${crest} C675,${crest} 675,1 900,1 C1125,1 1125,${crest} 1350,${crest} C1575,${crest} 1575,1 1800,1 L1800,42 L0,42 Z`;
+  };
+
+  let ticking = false;
+  let targetAmp = baseAmp;
+  let energy = 0;
+  let scrollFactor = 0;
+
+  const onScroll = () => {
+    const y = window.scrollY || 0;
+    scrollFactor = Math.min(1, y / 600); // ease in first ~600px
+    targetAmp = baseAmp + maxDelta * scrollFactor;
+    energy = 1; // kick the wobble when scrolling
+  };
+
+  const animate = (ts) => {
+    energy = Math.max(minEnergy, energy * decay); // decay toward calm
+    const wobble = Math.sin(ts * 0.004); // gentle oscillation
+    const amp = baseAmp + (maxDelta * scrollFactor * energy * wobble);
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => {
+        wavePath.setAttribute('d', buildPath(amp));
+        ticking = false;
+      });
+    }
+    requestAnimationFrame(animate);
+  };
+
+  requestAnimationFrame(animate);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
 // FAQ accordion toggles
 (() => {
   const items = Array.from(document.querySelectorAll('.faq-item'));

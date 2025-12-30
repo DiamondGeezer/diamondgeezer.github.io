@@ -183,13 +183,15 @@ img {
   transform: translateY(0);
   z-index: 3;
   margin-top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  right: auto;
   bottom: 113px; /* moved up by 114px */
   pointer-events: none;
+  transform: translate(-50%, 0);
 }
 .hero-wave svg {
-  width: 100%;
+  width: 1800px;
+  max-width: none;
   height: 42px;
   display: block;
 }
@@ -348,13 +350,11 @@ img {
 }
 
 .card {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
   padding: 1.4rem;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   text-align: center;
-  display: grid;
-  place-items: center;
 }
 
 .card h3 {

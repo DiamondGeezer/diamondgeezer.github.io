@@ -655,10 +655,13 @@ img {
   justify-content: center;
   width: 28px;
   height: 28px;
+  min-width: 28px;
+  min-height: 28px;
   border-radius: 50%;
   border: 1px solid var(--outline);
   font-size: 1.1rem;
   transition: transform 0.2s ease;
+  flex: 0 0 28px;
 }
 
 .faq-answer {

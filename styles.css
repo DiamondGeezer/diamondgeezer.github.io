@@ -910,8 +910,10 @@ img {
     url("assets/backgrounds/background.heic") type("image/heic"),
     url("assets/backgrounds/background.jpg") type("image/jpeg")
   );
-  background-size: auto 3200px;
+  background-size: 2000px auto;
   background-repeat: repeat-y;
+  background-position: center top;
+  height: calc(120vh + 200px + env(safe-area-inset-bottom, 0px));
   pointer-events: none;
   z-index: -1;
 }
@@ -1031,7 +1033,8 @@ img {
   }
 
   .ios-fixed-bg body::before {
-    background-size: auto 3600px;
+    background-size: 2200px auto;
+    height: calc(125vh + 240px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -1092,6 +1095,7 @@ img {
   }
 
   .ios-fixed-bg body::before {
-    background-size: auto 4000px;
+    background-size: 2400px auto;
+    height: calc(130vh + 280px + env(safe-area-inset-bottom, 0px));
   }
 }

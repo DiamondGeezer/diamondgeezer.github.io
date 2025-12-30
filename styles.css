@@ -947,7 +947,7 @@ img {
 
   .site-header {
     height: auto;
-    padding-bottom: 20px; /* extra breathing room for the buttons */
+    padding-bottom: 10px; /* extra breathing room for the buttons */
   }
 
   .logo {
@@ -992,17 +992,7 @@ img {
     font-size: 0.78rem;
   }
 
-  .layout-tag::after {
-    content: "M (S)";
-  }
-
   .ios-fixed-bg body::before {
     background-size: 2400px auto;
-  }
-}
-
-@media (max-width: 480px) {
-  .layout-tag::after {
-    content: "M (T)";
   }
 }

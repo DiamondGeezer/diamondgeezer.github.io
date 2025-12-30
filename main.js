@@ -4,19 +4,17 @@
 
   const updateLabel = () => {
     const w = Math.round(window.innerWidth);
-    let prefix = 'D';
+    let label = `💻 (${w})`;
     if (w <= 480) {
-      prefix = 'M (T)';
+      label = `📱 (T) (${w})`;
     } else if (w <= 540) {
-      prefix = 'M (S)';
+      label = `📱 (S) (${w})`;
     } else if (w <= 768) {
-      prefix = 'M (L)';
+      label = `📱 (L) (${w})`;
     } else if (w <= 900) {
-      prefix = 'T';
-    } else {
-      prefix = 'D';
+      label = `📺 (${w})`;
     }
-    tag.textContent = `${prefix} (${w})`;
+    tag.textContent = label;
   };
 
   window.addEventListener('resize', updateLabel, { passive: true });

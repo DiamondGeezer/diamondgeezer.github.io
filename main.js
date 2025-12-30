@@ -81,6 +81,52 @@
   onScroll();
 })();
 
+// Perk marquee scroll (cycle images within container)
+(() => {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return;
+
+  const track = document.querySelector('.perk-animation-track');
+  if (!track) return;
+
+  const items = Array.from(track.children);
+  if (!items.length) return;
+
+  const style = getComputedStyle(track);
+  const gapPx = (() => {
+    const g = parseFloat(style.gap || style.columnGap || '0');
+    return Number.isFinite(g) ? g : 0;
+  })();
+
+  // Duplicate items for seamless loop without DOM shuffles
+  const clones = items.map((node) => node.cloneNode(true));
+  clones.forEach((node) => track.appendChild(node));
+
+  const singleSetWidth =
+    items.reduce((sum, node) => sum + node.getBoundingClientRect().width, 0) +
+    gapPx * (items.length - 1);
+
+  let offset = 0;
+  let lastTime = null;
+  const speed = 35; // px per second
+
+  const step = (ts) => {
+    if (lastTime == null) lastTime = ts;
+    const dt = (ts - lastTime) / 1000;
+    lastTime = ts;
+
+    offset -= speed * dt;
+    if (-offset >= singleSetWidth) {
+      offset += singleSetWidth;
+    }
+
+    track.style.transform = `translateX(${offset}px)`;
+    requestAnimationFrame(step);
+  };
+
+  requestAnimationFrame(step);
+})();
+
 // FAQ accordion toggles
 (() => {
   const items = Array.from(document.querySelectorAll('.faq-item'));

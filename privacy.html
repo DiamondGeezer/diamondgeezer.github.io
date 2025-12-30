@@ -6,44 +6,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy — Mixport</title>
   <meta name="description" content="Privacy Policy for Mixport by Hagerlabs, LLC">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
-    html, body { height: 100%; }
+    html, body { height: 100%; background: #000; }
     body {
       font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       line-height: 1.6;
       margin: 0;
       padding: 0;
       background: #000;
-      background-image: url("assets/backgrounds/background.jpg");
-      background-image: image-set(
-        url("assets/backgrounds/background.heic") type("image/heic"),
-        url("assets/backgrounds/background.jpg") type("image/jpeg")
-      );
-      background-repeat: no-repeat;
-      background-position: center top;
-      background-size: 2000px auto;
-      background-attachment: fixed;
       color: #f2f3f5;
       position: relative;
       z-index: 0;
     }
-    .ios-fixed-bg body::before {
+    body::before {
       content: "";
       position: fixed;
       inset: 0;
-      background: #000 url("assets/backgrounds/background.jpg") no-repeat center top;
+      background: #000 url("assets/backgrounds/background.jpg") repeat-y center top;
       background-image: image-set(
         url("assets/backgrounds/background.heic") type("image/heic"),
         url("assets/backgrounds/background.jpg") type("image/jpeg")
       );
       background-size: 2000px auto;
-      background-repeat: repeat-y;
-      background-position: center top;
-      height: calc(120vh + 200px + env(safe-area-inset-bottom, 0px));
       pointer-events: none;
       z-index: -1;
     }
-    .ios-fixed-bg body { background: transparent; }
+    .ios-fixed-bg body {
+      background: transparent;
+    }
+    .ios-fixed-bg body::before {
+      background: #000 url("assets/backgrounds/background.jpg") repeat-y center top;
+      background-image: image-set(
+        url("assets/backgrounds/background.heic") type("image/heic"),
+        url("assets/backgrounds/background.jpg") type("image/jpeg")
+      );
+      background-size: 2000px auto;
+      height: calc(120vh + 200px + env(safe-area-inset-bottom, 0px));
+    }
     .container { max-width: 900px; margin: 0 auto; padding: 24px; }
     a { color: #9ecbff; }
     h1, h2, h3 { line-height: 1.2; }

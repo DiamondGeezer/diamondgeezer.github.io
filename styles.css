@@ -23,7 +23,7 @@ body {
     url("assets/backgrounds/background.heic") type("image/heic"),
     url("assets/backgrounds/background.jpg") type("image/jpeg")
   );
-  background-repeat: no-repeat;
+  background-repeat: repeat-y;
   background-position: center top;
   background-size: 2000px auto;
   background-attachment: fixed;

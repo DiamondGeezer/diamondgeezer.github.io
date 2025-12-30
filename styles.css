@@ -715,7 +715,8 @@ img {
 }
 
 .pricing-section {
-  background: #0b0b0f;
+  background: #000;
+  padding: 0;
 }
 
 .perk-container {

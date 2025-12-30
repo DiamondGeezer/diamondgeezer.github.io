@@ -2,6 +2,10 @@
   "brandName": "Mixport",
 
   "assets": {
+    "backgrounds": {
+      "mainHeic": "assets/backgrounds/background.heic",
+      "mainJpg": "assets/backgrounds/background.jpg"
+    },
     "gradients": {
       "gradient0": "assets/gradients/gradient_0.png",
       "gradient1": "assets/gradients/gradient_1.png",

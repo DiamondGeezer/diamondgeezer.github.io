@@ -18,7 +18,11 @@
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: #000;
-  background-image: url("assets/backgrounds/background.png");
+  background-image: url("assets/backgrounds/background.jpg");
+  background-image: image-set(
+    url("assets/backgrounds/background.heic") type("image/heic"),
+    url("assets/backgrounds/background.jpg") type("image/jpeg")
+  );
   background-repeat: no-repeat;
   background-position: center top;
   background-size: 2000px auto;
@@ -822,7 +826,11 @@ img {
   content: "";
   position: fixed;
   inset: 0;
-  background: #000 url("assets/backgrounds/background.png") no-repeat center top;
+  background: #000 url("assets/backgrounds/background.jpg") no-repeat center top;
+  background-image: image-set(
+    url("assets/backgrounds/background.heic") type("image/heic"),
+    url("assets/backgrounds/background.jpg") type("image/jpeg")
+  );
   background-size: 2000px auto;
   pointer-events: none;
   z-index: -1;

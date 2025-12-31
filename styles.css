@@ -266,7 +266,11 @@ img {
 }
 
 .hero-copy {
-  margin-top: -200px; /* lifted hero text/buttons further */
+  margin-top: 0; /* default; page-specific overrides handle positioning */
+}
+
+.home-page .hero-copy {
+  margin-top: -200px; /* lifted hero text/buttons further for home */
 }
 
 .hero-title-highlight {
@@ -1237,8 +1241,12 @@ img {
   }
 
   .hero-copy {
-    margin-top: -70px; /* blended offset to reduce drop on mobile large */
+    margin-top: 60px; /* default at this breakpoint; page-specific overrides below */
     align-items: flex-start;
+  }
+
+  .home-page .hero-copy {
+    margin-top: -70px; /* blended offset to reduce drop on mobile large */
   }
 
   .cta-row {
@@ -1263,7 +1271,7 @@ img {
 
 @media (max-width: 700px) {
   /* Home hero labels: drop slightly to avoid jump at ~695px; scoped away from pro */
-  .hero:not(.pro-hero) .hero-copy {
+  .home-page .hero-copy {
     margin-top: -30px;
   }
 
@@ -1348,5 +1356,31 @@ img {
   .ios-fixed-bg body::before {
     background-size: 2400px auto;
     height: calc(130vh + 280px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 480px) {
+  /* Pro-only tiny layout adjustments */
+  .pro-page .pro-black-section {
+    margin-top: -105px; /* down 75px from -180 */
+  }
+
+  .pro-page .hero-wave,
+  .pro-page .hero-wave-chaos,
+  .pro-page .hero-wave-back {
+    bottom: 255px; /* down 75px from 180 */
+  }
+
+  .pro-hero-title-line {
+    font-size: 2.2rem; /* scale down title */
+  }
+
+  .pro-hero .hero-subtitle,
+  .pro-hero-meta-text {
+    font-size: 1.4rem; /* scale down subtitle/meta */
+  }
+
+  .pro-hero .hero-copy {
+    margin-top: -250px; /* move hero labels down ~50px from -300 */
   }
 }

@@ -1237,7 +1237,7 @@ img {
   }
 
   .hero-copy {
-    margin-top: 60px; /* hold position and drop 30px at this width */
+    margin-top: -70px; /* blended offset to reduce drop on mobile large */
     align-items: flex-start;
   }
 
@@ -1264,7 +1264,7 @@ img {
 @media (max-width: 700px) {
   /* Home hero labels: drop slightly to avoid jump at ~695px; scoped away from pro */
   .hero:not(.pro-hero) .hero-copy {
-    margin-top: 92px;
+    margin-top: -30px;
   }
 
   /* Pro hero: ease the upward jump around ~695px */

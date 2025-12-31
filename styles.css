@@ -34,6 +34,32 @@ body {
   z-index: 0;
 }
 
+.pro-page {
+  background: #000;
+}
+
+.pro-page::before,
+.pro-page.ios-fixed-bg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: #000 url("assets/backgrounds/background2.jpg") no-repeat center top;
+  background-image: image-set(
+    url("assets/backgrounds/background2.heic") type("image/heic"),
+    url("assets/backgrounds/background2.jpg") type("image/jpeg")
+  );
+  background-size: 2000px auto;
+  background-repeat: repeat-y;
+  background-position: center top;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.pro-page.ios-fixed-bg::before {
+  background-attachment: scroll;
+  height: calc(120vh + 200px + env(safe-area-inset-bottom, 0px));
+}
+
 .ios-fixed-bg body {
   background-attachment: scroll;
 }
@@ -181,7 +207,8 @@ img {
   padding: 0;
   z-index: 2;
 }
-.hero-wave {
+.hero-wave,
+.hero-wave-chaos {
   display: block;
   position: absolute;
   transform: translateY(0);
@@ -189,15 +216,40 @@ img {
   margin-top: 0;
   left: 50%;
   right: auto;
-  bottom: 113px; /* moved up by 114px */
+  bottom: 217px; /* locked y-offset */
   pointer-events: none;
   transform: translate(-50%, 0);
 }
-.hero-wave svg {
+.hero-wave svg,
+.hero-wave-chaos svg {
   width: 1800px;
   max-width: none;
   height: 42px;
   display: block;
+}
+
+.hero-wave-back {
+  display: block;
+  position: absolute;
+  transform: translate(-50%, 0);
+  z-index: 1; /* furthest back */
+  left: 50%;
+  right: auto;
+  bottom: 217px; /* same locked offset */
+  pointer-events: none;
+  opacity: 1;
+}
+
+.hero-wave-back svg {
+  width: 1800px;
+  max-width: none;
+  height: 560px;
+  display: block;
+}
+
+/* Home page wave offset override (moved down by 90px + extra tweak) */
+.home-hero-wave {
+  bottom: 114px;
 }
 
 .hero-grid {
@@ -705,14 +757,14 @@ img {
 
 /* Pro page */
 .hero-pro {
-  padding-top: 7rem;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .pro-hero-shell {
   position: relative;
   overflow: hidden;
-  border-radius: 32px;
-  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
+  width: 100%;
 }
 
 .pro-hero-image {
@@ -721,54 +773,93 @@ img {
   display: block;
 }
 
-.pro-hero-overlay {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  gap: 0.6rem;
-  padding: clamp(1.6rem, 3vw, 2.4rem);
-  align-content: start;
-  text-align: left;
-  color: #ffffff;
+.pro-black-section {
+  height: 2000px;
+  background: #000;
+  margin-top: -218px;
 }
 
-.pro-hero-title {
+.wave-banner {
+  position: relative;
+  width: 100%;
+  height: clamp(320px, 45vw, 560px);
+  background: #000 url('assets/banners/banner_purpleWaves.png') center center / cover no-repeat;
+  overflow: hidden;
+}
+
+.pro-hero {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.pro-hero .hero-grid {
+  grid-template-columns: 1fr;
+  padding-bottom: 4rem;
+}
+
+.pro-hero .hero-copy {
+  margin-top: -405px;
+  margin-left: 72px;
+}
+
+.pro-hero-title-line {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: clamp(2rem, 4vw, 2.8rem);
-  font-weight: 700;
+  gap: 12px;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 800;
 }
 
-.pro-hero-pill {
-  padding: 0.3rem 0.7rem;
-  border-radius: 999px;
-  background: #b5f5c3;
-  color: #0a0a0a;
-  font-weight: 700;
-  font-size: 0.9em;
+.pro-title-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 14px;
+  background: #c2f5c8;
+  color: #0c3b14;
+  font-weight: 800;
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  letter-spacing: 0.01em;
 }
 
-.pro-hero-subtitle {
-  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
-  max-width: 34rem;
+.pro-hero .hero-subtitle {
+  max-width: 880px;
+  margin-top: 30px;
+  color: #efe8ff;
+  font-size: 1.8rem;
 }
 
-.pro-hero-meta {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.85);
+.pro-hero-meta-text {
+  margin-top: 30px;
+  font-weight: 500;
+  color: #efe8ff;
+  font-size: 1.8rem;
 }
 
-@media (max-width: 768px) {
-  .pro-hero-overlay {
-    align-items: center;
-    text-align: center;
-    justify-items: center;
-  }
+.pro-hero .hero-visual {
+  display: none;
+}
 
-  .pro-hero-title {
-    justify-content: center;
-  }
+.hero-wave-chaos {
+  z-index: 2; /* sits behind the primary wave */
+  opacity: 1;
+}
+
+.hero-wave-chaos svg {
+  height: 560px;
+}
+
+.pro-page .hero-wave path {
+  fill: #000;
+}
+
+.pro-page .hero-wave-chaos path {
+  fill: #121212; /* slightly lighter than pure black */
+}
+
+.pro-page .hero-wave-back path {
+  fill: #1c1c1c; /* lightest of the three, still near-black */
 }
 
 
@@ -1001,8 +1092,14 @@ img {
     background-attachment: scroll;
   }
 
-  .hero-wave {
+  .hero-wave,
+  .hero-wave-chaos,
+  .hero-wave-back {
     bottom: 113px; /* align with desktop position to avoid jump */
+  }
+
+  .home-hero-wave {
+    bottom: 10px; /* 103px lower than default at this breakpoint */
   }
 
   .page-body {
@@ -1045,8 +1142,14 @@ img {
     padding-bottom: 2rem;
   }
 
-  .hero-wave {
+  .hero-wave,
+  .hero-wave-chaos,
+  .hero-wave-back {
     bottom: 140px; /* lift wave for mobile-wide transition */
+  }
+
+  .home-hero-wave {
+    bottom: 37px; /* 103px lower than default at this breakpoint */
   }
 
   .page-body {

@@ -4,7 +4,9 @@
   "assets": {
     "backgrounds": {
       "mainHeic": "assets/backgrounds/background.heic",
-      "mainJpg": "assets/backgrounds/background.jpg"
+      "mainJpg": "assets/backgrounds/background.jpg",
+      "proHeic": "assets/backgrounds/background2.heic",
+      "proJpg": "assets/backgrounds/background2.jpg"
     },
     "gradients": {
       "gradient0": "assets/gradients/gradient_0.png",

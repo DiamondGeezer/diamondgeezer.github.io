@@ -777,7 +777,7 @@ img {
 
 .pro-black-section {
   height: 2000px;
-  background: #000;
+  background: #63b3ff;
   margin-top: -218px;
 }
 
@@ -1363,6 +1363,7 @@ img {
   /* Pro-only tiny layout adjustments */
   .pro-page .pro-black-section {
     margin-top: -105px; /* down 75px from -180 */
+    background: #63b3ff;
   }
 
   .pro-page .hero-wave,

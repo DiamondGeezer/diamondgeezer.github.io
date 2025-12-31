@@ -211,14 +211,12 @@ img {
 .hero-wave-chaos {
   display: block;
   position: absolute;
-  transform: translateY(0);
+  transform: translate(-50%, 0);
   z-index: 3;
   margin-top: 0;
   left: 50%;
   right: auto;
-  bottom: 217px; /* locked y-offset */
   pointer-events: none;
-  transform: translate(-50%, 0);
 }
 .hero-wave svg,
 .hero-wave-chaos svg {
@@ -235,7 +233,6 @@ img {
   z-index: 1; /* furthest back */
   left: 50%;
   right: auto;
-  bottom: 217px; /* same locked offset */
   pointer-events: none;
   opacity: 1;
 }
@@ -247,9 +244,10 @@ img {
   display: block;
 }
 
-/* Home page wave offset override (moved down by 90px + extra tweak) */
+/* Home page wave positioning */
 .home-hero-wave {
   bottom: 114px;
+  z-index: 5; /* ensure it sits above the black section */
 }
 
 .hero-grid {
@@ -806,7 +804,7 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 12px;
-  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-size: 3.4rem; /* fixed to prevent vertical jumps */
   font-weight: 800;
 }
 
@@ -850,6 +848,13 @@ img {
   height: 560px;
 }
 
+/* Pro page wave positioning and colors */
+.pro-page .hero-wave,
+.pro-page .hero-wave-chaos,
+.pro-page .hero-wave-back {
+  bottom: 217px;
+}
+
 .pro-page .hero-wave path {
   fill: #000;
 }
@@ -860,6 +865,18 @@ img {
 
 .pro-page .hero-wave-back path {
   fill: #1c1c1c; /* lightest of the three, still near-black */
+}
+
+@media (max-width: 900px) {
+  .pro-black-section {
+    margin-top: -120px; /* reduce overlap at tablet */
+  }
+}
+
+@media (max-width: 768px) {
+  .pro-black-section {
+    margin-top: -80px; /* further reduce overlap on mobile large and below */
+  }
 }
 
 
@@ -1092,18 +1109,35 @@ img {
     background-attachment: scroll;
   }
 
-  .hero-wave,
-  .hero-wave-chaos,
-  .hero-wave-back {
-    bottom: 113px; /* align with desktop position to avoid jump */
+  .pro-page .hero {
+    min-height: 70vh; /* keep pro hero height consistent with desktop */
+  }
+
+  .pro-hero-title-line {
+    font-size: 3.1rem; /* gentle step down for tablet */
+  }
+
+  /* Keep Pro hero copy at the same Y offset as desktop */
+  .pro-hero .hero-copy {
+    margin-top: -405px;
+  }
+
+  .pro-page .hero-wave,
+  .pro-page .hero-wave-chaos,
+  .pro-page .hero-wave-back {
+    bottom: 217px; /* match desktop offset */
   }
 
   .home-hero-wave {
-    bottom: 10px; /* 103px lower than default at this breakpoint */
+    bottom: 114px; /* keep home wave visible at this breakpoint */
   }
 
   .page-body {
     margin-top: -118px; /* match desktop alignment to keep wave flush */
+  }
+
+  .pro-page .pro-black-section {
+    margin-top: -228px; /* lifted 10px for tablet width */
   }
 }
 
@@ -1142,14 +1176,27 @@ img {
     padding-bottom: 2rem;
   }
 
-  .hero-wave,
-  .hero-wave-chaos,
-  .hero-wave-back {
-    bottom: 140px; /* lift wave for mobile-wide transition */
+  .pro-hero-title-line {
+    font-size: 2.8rem; /* step down for mobile large */
+  }
+
+  /* Keep Pro hero copy at the same Y offset as desktop */
+  .pro-hero .hero-copy {
+    margin-top: -405px;
+  }
+
+  .pro-page .hero-wave,
+  .pro-page .hero-wave-chaos,
+  .pro-page .hero-wave-back {
+    bottom: 180px; /* lift pro waves further on mobile large */
+  }
+
+  .pro-page .pro-black-section {
+    margin-top: -180px; /* nudge up 2px on mobile large */
   }
 
   .home-hero-wave {
-    bottom: 37px; /* 103px lower than default at this breakpoint */
+    bottom: 136px; /* raised 22px for mobile large */
   }
 
   .page-body {
@@ -1185,13 +1232,13 @@ img {
 
   .hero-grid {
     grid-template-columns: 1fr;
-    text-align: center;
+    text-align: left; /* prevent upward jump alignment shift */
     padding-bottom: 2rem;
   }
 
   .hero-copy {
-    margin-top: 0;
-    align-items: center;
+    margin-top: 60px; /* hold position and drop 30px at this width */
+    align-items: flex-start;
   }
 
   .cta-row {
@@ -1211,6 +1258,34 @@ img {
   .ios-fixed-bg body::before {
     background-size: 2200px auto;
     height: calc(125vh + 240px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 700px) {
+  /* Home hero labels: drop slightly to avoid jump at ~695px; scoped away from pro */
+  .hero:not(.pro-hero) .hero-copy {
+    margin-top: 92px;
+  }
+
+  /* Pro hero: ease the upward jump around ~695px */
+  .pro-hero .hero-copy {
+    margin-top: -375px;
+  }
+}
+
+@media (max-width: 560px) {
+  /* Pro hero: continue easing up but keep titles in view */
+  .pro-hero .hero-copy {
+    margin-top: -300px; /* reduce downward jump */
+    margin-left: 32px;
+  }
+}
+
+@media (max-width: 520px) {
+  /* Keep Pro hero text in view on very small screens */
+  .pro-hero .hero-copy {
+    margin-top: -300px; /* align with 560px breakpoint to prevent drop */
+    margin-left: 24px;
   }
 }
 

@@ -703,6 +703,75 @@ img {
   }
 }
 
+/* Pro page */
+.hero-pro {
+  padding-top: 7rem;
+}
+
+.pro-hero-shell {
+  position: relative;
+  overflow: hidden;
+  border-radius: 32px;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.45);
+}
+
+.pro-hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.pro-hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  gap: 0.6rem;
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  align-content: start;
+  text-align: left;
+  color: #ffffff;
+}
+
+.pro-hero-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+}
+
+.pro-hero-pill {
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  background: #b5f5c3;
+  color: #0a0a0a;
+  font-weight: 700;
+  font-size: 0.9em;
+}
+
+.pro-hero-subtitle {
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  max-width: 34rem;
+}
+
+.pro-hero-meta {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+@media (max-width: 768px) {
+  .pro-hero-overlay {
+    align-items: center;
+    text-align: center;
+    justify-items: center;
+  }
+
+  .pro-hero-title {
+    justify-content: center;
+  }
+}
+
+
 .service-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));

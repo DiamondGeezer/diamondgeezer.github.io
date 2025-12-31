@@ -1369,7 +1369,7 @@ img {
   .pro-page .hero-wave,
   .pro-page .hero-wave-chaos,
   .pro-page .hero-wave-back {
-    bottom: 605px; /* drop waves further to meet section */
+    bottom: 80px; /* drop waves down to sit on the section */
   }
 
   .pro-hero-title-line {

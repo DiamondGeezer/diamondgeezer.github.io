@@ -1102,7 +1102,8 @@ img {
   margin: 0 auto 0.5rem;
   position: relative;
   z-index: 1;
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
+  border-radius: 16px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28));
 }
 
 .service-name {
@@ -1126,6 +1127,20 @@ img {
   inset: -20%;
   background: radial-gradient(circle at center, rgba(244, 45, 69, 0.28) 0%, rgba(252, 59, 113, 0.16) 35%, rgba(252, 59, 113, 0.08) 60%, rgba(252, 59, 113, 0) 100%);
   z-index: 0;
+}
+
+/* Mask shadows to icon shapes so transparent corners don't show */
+.service-spotify .service-icon,
+.service-youtube .service-icon {
+  -webkit-mask-image: radial-gradient(circle at center, #000 72%, transparent 74%);
+  mask-image: radial-gradient(circle at center, #000 72%, transparent 74%);
+  border-radius: 50%;
+}
+
+.service-apple .service-icon {
+  -webkit-mask-image: radial-gradient(60% 60% at center, #000 70%, transparent 74%);
+  mask-image: radial-gradient(60% 60% at center, #000 70%, transparent 74%);
+  border-radius: 14px;
 }
 
 .pricing-section {

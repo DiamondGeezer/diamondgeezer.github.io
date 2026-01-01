@@ -1114,7 +1114,7 @@ img {
   }
 
   .pro-page .hero {
-    min-height: 70vh; /* keep pro hero height consistent with desktop */
+    min-height: 100vh; /* maximize space on short viewports */
   }
 
   .pro-hero-title-line {
@@ -1123,13 +1123,13 @@ img {
 
   /* Keep Pro hero copy at the same Y offset as desktop */
   .pro-hero .hero-copy {
-    margin-top: -405px;
+    margin-top: -80px;
   }
 
   .pro-page .hero-wave,
   .pro-page .hero-wave-chaos,
   .pro-page .hero-wave-back {
-    bottom: 217px; /* match desktop offset */
+    bottom: 80px; /* push waves down on short viewports */
   }
 
   .home-hero-wave {
@@ -1141,7 +1141,7 @@ img {
   }
 
   .pro-page .pro-black-section {
-    margin-top: -228px; /* lifted 10px for tablet width */
+    margin-top: -80px; /* reduce overlap on tablet */
   }
 }
 
@@ -1186,17 +1186,17 @@ img {
 
   /* Keep Pro hero copy at the same Y offset as desktop */
   .pro-hero .hero-copy {
-    margin-top: -405px;
+    margin-top: -40px;
   }
 
   .pro-page .hero-wave,
   .pro-page .hero-wave-chaos,
   .pro-page .hero-wave-back {
-    bottom: 180px; /* lift pro waves further on mobile large */
+    bottom: 40px; /* lower waves further on mobile large */
   }
 
   .pro-page .pro-black-section {
-    margin-top: -180px; /* nudge up 2px on mobile large */
+    margin-top: -40px; /* reduce overlap on mobile large */
   }
 
   .home-hero-wave {
@@ -1277,14 +1277,14 @@ img {
 
   /* Pro hero: ease the upward jump around ~695px */
   .pro-hero .hero-copy {
-    margin-top: -375px;
+    margin-top: -30px;
   }
 }
 
 @media (max-width: 560px) {
   /* Pro hero: continue easing up but keep titles in view */
   .pro-hero .hero-copy {
-    margin-top: -300px; /* reduce downward jump */
+    margin-top: -60px; /* reduce downward jump */
     margin-left: 32px;
   }
 }
@@ -1292,7 +1292,7 @@ img {
 @media (max-width: 520px) {
   /* Keep Pro hero text in view on very small screens */
   .pro-hero .hero-copy {
-    margin-top: -300px; /* align with 560px breakpoint to prevent drop */
+    margin-top: -40px; /* align with 560px breakpoint to prevent drop */
     margin-left: 24px;
   }
 }

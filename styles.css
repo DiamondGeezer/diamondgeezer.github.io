@@ -1083,6 +1083,16 @@ img {
   text-align: center;
   display: grid;
   align-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.service-spotify::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at center, rgba(30, 215, 96, 0.28) 0%, rgba(30, 215, 96, 0.16) 35%, rgba(30, 215, 96, 0.08) 60%, rgba(30, 215, 96, 0) 100%);
+  z-index: 0;
 }
 
 .service-icon {
@@ -1090,11 +1100,31 @@ img {
   height: 64px;
   display: block;
   margin: 0 auto 0.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .service-name {
   display: block;
   font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.service-youtube::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at center, rgba(244, 45, 69, 0.28) 0%, rgba(244, 45, 69, 0.16) 35%, rgba(244, 45, 69, 0.08) 60%, rgba(244, 45, 69, 0) 100%);
+  z-index: 0;
+}
+
+.service-apple::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at center, rgba(244, 45, 69, 0.28) 0%, rgba(252, 59, 113, 0.16) 35%, rgba(252, 59, 113, 0.08) 60%, rgba(252, 59, 113, 0) 100%);
+  z-index: 0;
 }
 
 .pricing-section {

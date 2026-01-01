@@ -1102,6 +1102,7 @@ img {
   margin: 0 auto 0.5rem;
   position: relative;
   z-index: 1;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.35));
 }
 
 .service-name {

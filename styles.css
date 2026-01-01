@@ -882,16 +882,27 @@ img {
 }
 
 .pro-plan-row.two-up .plan-card {
-  flex: 1 1 calc((100% - 30px) / 2);
-  max-width: 320px;
-  min-width: 160px;
+  flex: 0 0 auto;
+  width: clamp(140px, 45vw, 220px);
+  max-width: 220px;
+  min-width: 140px;
 }
 
 .pro-plan-row.three-up {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
   gap: 30px;
-  justify-items: center;
+  flex-wrap: nowrap;
+}
+
+.pro-plan-row.three-up .plan-card {
+  flex: 1 1 180px;
+  max-width: 220px;
+}
+
+.pro-plan-row.three-up .plan-card:nth-child(2) {
+  flex: 0 0 200px; /* center card fixed width to hold midpoint */
 }
 
 @media (max-width: 768px) {
@@ -900,25 +911,50 @@ img {
   }
 
   .pro-plan-row.two-up .plan-card {
-    flex: 1 1 calc((100% - 30px) / 2);
-    max-width: 260px;
-    min-width: 140px;
+    width: clamp(130px, 45vw, 200px);
+    max-width: 200px;
+    min-width: 130px;
   }
 
   .pro-plan-row.three-up {
-    grid-template-columns: repeat(3, minmax(120px, 1fr));
+    gap: 30px;
+    flex-wrap: nowrap;
+  }
+
+  .pro-plan-row.three-up .plan-card {
+    flex: 1 1 150px;
+    max-width: 200px;
+  }
+
+  .pro-plan-row.three-up .plan-card:nth-child(2) {
+    flex: 0 0 180px;
   }
 }
 
 @media (max-width: 640px) {
-  .pro-plan-row.three-up {
-    grid-template-columns: repeat(3, minmax(110px, 1fr));
+  .pro-plan-row.three-up .plan-card {
+    flex: 1 1 130px;
+    max-width: 180px;
+  }
+
+  .pro-plan-row.three-up .plan-card:nth-child(2) {
+    flex: 0 0 160px;
   }
 }
 
 @media (max-width: 540px) {
   .pro-plan-row.three-up {
-    grid-template-columns: repeat(3, minmax(95px, 1fr));
+    gap: 24px;
+  }
+
+  .pro-plan-row.three-up .plan-card {
+    flex: 1 1 110px;
+    max-width: 160px;
+    min-width: 90px;
+  }
+
+  .pro-plan-row.three-up .plan-card:nth-child(2) {
+    flex: 0 0 140px;
   }
 }
 
@@ -931,9 +967,10 @@ img {
   background: rgba(255, 255, 255, 0.04);
   color: inherit;
   text-align: center;
-  min-width: 180px;
-  min-height: 230px;
-  width: 100%;
+  min-width: 140px;
+  max-width: 220px;
+  min-height: 220px;
+  height: 220px; /* fixed height, slightly more square */
   transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
 }
 

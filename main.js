@@ -36,49 +36,87 @@
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (prefersReducedMotion) return;
 
-  const wavePath = document.querySelector('.hero-wave path');
-  if (!wavePath) return;
+  const createWaveAnimator = (selector, opts = {}) => {
+    const path = document.querySelector(selector);
+    if (!path) return;
 
-  const baseAmp = 26; // keeps crest well within viewBox height
-  const maxDelta = 18; // more visible amplitude change
-  const decay = 0.9; // damping when scroll stops
-  const minEnergy = 0.01;
+    const {
+      baseAmp = 26,
+      maxDelta = 18,
+      decay = 0.9,
+      minEnergy = 0.01,
+      scrollRange = 600,
+      freq = 0.004,
+      crestCap = 41,
+      velocityGain = 0.0,
+      maxEnergy = 1.5
+    } = opts;
 
-  const buildPath = (amp) => {
-    const crest = Math.min(41, 1 + amp); // cap within viewBox height
-    // fixed x coordinates, scaled for 1800 width
-    return `M0,1 C225,1 225,${crest} 450,${crest} C675,${crest} 675,1 900,1 C1125,1 1125,${crest} 1350,${crest} C1575,${crest} 1575,1 1800,1 L1800,42 L0,42 Z`;
-  };
+    const buildPath = (amp) => {
+      const crest = Math.min(crestCap, 1 + amp); // cap within viewBox height
+      return `M0,1 C225,1 225,${crest} 450,${crest} C675,${crest} 675,1 900,1 C1125,1 1125,${crest} 1350,${crest} C1575,${crest} 1575,1 1800,1 L1800,42 L0,42 Z`;
+    };
 
-  let ticking = false;
-  let targetAmp = baseAmp;
-  let energy = 0;
-  let scrollFactor = 0;
+    let ticking = false;
+    let energy = 0;
+    let scrollFactor = 0;
+    let lastY = window.scrollY || 0;
+    let lastT = performance.now();
 
-  const onScroll = () => {
-    const y = window.scrollY || 0;
-    scrollFactor = Math.min(1, y / 600); // ease in first ~600px
-    targetAmp = baseAmp + maxDelta * scrollFactor;
-    energy = 1; // kick the wobble when scrolling
-  };
+    const onScroll = () => {
+      const now = performance.now();
+      const y = window.scrollY || 0;
+      const dy = y - lastY;
+      const dt = Math.max(1, now - lastT); // ms
 
-  const animate = (ts) => {
-    energy = Math.max(minEnergy, energy * decay); // decay toward calm
-    const wobble = Math.sin(ts * 0.004); // gentle oscillation
-    const amp = baseAmp + (maxDelta * scrollFactor * energy * wobble);
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(() => {
-        wavePath.setAttribute('d', buildPath(amp));
-        ticking = false;
-      });
-    }
+      scrollFactor = Math.min(1, y / scrollRange);
+
+      // velocity-driven kick (px/ms -> px/s scaled)
+      const speed = Math.abs(dy) / dt; // px per ms
+      const impulse = Math.min(maxEnergy, speed * velocityGain);
+      energy = Math.min(maxEnergy, energy + impulse);
+
+      lastY = y;
+      lastT = now;
+    };
+
+    const animate = (ts) => {
+      energy = Math.max(minEnergy, energy * decay); // decay toward calm
+      const wobble = Math.sin(ts * freq);
+      const amp = baseAmp + (maxDelta * scrollFactor * wobble) + (maxDelta * energy * 0.6);
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          path.setAttribute('d', buildPath(amp));
+          ticking = false;
+        });
+      }
+      requestAnimationFrame(animate);
+    };
+
     requestAnimationFrame(animate);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
   };
 
-  requestAnimationFrame(animate);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  // Home wave (index.html)
+  createWaveAnimator('.home-hero-wave path', {
+    baseAmp: 26,
+    maxDelta: 18,
+    scrollRange: 600,
+    velocityGain: 0.0,
+    maxEnergy: 1.0,
+  });
+
+  // Pro foreground wave (front layer only)
+  createWaveAnimator('.pro-page .hero-wave:not(.hero-wave-chaos):not(.hero-wave-back) path', {
+    baseAmp: 24,
+    maxDelta: 22,
+    scrollRange: 500,
+    freq: 0.0038,
+    velocityGain: 1.2, // larger kicks on rapid scroll
+    maxEnergy: 2.5,
+  });
 })();
 
 // Perk marquee scroll (cycle images within container)

@@ -776,9 +776,9 @@ img {
 }
 
 .pro-black-section {
-  height: 2000px;
   background: #000;
   margin-top: -218px;
+  padding: 4rem 0 5rem;
 }
 
 .wave-banner {
@@ -841,6 +841,137 @@ img {
 
 .pro-hero .hero-visual {
   display: none;
+}
+
+.pro-pricing {
+  display: grid;
+  gap: 1.5rem;
+  text-align: center;
+  max-width: 1100px;
+}
+
+.pro-pricing-title {
+  font-weight: 800;
+  font-size: clamp(1.3rem, 3vw, 1.8rem);
+  margin: 0;
+}
+
+.pro-pricing-title.secondary {
+  font-size: clamp(1.1rem, 2.4vw, 1.4rem);
+}
+
+.pro-divider {
+  height: 1px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0.5rem 0 1rem;
+}
+
+.pro-plan-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+.pro-plan-row.two-up {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  flex-wrap: nowrap;
+}
+
+.pro-plan-row.two-up .plan-card {
+  flex: 1 1 calc((100% - 30px) / 2);
+  max-width: 320px;
+  min-width: 160px;
+}
+
+.pro-plan-row.three-up {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  gap: 30px;
+  justify-items: center;
+}
+
+@media (max-width: 768px) {
+  .pro-plan-row.two-up {
+    flex-wrap: nowrap;
+  }
+
+  .pro-plan-row.two-up .plan-card {
+    flex: 1 1 calc((100% - 30px) / 2);
+    max-width: 260px;
+    min-width: 140px;
+  }
+
+  .pro-plan-row.three-up {
+    grid-template-columns: repeat(3, minmax(120px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .pro-plan-row.three-up {
+    grid-template-columns: repeat(3, minmax(110px, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .pro-plan-row.three-up {
+    grid-template-columns: repeat(3, minmax(95px, 1fr));
+  }
+}
+
+.plan-card {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.6rem 1.2rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  text-align: center;
+  min-width: 180px;
+  min-height: 230px;
+  width: 100%;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.plan-card:hover,
+.plan-card:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+  outline: none;
+}
+
+.plan-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.plan-price {
+  font-weight: 800;
+  font-size: 1.6rem;
+}
+
+.plan-renew {
+  font-size: 0.95rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.pro-pricing-subhead {
+  display: grid;
+  gap: 0.2rem;
+  margin-top: 0.4rem;
+}
+
+.pro-pricing-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .hero-wave-chaos {

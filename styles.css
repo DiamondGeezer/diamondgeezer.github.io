@@ -1081,6 +1081,20 @@ img {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.04);
   text-align: center;
+  display: grid;
+  align-content: center;
+}
+
+.service-icon {
+  width: 64px;
+  height: 64px;
+  display: block;
+  margin: 0 auto 0.5rem;
+}
+
+.service-name {
+  display: block;
+  font-weight: 600;
 }
 
 .pricing-section {

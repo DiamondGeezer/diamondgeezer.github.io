@@ -18,7 +18,10 @@
       "premium1": "assets/icons/icon_1.png",
       "premium2": "assets/icons/icon_2.png",
       "premium3": "assets/icons/icon_3.png",
-      "glyphTransparent": "assets/icons/icon_transparent.png"
+      "glyphTransparent": "assets/icons/icon_transparent.png",
+      "appleMusic": "assets/icons/appleMusic.png",
+      "spotify": "assets/icons/spotify.png",
+      "youtube": "assets/icons/youtube.png"
     },
     "mockups": {
       "iphoneEn1": "assets/mockups/iPhone_en_1.PNG",

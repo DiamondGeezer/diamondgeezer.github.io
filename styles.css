@@ -1344,35 +1344,6 @@ img {
   }
 }
 
-/* Compact viewport overrides (e.g., mobile landscape: short + narrow) */
-.compact-viewport .pro-page .hero {
-  min-height: 80vh;
-}
-
-.compact-viewport .pro-hero .hero-copy {
-  margin-top: -150px;
-  margin-left: 32px;
-}
-
-.compact-viewport .pro-hero-title-line {
-  font-size: 2.6rem;
-}
-
-.compact-viewport .pro-hero .hero-subtitle,
-.compact-viewport .pro-hero-meta-text {
-  font-size: 1.5rem;
-}
-
-.compact-viewport .pro-page .hero-wave,
-.compact-viewport .pro-page .hero-wave-chaos,
-.compact-viewport .pro-page .hero-wave-back {
-  bottom: 140px;
-}
-
-.compact-viewport .pro-page .pro-black-section {
-  margin-top: -140px;
-}
-
 @media (max-width: 540px) {
   body {
     background-size: 2400px auto; /* ensure background still covers under wave on narrow screens */

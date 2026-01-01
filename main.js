@@ -177,20 +177,3 @@
     });
   }, { passive: true });
 })();
-
-// Toggle compact viewport class for narrow/short viewports (helps mobile landscape)
-(() => {
-  const target = document.documentElement;
-  if (!target) return;
-
-  const update = () => {
-    const w = window.innerWidth || 0;
-    const h = window.innerHeight || 0;
-    const isCompact = w <= 900 && h <= 600;
-    target.classList.toggle('compact-viewport', isCompact);
-  };
-
-  window.addEventListener('resize', update, { passive: true });
-  window.addEventListener('orientationchange', update);
-  update();
-})();

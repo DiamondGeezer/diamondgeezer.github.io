@@ -958,6 +958,23 @@ img {
   }
 }
 
+@media (max-width: 480px) {
+  /* Force three-up to compress without overlap on tiny screens */
+  .pro-plan-row.three-up {
+    gap: 16px;
+  }
+
+  .pro-plan-row.three-up .plan-card {
+    flex: 1 1 90px;
+    max-width: 150px;
+    min-width: 80px;
+  }
+
+  .pro-plan-row.three-up .plan-card:nth-child(2) {
+    flex: 0 0 120px;
+  }
+}
+
 .plan-card {
   display: grid;
   gap: 0.35rem;

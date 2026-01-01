@@ -960,18 +960,8 @@ img {
 
 @media (max-width: 480px) {
   /* Force three-up to compress without overlap on tiny screens */
-  .pro-plan-row {
-    padding: 0 14px; /* keep side margins on tiny screens */
-  }
-
-  .pro-plan-row.two-up {
-    gap: 20px;
-  }
-
-  .pro-plan-row.two-up .plan-card {
-    width: clamp(120px, 42vw, 170px);
-    max-width: 170px;
-    min-width: 120px;
+  .pro-plan-row.three-up {
+    gap: 16px;
   }
 
   .pro-plan-row.three-up .plan-card {

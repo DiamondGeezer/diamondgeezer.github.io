@@ -312,13 +312,21 @@ img {
   display: inline-flex;
 }
 
-.hero-screenshot {
+.hero-screenshot-frame {
   max-width: 292px;
   width: 90%;
+  border-radius: 44px;
+  overflow: hidden;
+  background: #0b0b0b;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.4), 0 10px 26px rgba(0, 0, 0, 0.32);
+}
+
+.hero-screenshot {
+  display: block;
+  width: 100%;
   height: auto;
-  border-radius: 20px;
+  border-radius: 0;
   opacity: 0.92;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 .hero-visual {
@@ -1138,9 +1146,10 @@ img {
 }
 
 .service-apple .service-icon {
-  -webkit-mask-image: radial-gradient(60% 60% at center, #000 70%, transparent 74%);
-  mask-image: radial-gradient(60% 60% at center, #000 70%, transparent 74%);
-  border-radius: 14px;
+  -webkit-mask-image: none;
+  mask-image: none;
+  clip-path: inset(0 round 24%);
+  border-radius: 24%;
 }
 
 .pricing-section {

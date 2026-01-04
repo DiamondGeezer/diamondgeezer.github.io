@@ -1170,6 +1170,37 @@ img {
   font-size: 0.95rem;
 }
 
+.pro-cta-footer {
+  background: #000;
+  text-align: center;
+  padding: 1.5rem 0 3rem;
+}
+
+.pro-cta-footer h2 {
+  margin: 0 0 1.2rem;
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+}
+
+.pro-cta-footer .app-store-badge img {
+  height: 62px;
+}
+
+@media (max-width: 500px) {
+  .pro-features {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .pro-feature-grid {
+    gap: 1.1rem;
+  }
+
+  .pro-cta-footer {
+    padding-top: 1rem;
+    padding-bottom: 2.4rem;
+  }
+}
+
 .service-youtube::before {
   content: "";
   position: absolute;

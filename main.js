@@ -288,6 +288,7 @@
   const highlight = title?.querySelector('.hero-title-highlight');
   const subtitle = document.querySelector('.hero-copy .hero-subtitle');
   const heroVisual = document.querySelector('.hero-visual');
+  const heroDownload = document.querySelector('.hero-download');
   if (!title || !highlight || !subtitle) return;
 
   const fullHighlight = highlight.textContent || '';
@@ -297,6 +298,7 @@
   if (prefersReducedMotion) {
     subtitle.classList.add('typing-visible');
     heroVisual?.classList.add('typing-visible');
+    heroDownload?.classList.add('typing-visible');
     return;
   }
 
@@ -321,6 +323,10 @@
     heroVisual.classList.remove('typing-visible');
     heroVisual.classList.add('typing-hidden');
   }
+  if (heroDownload) {
+    heroDownload.classList.remove('typing-visible');
+    heroDownload.classList.add('typing-hidden');
+  }
 
   const typeText = (el, text, delay = 65) =>
     new Promise((resolve) => {
@@ -343,16 +349,24 @@
     await typeText(restSpan, restText, 55);
     cursor.remove();
     // After typing completes, reveal subtitle then hero visual staggered
-    requestAnimationFrame(() => {
-      subtitle.classList.remove('typing-hidden');
-      subtitle.classList.add('typing-visible');
-      if (heroVisual) {
-        setTimeout(() => {
-          heroVisual.classList.remove('typing-hidden');
-          heroVisual.classList.add('typing-visible');
-        }, 300);
-      }
-    });
+    setTimeout(() => {
+      requestAnimationFrame(() => {
+        subtitle.classList.remove('typing-hidden');
+        subtitle.classList.add('typing-visible');
+        if (heroVisual) {
+          setTimeout(() => {
+            heroVisual.classList.remove('typing-hidden');
+            heroVisual.classList.add('typing-visible');
+          }, 300);
+        }
+        if (heroDownload) {
+          setTimeout(() => {
+            heroDownload.classList.remove('typing-hidden');
+            heroDownload.classList.add('typing-visible');
+          }, 600);
+        }
+      });
+    }, 600);
   };
 
   requestAnimationFrame(run);

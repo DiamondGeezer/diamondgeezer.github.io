@@ -1429,6 +1429,17 @@ img {
   transition: opacity 2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+.hero-download.typing-hidden {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.hero-download.typing-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
 /* Scroll reveal helpers */
 .will-reveal {
   opacity: 0;

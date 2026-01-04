@@ -215,3 +215,59 @@
     });
   }, { passive: true });
 })();
+
+// Scroll reveal animations (respect reduced motion)
+(() => {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (prefersReducedMotion) return;
+
+  const revealGroup = (nodes, { rootMargin = '0px', threshold = 0.25, baseDelay = 0, stagger = 120 } = {}) => {
+    if (!nodes.length) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-revealed');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin, threshold });
+
+    nodes.forEach((node, idx) => {
+      node.classList.add('will-reveal');
+      const delay = (baseDelay + idx * stagger) / 1000;
+      node.style.transitionDelay = `${delay}s`;
+      observer.observe(node);
+    });
+  };
+
+  // Supported services cards
+  revealGroup(Array.from(document.querySelectorAll('.service')), { threshold: 0.2, baseDelay: 0, stagger: 80 });
+
+  // How it works cards
+  revealGroup(Array.from(document.querySelectorAll('.how-card')), { threshold: 0.2, baseDelay: 0, stagger: 120 });
+
+  // Pro carousel block on home page (stagger children)
+  const perkContainer = document.querySelector('.perk-container');
+  if (perkContainer) {
+    const kids = Array.from(perkContainer.querySelectorAll('.perk-title, .perk-subtitle, .perk-animation-row, .perk-cta'));
+    if (kids.length) {
+      revealGroup(kids, { threshold: 0.15, baseDelay: 0, stagger: 180 });
+    } else {
+      revealGroup([perkContainer], { threshold: 0.15, baseDelay: 0 });
+    }
+  }
+
+  // Final CTA block (stagger rows)
+  const finalCta = document.querySelector('.final-cta .container');
+  if (finalCta) {
+    const rows = Array.from(finalCta.querySelectorAll('h2, p, .app-store-badge'));
+    if (rows.length) {
+      revealGroup(rows, { threshold: 0.2, baseDelay: 150, stagger: 180 });
+    } else {
+      revealGroup([finalCta], { threshold: 0.2, baseDelay: 150 });
+    }
+  }
+
+  // FAQ items
+  revealGroup(Array.from(document.querySelectorAll('.faq-item')), { threshold: 0.15, baseDelay: 0, stagger: 50 });
+})();

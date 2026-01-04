@@ -248,7 +248,8 @@
   howCards.forEach((card, cardIdx) => {
     const parts = [
       card,
-      ...Array.from(card.querySelectorAll('.how-step, .how-text h3, .how-text p, .how-card-clip img'))
+      ...Array.from(card.querySelectorAll('.how-card-clip img')), // start image a bit earlier
+      ...Array.from(card.querySelectorAll('.how-step, .how-text h3, .how-text p'))
     ];
     revealGroup(parts, { threshold: 0.2, baseDelay: cardIdx * 120, stagger: 100 });
   });

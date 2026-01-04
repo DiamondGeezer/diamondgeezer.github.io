@@ -336,11 +336,11 @@
         el.addEventListener('animationend', () => el.remove(), { once: true });
       };
     };
-    // initial delay 6s after start, then every 6s
+    // initial delay ~3s after start, then every 4s
     setTimeout(() => {
       emit();
-      notesTimer = setInterval(emit, 6000);
-    }, 6000);
+      notesTimer = setInterval(emit, 4000);
+    }, 3000);
     return;
   }
 
@@ -387,7 +387,7 @@
 
   const run = async () => {
     await typeText(highlight, fullHighlight, 65);
-    await new Promise((r) => setTimeout(r, 1000));
+    await new Promise((r) => setTimeout(r, 1300));
     await typeText(restSpan, restText, 55);
     cursor.remove();
     // After typing completes, reveal subtitle then hero visual staggered

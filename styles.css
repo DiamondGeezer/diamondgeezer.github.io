@@ -1269,6 +1269,10 @@ img {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 700;
   margin-top: 0;
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 35%, #ca7efd 70%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .perk-subtitle {
@@ -1308,9 +1312,15 @@ img {
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text);
-  font-weight: 700;
+  font-weight: 800;
+  font-size: clamp(1.1rem, 2.8vw, 1.35rem);
+  max-width: 350px;
+  width: 100%;
   background: rgba(255, 255, 255, 0.06);
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
 }
 
 .perk-cta:hover,
@@ -1323,6 +1333,21 @@ img {
 .perk-cta:focus-visible {
   outline: 2px solid rgba(255, 255, 255, 0.4);
   outline-offset: 2px;
+}
+
+.perk-cta::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(circle at center, rgba(202, 126, 253, 0.12) 0%, rgba(94, 39, 159, 0.08) 55%, rgba(94, 39, 159, 0.04) 75%, rgba(94, 39, 159, 0) 100%);
+  z-index: 0;
+}
+
+.perk-cta span,
+.perk-cta img,
+.perk-cta svg {
+  position: relative;
+  z-index: 1;
 }
 
 .trust-list {

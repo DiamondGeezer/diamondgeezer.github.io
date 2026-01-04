@@ -315,17 +315,25 @@
       img.src = src;
       img.onload = () => {
         const aspect = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
-        const size = 50 + Math.random() * 30;
+        const height = 40 + Math.random() * 20; // max 60px
+        const width = height / aspect;
         const el = document.createElement('img');
         el.className = 'note-plume';
         el.src = src;
-        el.style.width = `${size}px`;
-        el.style.height = `${size * aspect}px`;
-        el.style.animationDuration = `${3 + Math.random() * 2}s`;
-        el.style.left = `${50 + (Math.random() * 20 - 10)}%`;
+        el.style.setProperty('--note-rot', `${6 + Math.random() * 10}deg`);
+        el.style.width = `${width}px`;
+        el.style.height = `${height}px`;
+        el.style.animationDuration = `${6 + Math.random() * 3}s`;
+        // Position at top-right of the download button
+        const ctaRect = ctaRow.getBoundingClientRect();
+        const btnRect = heroDownload.getBoundingClientRect();
+        const x = btnRect.right - ctaRect.left;
+        const y = btnRect.top - ctaRect.top;
+        el.style.left = `${x}px`;
+        el.style.top = `${y}px`;
         el.style.transformOrigin = 'center';
         ctaRow.appendChild(el);
-        el.addEventListener('animationend', () => el.remove());
+        el.addEventListener('animationend', () => el.remove(), { once: true });
       };
     };
     // initial delay 6s after start, then every 6s

@@ -243,8 +243,15 @@
   // Supported services cards
   revealGroup(Array.from(document.querySelectorAll('.service')), { threshold: 0.2, baseDelay: 0, stagger: 80 });
 
-  // How it works cards
-  revealGroup(Array.from(document.querySelectorAll('.how-card')), { threshold: 0.2, baseDelay: 0, stagger: 120 });
+  // How it works cards (stagger inner rows per card)
+  const howCards = Array.from(document.querySelectorAll('.how-card'));
+  howCards.forEach((card, cardIdx) => {
+    const parts = [
+      card,
+      ...Array.from(card.querySelectorAll('.how-step, .how-text h3, .how-text p, .how-card-clip img'))
+    ];
+    revealGroup(parts, { threshold: 0.2, baseDelay: cardIdx * 120, stagger: 100 });
+  });
 
   // Pro carousel block on home page (stagger children)
   const perkContainer = document.querySelector('.perk-container');
@@ -270,4 +277,83 @@
 
   // FAQ items
   revealGroup(Array.from(document.querySelectorAll('.faq-item')), { threshold: 0.15, baseDelay: 0, stagger: 50 });
+})();
+
+// Typewriter effect for hero title (home only)
+(() => {
+  if (document.body.classList.contains('pro-page')) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const title = document.querySelector('.hero-copy h1');
+  const highlight = title?.querySelector('.hero-title-highlight');
+  const subtitle = document.querySelector('.hero-copy .hero-subtitle');
+  const heroVisual = document.querySelector('.hero-visual');
+  if (!title || !highlight || !subtitle) return;
+
+  const fullHighlight = highlight.textContent || '';
+  const fullTitleText = (title.textContent || '').trim();
+  const restText = fullTitleText.replace(fullHighlight, ''); // keep leading space before second sentence
+
+  if (prefersReducedMotion) {
+    subtitle.classList.add('typing-visible');
+    heroVisual?.classList.add('typing-visible');
+    return;
+  }
+
+  // Build structure: highlight span, rest span, cursor
+  const restSpan = document.createElement('span');
+  restSpan.className = 'hero-title-rest';
+  restSpan.textContent = '';
+
+  const cursor = document.createElement('span');
+  cursor.className = 'type-cursor';
+  cursor.textContent = '|';
+
+  highlight.textContent = '';
+  title.innerHTML = '';
+  title.appendChild(highlight);
+  title.appendChild(restSpan);
+  title.appendChild(cursor);
+
+  subtitle.classList.remove('typing-visible');
+  subtitle.classList.add('typing-hidden');
+  if (heroVisual) {
+    heroVisual.classList.remove('typing-visible');
+    heroVisual.classList.add('typing-hidden');
+  }
+
+  const typeText = (el, text, delay = 65) =>
+    new Promise((resolve) => {
+      let idx = 0;
+      const step = () => {
+        if (idx <= text.length) {
+          el.textContent = text.slice(0, idx);
+          idx += 1;
+          setTimeout(step, delay);
+        } else {
+          resolve();
+        }
+      };
+      step();
+    });
+
+  const run = async () => {
+    await typeText(highlight, fullHighlight, 65);
+    await new Promise((r) => setTimeout(r, 1000));
+    await typeText(restSpan, restText, 55);
+    cursor.remove();
+    // After typing completes, reveal subtitle then hero visual staggered
+    requestAnimationFrame(() => {
+      subtitle.classList.remove('typing-hidden');
+      subtitle.classList.add('typing-visible');
+      if (heroVisual) {
+        setTimeout(() => {
+          heroVisual.classList.remove('typing-hidden');
+          heroVisual.classList.add('typing-visible');
+        }, 300);
+      }
+    });
+  };
+
+  requestAnimationFrame(run);
 })();

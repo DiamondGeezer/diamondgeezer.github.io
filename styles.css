@@ -496,6 +496,20 @@ img {
   overflow: hidden;
 }
 
+.how-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  transition: opacity 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.how-card.is-revealed::before {
+  opacity: 0;
+}
+
 .how-card-inner {
   position: absolute;
   inset: 0;
@@ -1379,6 +1393,40 @@ img {
 .perk-cta svg {
   position: relative;
   z-index: 1;
+}
+
+/* Typewriter hero */
+.type-cursor {
+  display: inline-block;
+  width: 1ch;
+  animation: blink 0.8s steps(1, end) infinite;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+.hero-subtitle.typing-hidden {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.hero-subtitle.typing-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.hero-visual.typing-hidden {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.hero-visual.typing-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
 /* Scroll reveal helpers */

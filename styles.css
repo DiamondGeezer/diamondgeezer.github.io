@@ -289,6 +289,7 @@ img {
   flex-wrap: wrap;
   gap: 0.9rem;
   margin-top: 2.84rem;
+  position: relative;
 }
 
 .layout-tag {
@@ -1314,7 +1315,7 @@ img {
   font-size: clamp(1.6rem, 3vw, 2.4rem);
   font-weight: 700;
   margin-top: 0;
-  background: linear-gradient(90deg, #ffffff 0%, #ffffff 35%, #ca7efd 70%);
+  background: linear-gradient(90deg, #ffffff 0%, #ffffff 24%, #ca7efd 70%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -1440,6 +1441,30 @@ img {
   transition: opacity 2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
 
+.note-plume {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation-name: float-note;
+  animation-timing-function: ease-out;
+  pointer-events: none;
+}
+
+@keyframes float-note {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 8px) scale(0.9) rotate(0deg);
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -70px) scale(1.08) rotate(8deg);
+  }
+}
 /* Scroll reveal helpers */
 .will-reveal {
   opacity: 0;

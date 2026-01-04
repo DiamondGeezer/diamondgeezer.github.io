@@ -290,6 +290,7 @@
   const subtitle = document.querySelector('.hero-copy .hero-subtitle');
   const heroVisual = document.querySelector('.hero-visual');
   const heroDownload = document.querySelector('.hero-download');
+  const ctaRow = document.querySelector('.cta-row');
   if (!title || !highlight || !subtitle) return;
 
   const fullHighlight = highlight.textContent || '';
@@ -300,6 +301,38 @@
     subtitle.classList.add('typing-visible');
     heroVisual?.classList.add('typing-visible');
     heroDownload?.classList.add('typing-visible');
+    return;
+  }
+
+  let notesTimer = null;
+  const musPaths = Array.from({ length: 34 }, (_, i) => `assets/music_symbols_chalk/mus_${String(i + 1).padStart(2, '0')}.png`);
+
+  const startNotes = () => {
+    if (!ctaRow || notesTimer !== null) return;
+    const emit = () => {
+      const src = musPaths[Math.floor(Math.random() * musPaths.length)];
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        const aspect = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
+        const size = 50 + Math.random() * 30;
+        const el = document.createElement('img');
+        el.className = 'note-plume';
+        el.src = src;
+        el.style.width = `${size}px`;
+        el.style.height = `${size * aspect}px`;
+        el.style.animationDuration = `${3 + Math.random() * 2}s`;
+        el.style.left = `${50 + (Math.random() * 20 - 10)}%`;
+        el.style.transformOrigin = 'center';
+        ctaRow.appendChild(el);
+        el.addEventListener('animationend', () => el.remove());
+      };
+    };
+    // initial delay 6s after start, then every 6s
+    setTimeout(() => {
+      emit();
+      notesTimer = setInterval(emit, 6000);
+    }, 6000);
     return;
   }
 
@@ -364,6 +397,7 @@
           setTimeout(() => {
             heroDownload.classList.remove('typing-hidden');
             heroDownload.classList.add('typing-visible');
+            startNotes();
           }, 600);
         }
       });

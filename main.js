@@ -442,5 +442,14 @@
     }, 600);
   };
 
-  requestAnimationFrame(run);
+  const startTyping = () => {
+    requestAnimationFrame(run);
+  };
+
+  // Wait for background image to load before starting typing animation
+  const bg = new Image();
+  bg.onload = startTyping;
+  bg.onerror = startTyping; // fail-safe: still start typing if load fails
+  bg.src = 'assets/backgrounds/background.jpg';
+  if (bg.complete) startTyping();
 })();

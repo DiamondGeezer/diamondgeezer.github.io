@@ -307,6 +307,7 @@
   let notesTimer = null;
   const musPaths = Array.from({ length: 34 }, (_, i) => `assets/music_symbols_chalk/mus_${String(i + 1).padStart(2, '0')}.png`);
   let firstNote = true;
+  let lastNote = null;
 
   const startNotes = () => {
     if (!ctaRow || notesTimer !== null) return;
@@ -317,8 +318,11 @@
         src = firstChoices[Math.floor(Math.random() * firstChoices.length)];
         firstNote = false;
       } else {
-        src = musPaths[Math.floor(Math.random() * musPaths.length)];
+        do {
+          src = musPaths[Math.floor(Math.random() * musPaths.length)];
+        } while (src === lastNote);
       }
+      lastNote = src;
       const img = new Image();
       img.src = src;
       img.onload = () => {
@@ -348,7 +352,7 @@
     setTimeout(() => {
       emit();
       notesTimer = setInterval(emit, 4000);
-    }, 3000);
+    }, 1000);
     return;
   }
 

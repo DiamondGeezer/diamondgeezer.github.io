@@ -306,11 +306,19 @@
 
   let notesTimer = null;
   const musPaths = Array.from({ length: 34 }, (_, i) => `assets/music_symbols_chalk/mus_${String(i + 1).padStart(2, '0')}.png`);
+  let firstNote = true;
 
   const startNotes = () => {
     if (!ctaRow || notesTimer !== null) return;
     const emit = () => {
-      const src = musPaths[Math.floor(Math.random() * musPaths.length)];
+      let src;
+      if (firstNote) {
+        const firstChoices = ['assets/music_symbols_chalk/mus_09.png', 'assets/music_symbols_chalk/mus_21.png'];
+        src = firstChoices[Math.floor(Math.random() * firstChoices.length)];
+        firstNote = false;
+      } else {
+        src = musPaths[Math.floor(Math.random() * musPaths.length)];
+      }
       const img = new Image();
       img.src = src;
       img.onload = () => {
@@ -385,10 +393,28 @@
       step();
     });
 
+  const blinkCursor = (times = 2, interval = 180) =>
+    new Promise((resolve) => {
+      let count = 0;
+      cursor.style.visibility = 'visible'; // ensure consistent start state
+      const tick = () => {
+        cursor.style.visibility = cursor.style.visibility === 'hidden' ? 'visible' : 'hidden';
+        count += 1;
+        if (count >= times * 2) {
+          cursor.style.visibility = 'visible';
+          resolve();
+          return;
+        }
+        setTimeout(tick, interval);
+      };
+      setTimeout(tick, interval);
+    });
+
   const run = async () => {
     await typeText(highlight, fullHighlight, 65);
     await new Promise((r) => setTimeout(r, 1300));
     await typeText(restSpan, restText, 55);
+    await blinkCursor(2, 180);
     cursor.remove();
     // After typing completes, reveal subtitle then hero visual staggered
     setTimeout(() => {

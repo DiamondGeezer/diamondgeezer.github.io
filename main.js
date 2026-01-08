@@ -184,8 +184,34 @@ const i18n = (() => {
       pl: { currency: 'PLN', value: '149.99', locale: 'pl-PL' }
     };
 
+    const priceMapFamilyMonthly = {
+      en: { currency: 'USD', value: '9.99', locale: 'en-US' },
+      fr: { currency: 'EUR', value: '9.99', locale: 'fr-FR' },
+      es: { currency: 'EUR', value: '9.99', locale: 'es-ES' },
+      de: { currency: 'EUR', value: '9.99', locale: 'de-DE' },
+      it: { currency: 'EUR', value: '9.99', locale: 'it-IT' },
+      'pt-BR': { currency: 'BRL', value: '59.90', locale: 'pt-BR' },
+      ja: { currency: 'JPY', value: '1500', locale: 'ja-JP', decimals: 0 },
+      ko: { currency: 'KRW', value: '14000', locale: 'ko-KR', decimals: 0 },
+      'zh-Hans': { currency: 'CNY', value: '68.00', locale: 'zh-CN' },
+      'zh-Hant': { currency: 'TWD', value: '320', locale: 'zh-TW', decimals: 0 },
+      hi: { currency: 'INR', value: '999', locale: 'hi-IN' },
+      ar: { currency: 'SAR', value: '39.99', locale: 'ar-SA' },
+      tr: { currency: 'TRY', value: '449.99', locale: 'tr-TR' },
+      nl: { currency: 'EUR', value: '9.99', locale: 'nl-NL' },
+      sv: { currency: 'SEK', value: '129', locale: 'sv-SE' },
+      id: { currency: 'IDR', value: '169000', locale: 'id-ID', decimals: 0 },
+      th: { currency: 'THB', value: '399', locale: 'th-TH' },
+      pl: { currency: 'PLN', value: '49.99', locale: 'pl-PL' }
+    };
+
     const formatPrice = (langKey, tier = 'monthly') => {
-      const map = tier === 'annual' ? priceMapAnnual : priceMapMonthly;
+      const map =
+        tier === 'annual'
+          ? priceMapAnnual
+          : tier === 'family-monthly'
+            ? priceMapFamilyMonthly
+            : priceMapMonthly;
       const baseKey = langKey.split('-')[0];
       const matchKey = map[langKey] ? langKey : (map[baseKey] ? baseKey : 'en');
       const priceInfo = map[matchKey] || map.en;
@@ -236,6 +262,13 @@ const i18n = (() => {
       const priceLabel = formatPrice(langKey, 'annual');
       proAnnualEl.textContent = priceLabel;
       proAnnualEl.setAttribute('aria-label', priceLabel);
+    }
+    const proFamilyMonthlyEl = document.querySelector('[data-price-target="pro-family-monthly"]');
+    if (proFamilyMonthlyEl) {
+      const langKey = currentLocale || 'en';
+      const priceLabel = formatPrice(langKey, 'family-monthly');
+      proFamilyMonthlyEl.textContent = priceLabel;
+      proFamilyMonthlyEl.setAttribute('aria-label', priceLabel);
     }
     return strings;
   });

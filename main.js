@@ -116,9 +116,11 @@ const i18n = (() => {
 
   const fetchLocale = async (locale) => {
     const base = locale.split('-')[0];
+    const isZhHant = locale.toLowerCase().startsWith('zh-hant');
     const tryPaths = [
       `assets/i18n/${locale}.json`,
       `assets/i18n/${locale.toLowerCase()}.json`,
+      ...(isZhHant ? ['assets/i18n/zh-Hant.json'] : []),
       ...(base && base !== locale ? [`assets/i18n/${base}.json`] : [])
     ];
 
@@ -163,7 +165,7 @@ const i18n = (() => {
       fr: { currency: 'EUR', value: '7.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '7.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '7.99', locale: 'es-ES' },
-      'es-MX': { currency: 'MXN', value: '149', locale: 'es-MX' },
+      'es-MX': { currency: 'MXN', value: '149', locale: 'es-MX', decimals: 0, customSymbol: 'MX$' },
       de: { currency: 'EUR', value: '7.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '7.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '49,90', locale: 'pt-BR' },
@@ -188,7 +190,7 @@ const i18n = (() => {
       fr: { currency: 'EUR', value: '34.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '34.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '34.99', locale: 'es-ES' },
-      'es-MX': { currency: 'MXN', value: '599', locale: 'es-MX' },
+      'es-MX': { currency: 'MXN', value: '599', locale: 'es-MX', decimals: 0, customSymbol: 'MX$' },
       de: { currency: 'EUR', value: '34.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '34.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '199.90', locale: 'pt-BR' },
@@ -213,7 +215,7 @@ const i18n = (() => {
       fr: { currency: 'EUR', value: '9.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '9.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '9.99', locale: 'es-ES' },
-      'es-MX': { currency: 'MXN', value: '199', locale: 'es-MX' },
+      'es-MX': { currency: 'MXN', value: '199', locale: 'es-MX', decimals: 0, customSymbol: 'MX$' },
       de: { currency: 'EUR', value: '9.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '9.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '59.90', locale: 'pt-BR' },
@@ -238,7 +240,7 @@ const i18n = (() => {
       fr: { currency: 'EUR', value: '44.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '44.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '44.99', locale: 'es-ES' },
-      'es-MX': { currency: 'MXN', value: '899', locale: 'es-MX' },
+      'es-MX': { currency: 'MXN', value: '899', locale: 'es-MX', decimals: 0, customSymbol: 'MX$' },
       de: { currency: 'EUR', value: '44.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '44.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '249.90', locale: 'pt-BR' },
@@ -263,7 +265,7 @@ const i18n = (() => {
       fr: { currency: 'EUR', value: '69.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '69.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '69.99', locale: 'es-ES' },
-      'es-MX': { currency: 'MXN', value: '1299', locale: 'es-MX' },
+      'es-MX': { currency: 'MXN', value: '1299', locale: 'es-MX', decimals: 0, customSymbol: 'MX$' },
       de: { currency: 'EUR', value: '69.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '69.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '399.90', locale: 'pt-BR' },
@@ -303,17 +305,27 @@ const i18n = (() => {
           ? 'en-US'
           : locale;
       const numeric = parseFloat(String(priceInfo.value).replace(',', '.'));
-      const fmtOpts = {
-        style: 'currency',
-        currency: priceInfo.currency,
-        currencyDisplay: 'symbol'
-      };
-      if (typeof priceInfo.decimals === 'number') {
-        fmtOpts.minimumFractionDigits = priceInfo.decimals;
-        fmtOpts.maximumFractionDigits = priceInfo.decimals;
+      if (priceInfo.customSymbol) {
+        const decs = typeof priceInfo.decimals === 'number' ? priceInfo.decimals : 2;
+        const formatter = new Intl.NumberFormat(effLocale, {
+          minimumFractionDigits: decs,
+          maximumFractionDigits: decs
+        });
+        const numStr = formatter.format(Number.isFinite(numeric) ? numeric : Number(priceInfo.value) || 0);
+        return `${priceInfo.customSymbol}${numStr}`;
+      } else {
+        const fmtOpts = {
+          style: 'currency',
+          currency: priceInfo.currency,
+          currencyDisplay: 'symbol'
+        };
+        if (typeof priceInfo.decimals === 'number') {
+          fmtOpts.minimumFractionDigits = priceInfo.decimals;
+          fmtOpts.maximumFractionDigits = priceInfo.decimals;
+        }
+        const formatter = new Intl.NumberFormat(effLocale, fmtOpts);
+        return formatter.format(Number.isFinite(numeric) ? numeric : Number(priceInfo.value) || 0);
       }
-      const formatter = new Intl.NumberFormat(effLocale, fmtOpts);
-      return formatter.format(Number.isFinite(numeric) ? numeric : Number(priceInfo.value) || 0);
     };
     const replacePriceToken = (text, newPrice) => {
       if (!text) return newPrice;

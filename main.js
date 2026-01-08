@@ -155,9 +155,10 @@ const i18n = (() => {
       pl: { currency: 'PLN', symbol: 'zł', value: '39.99' }
     };
     const replacePriceToken = (text, newPrice) => {
-      const tokenRegex = /([\\p{Sc}A-Z]{0,3}\\s?[\\d.,]+(?:\\s?[A-Z]{3})?)/u;
+      if (!text) return newPrice;
+      const tokenRegex = /([\\p{Sc}A-Z]{0,3}\\s?[\\d.,]+(?:\\s?[A-Z]{3})?)/gu;
       if (tokenRegex.test(text)) return text.replace(tokenRegex, newPrice);
-      const numRegex = /[\\d][\\d.,]*/;
+      const numRegex = /[\\d][\\d.,]*/g;
       if (numRegex.test(text)) return text.replace(numRegex, newPrice);
       return `${newPrice} ${text}`;
     };
@@ -167,7 +168,11 @@ const i18n = (() => {
       const matchKey = priceMap[langKey] ? langKey : (priceMap[baseKey] ? baseKey : 'en');
       const price = priceMap[matchKey] || priceMap.en;
       const priceLabel = `${price.symbol}${price.value}`;
-      const baseText = (strings && strings.pricing && strings.pricing.subtitle) || priceEl.textContent || '';
+      const baseText =
+        (strings && strings['pricing.subtitle']) ||
+        (strings && strings.pricing && strings.pricing.subtitle) ||
+        priceEl.textContent ||
+        '';
       const text = replacePriceToken(baseText, priceLabel);
       priceEl.textContent = text;
       priceEl.setAttribute('aria-label', text);

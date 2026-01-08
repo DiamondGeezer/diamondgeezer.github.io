@@ -42,6 +42,7 @@ const i18n = (() => {
     'en-AU',
     'en-GB',
     'en-IE',
+    'en-CA',
     'ga-IE',
     'de',
     'it',
@@ -75,6 +76,7 @@ const i18n = (() => {
       if (lower.includes('au')) return 'en-AU';
       if (lower.includes('gb') || lower.includes('uk')) return 'en-GB';
       if (lower.includes('ie')) return 'en-IE';
+      if (lower.includes('ca')) return 'en-CA';
       return 'en';
     }
     if (lower.startsWith('ga')) return 'en-IE';
@@ -179,7 +181,7 @@ const i18n = (() => {
       'en-AU': { currency: 'AUD', value: '9.99', locale: 'en-AU', customSymbol: 'A$ ' },
       'en-GB': { currency: 'GBP', value: '6.99', locale: 'en-GB' },
       'en-IE': { currency: 'EUR', value: '7.99', locale: 'en-IE' },
-      'en-GB': { currency: 'GBP', value: '6.99', locale: 'en-GB' },
+      'en-CA': { currency: 'CAD', value: '9.99', locale: 'en-CA', customSymbol: 'CA$ ' },
       fr: { currency: 'EUR', value: '7.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '7.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '7.99', locale: 'es-ES' },
@@ -209,7 +211,7 @@ const i18n = (() => {
       'en-AU': { currency: 'AUD', value: '49.99', locale: 'en-AU', customSymbol: 'A$ ' },
       'en-GB': { currency: 'GBP', value: '29.99', locale: 'en-GB' },
       'en-IE': { currency: 'EUR', value: '34.99', locale: 'en-IE' },
-      'en-GB': { currency: 'GBP', value: '29.99', locale: 'en-GB' },
+      'en-CA': { currency: 'CAD', value: '39.99', locale: 'en-CA', customSymbol: 'CA$ ' },
       fr: { currency: 'EUR', value: '34.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '34.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '34.99', locale: 'es-ES' },
@@ -239,7 +241,7 @@ const i18n = (() => {
       'en-AU': { currency: 'AUD', value: '14.99', locale: 'en-AU', customSymbol: 'A$ ' },
       'en-GB': { currency: 'GBP', value: '9.99', locale: 'en-GB' },
       'en-IE': { currency: 'EUR', value: '9.99', locale: 'en-IE' },
-      'en-GB': { currency: 'GBP', value: '9.99', locale: 'en-GB' },
+      'en-CA': { currency: 'CAD', value: '12.99', locale: 'en-CA', customSymbol: 'CA$ ' },
       fr: { currency: 'EUR', value: '9.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '9.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '9.99', locale: 'es-ES' },
@@ -269,7 +271,7 @@ const i18n = (() => {
       'en-AU': { currency: 'AUD', value: '59.99', locale: 'en-AU', customSymbol: 'A$ ' },
       'en-GB': { currency: 'GBP', value: '39.99', locale: 'en-GB' },
       'en-IE': { currency: 'EUR', value: '44.99', locale: 'en-IE' },
-      'en-GB': { currency: 'GBP', value: '39.99', locale: 'en-GB' },
+      'en-CA': { currency: 'CAD', value: '49.99', locale: 'en-CA', customSymbol: 'CA$ ' },
       fr: { currency: 'EUR', value: '44.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '44.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '44.99', locale: 'es-ES' },
@@ -299,7 +301,7 @@ const i18n = (() => {
       'en-AU': { currency: 'AUD', value: '99.99', locale: 'en-AU', customSymbol: 'A$ ' },
       'en-GB': { currency: 'GBP', value: '59.99', locale: 'en-GB' },
       'en-IE': { currency: 'EUR', value: '69.99', locale: 'en-IE' },
-      'en-GB': { currency: 'GBP', value: '59.99', locale: 'en-GB' },
+      'en-CA': { currency: 'CAD', value: '79.99', locale: 'en-CA', customSymbol: 'CA$ ' },
       fr: { currency: 'EUR', value: '69.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '69.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '69.99', locale: 'es-ES' },

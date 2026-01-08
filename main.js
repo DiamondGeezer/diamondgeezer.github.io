@@ -205,13 +205,59 @@ const i18n = (() => {
       pl: { currency: 'PLN', value: '49.99', locale: 'pl-PL' }
     };
 
+    const priceMapFamilyAnnual = {
+      en: { currency: 'USD', value: '39.99', locale: 'en-US' },
+      fr: { currency: 'EUR', value: '44.99', locale: 'fr-FR' },
+      es: { currency: 'EUR', value: '44.99', locale: 'es-ES' },
+      de: { currency: 'EUR', value: '44.99', locale: 'de-DE' },
+      it: { currency: 'EUR', value: '44.99', locale: 'it-IT' },
+      'pt-BR': { currency: 'BRL', value: '249.90', locale: 'pt-BR' },
+      ja: { currency: 'JPY', value: '6000', locale: 'ja-JP', decimals: 0 },
+      ko: { currency: 'KRW', value: '55000', locale: 'ko-KR', decimals: 0 },
+      'zh-Hans': { currency: 'CNY', value: '298.00', locale: 'zh-CN' },
+      'zh-Hant': { currency: 'TWD', value: '1290', locale: 'zh-TW', decimals: 0 },
+      hi: { currency: 'INR', value: '3999', locale: 'hi-IN' },
+      ar: { currency: 'SAR', value: '179.99', locale: 'ar-SA' },
+      tr: { currency: 'TRY', value: '1799.99', locale: 'tr-TR' },
+      nl: { currency: 'EUR', value: '44.99', locale: 'nl-NL' },
+      sv: { currency: 'SEK', value: '499', locale: 'sv-SE' },
+      id: { currency: 'IDR', value: '699000', locale: 'id-ID', decimals: 0 },
+      th: { currency: 'THB', value: '1490', locale: 'th-TH' },
+      pl: { currency: 'PLN', value: '199.99', locale: 'pl-PL' }
+    };
+
+    const priceMapFamilyLifetime = {
+      en: { currency: 'USD', value: '59.99', locale: 'en-US' },
+      fr: { currency: 'EUR', value: '69.99', locale: 'fr-FR' },
+      es: { currency: 'EUR', value: '69.99', locale: 'es-ES' },
+      de: { currency: 'EUR', value: '69.99', locale: 'de-DE' },
+      it: { currency: 'EUR', value: '69.99', locale: 'it-IT' },
+      'pt-BR': { currency: 'BRL', value: '399.90', locale: 'pt-BR' },
+      ja: { currency: 'JPY', value: '10000', locale: 'ja-JP', decimals: 0 },
+      ko: { currency: 'KRW', value: '88000', locale: 'ko-KR', decimals: 0 },
+      'zh-Hans': { currency: 'CNY', value: '398.00', locale: 'zh-CN' },
+      'zh-Hant': { currency: 'TWD', value: '1990', locale: 'zh-TW', decimals: 0 },
+      hi: { currency: 'INR', value: '5900', locale: 'hi-IN' },
+      ar: { currency: 'SAR', value: '249.99', locale: 'ar-SA' },
+      tr: { currency: 'TRY', value: '2999.99', locale: 'tr-TR' },
+      nl: { currency: 'EUR', value: '69.99', locale: 'nl-NL' },
+      sv: { currency: 'SEK', value: '799', locale: 'sv-SE' },
+      id: { currency: 'IDR', value: '999000', locale: 'id-ID', decimals: 0 },
+      th: { currency: 'THB', value: '1990', locale: 'th-TH' },
+      pl: { currency: 'PLN', value: '299.99', locale: 'pl-PL' }
+    };
+
     const formatPrice = (langKey, tier = 'monthly') => {
       const map =
         tier === 'annual'
           ? priceMapAnnual
           : tier === 'family-monthly'
             ? priceMapFamilyMonthly
-            : priceMapMonthly;
+            : tier === 'family-annual'
+              ? priceMapFamilyAnnual
+              : tier === 'family-lifetime'
+                ? priceMapFamilyLifetime
+                : priceMapMonthly;
       const baseKey = langKey.split('-')[0];
       const matchKey = map[langKey] ? langKey : (map[baseKey] ? baseKey : 'en');
       const priceInfo = map[matchKey] || map.en;
@@ -269,6 +315,20 @@ const i18n = (() => {
       const priceLabel = formatPrice(langKey, 'family-monthly');
       proFamilyMonthlyEl.textContent = priceLabel;
       proFamilyMonthlyEl.setAttribute('aria-label', priceLabel);
+    }
+    const proFamilyAnnualEl = document.querySelector('[data-price-target="pro-family-annual"]');
+    if (proFamilyAnnualEl) {
+      const langKey = currentLocale || 'en';
+      const priceLabel = formatPrice(langKey, 'family-annual');
+      proFamilyAnnualEl.textContent = priceLabel;
+      proFamilyAnnualEl.setAttribute('aria-label', priceLabel);
+    }
+    const proFamilyLifetimeEl = document.querySelector('[data-price-target="pro-family-lifetime"]');
+    if (proFamilyLifetimeEl) {
+      const langKey = currentLocale || 'en';
+      const priceLabel = formatPrice(langKey, 'family-lifetime');
+      proFamilyLifetimeEl.textContent = priceLabel;
+      proFamilyLifetimeEl.setAttribute('aria-label', priceLabel);
     }
     return strings;
   });

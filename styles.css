@@ -1454,26 +1454,46 @@ img {
   --note-rot: 8deg;
 }
 
+.note-plume.typing-note {
+  animation-name: typing-note-float;
+  animation-duration: 1s;
+}
+
 @keyframes float-note {
   0% {
     opacity: 0;
     transform: translate(-20px, -30px) scale(0.1) rotate(-6deg) rotateY(-10deg);
   }
   20% {
-    opacity: 0.85;
+    opacity: 0.68;
     transform: translate(0px, -120px) scale(0.4) rotate(-2deg) rotateY(6deg);
   }
   50% {
-    opacity: 0.85;
+    opacity: 0.68;
     transform: translate(60px, -220px) scale(0.75) rotate(1deg) rotateY(3deg);
   }
   80% {
-    opacity: 0.7;
+    opacity: 0.5;
     transform: translate(110px, -320px) scale(0.95) rotate(var(--note-rot)) rotateY(2deg);
   }
   100% {
     opacity: 0;
     transform: translate(150px, -420px) scale(1.05) rotate(calc(var(--note-rot) + 3deg)) rotateY(2deg);
+  }
+}
+
+@keyframes typing-note-float {
+  0% {
+    opacity: 1;
+    transform: translate(-20px, -30px) scale(0.9) rotate(-6deg) rotateY(-6deg);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-20px, -30px) scale(3) rotate(0deg) rotateY(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-20px, -30px) scale(6) rotate(8deg) rotateY(4deg);
   }
 }
 /* Scroll reveal helpers */

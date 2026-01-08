@@ -414,9 +414,44 @@
       setTimeout(tick, interval);
     });
 
+  const emitTypingNote = () => {
+    if (!cursor) return;
+      const img = new Image();
+      img.src = 'assets/music_symbols_chalk/mus_17.png';
+      img.onload = () => {
+        const aspect = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
+        const height = 72; // base height for the typing note
+        const width = height / aspect;
+        const el = document.createElement('img');
+      el.className = 'note-plume typing-note';
+      el.src = img.src;
+      el.style.setProperty('--note-rot', `${6 + Math.random() * 10}deg`);
+      el.style.width = `${width}px`;
+      el.style.height = `${height}px`;
+      el.style.animationDuration = `1s`;
+      el.style.opacity = '1';
+      const rect = cursor.getBoundingClientRect();
+      el.style.position = 'fixed';
+      el.style.left = `${rect.left + rect.width / 2 - 20}px`;
+      el.style.top = `${rect.top + 50}px`;
+      el.style.transformOrigin = 'center';
+      el.style.transform = 'scale(0.9)';
+      document.body.appendChild(el);
+      el.addEventListener('animationend', () => el.remove(), { once: true });
+    };
+  };
+
   const run = async () => {
     await typeText(highlight, fullHighlight, 65);
-    await new Promise((r) => setTimeout(r, 1300));
+    emitTypingNote();
+    await new Promise((r) => setTimeout(r, 600)); // start note 0.4s sooner relative to resume
+    // Fade out any active typing-note immediately before resuming sentence two
+    document.querySelectorAll('.note-plume.typing-note').forEach((el) => {
+      // Let the drift continue; overlay a smooth fade to 0 over 1s
+      el.style.transition = 'opacity 1s linear';
+      el.style.opacity = '0';
+      setTimeout(() => el.remove(), 1100);
+    });
     await typeText(restSpan, restText, 55);
     await blinkCursor(2, 180);
     cursor.remove();

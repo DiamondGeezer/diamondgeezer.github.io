@@ -132,27 +132,27 @@ const i18n = (() => {
       url.searchParams.set('lang', currentLocale);
       a.href = url.pathname + url.search + url.hash;
     });
-    // Localized hero price swap (index only)
+    // Localized pricing (shared map)
     const priceEl = document.querySelector('[data-price-target="hero-price"]');
     const priceMap = {
-      en: { currency: 'USD', value: '6.99' },
-      fr: { currency: 'EUR', value: '7.99' },
-      es: { currency: 'EUR', value: '7.99' },
-      de: { currency: 'EUR', value: '7.99' },
-      it: { currency: 'EUR', value: '7.99' },
-      'pt-BR': { currency: 'BRL', value: '49.90' },
-      ja: { currency: 'JPY', value: '1100' },
-      ko: { currency: 'KRW', value: '9900' },
-      'zh-Hans': { currency: 'CNY', value: '48.00' },
-      'zh-Hant': { currency: 'TWD', value: '220' },
-      hi: { currency: 'INR', value: '699' },
-      ar: { currency: 'SAR', value: '29.99' },
-      tr: { currency: 'TRY', value: '299.99' },
-      nl: { currency: 'EUR', value: '7.99' },
-      sv: { currency: 'SEK', value: '99' },
-      id: { currency: 'IDR', value: '119000' },
-      th: { currency: 'THB', value: '249' },
-      pl: { currency: 'PLN', value: '39.99' }
+      en: { currency: 'USD', symbol: '$', value: '6.99' },
+      fr: { currency: 'EUR', symbol: '€', value: '7.99' },
+      es: { currency: 'EUR', symbol: '€', value: '7.99' },
+      de: { currency: 'EUR', symbol: '€', value: '7.99' },
+      it: { currency: 'EUR', symbol: '€', value: '7.99' },
+      'pt-BR': { currency: 'BRL', symbol: 'R$', value: '49.90' },
+      ja: { currency: 'JPY', symbol: '¥', value: '1100' },
+      ko: { currency: 'KRW', symbol: '₩', value: '9900' },
+      'zh-Hans': { currency: 'CNY', symbol: '¥', value: '48.00' },
+      'zh-Hant': { currency: 'TWD', symbol: 'NT$', value: '220' },
+      hi: { currency: 'INR', symbol: '₹', value: '699' },
+      ar: { currency: 'SAR', symbol: '﷼', value: '29.99' },
+      tr: { currency: 'TRY', symbol: '₺', value: '299.99' },
+      nl: { currency: 'EUR', symbol: '€', value: '7.99' },
+      sv: { currency: 'SEK', symbol: 'kr', value: '99' },
+      id: { currency: 'IDR', symbol: 'Rp', value: '119000' },
+      th: { currency: 'THB', symbol: '฿', value: '249' },
+      pl: { currency: 'PLN', symbol: 'zł', value: '39.99' }
     };
     if (priceEl) {
       const langKey = currentLocale || 'en';
@@ -161,8 +161,8 @@ const i18n = (() => {
       const price = priceMap[matchKey] || priceMap.en;
       const priceLabel =
         matchKey === 'ja' || matchKey === 'ko' || matchKey.startsWith('zh')
-          ? `${price.currency} ${price.value}`
-          : `${price.value} ${price.currency}`;
+          ? `${price.symbol}${price.value}`
+          : `${price.symbol}${price.value}`;
       const text = `Starting at ${priceLabel}/month`;
       priceEl.textContent = text;
       priceEl.setAttribute('aria-label', text);
@@ -174,10 +174,7 @@ const i18n = (() => {
       const baseKey = langKey.split('-')[0];
       const matchKey = priceMap[langKey] ? langKey : (priceMap[baseKey] ? baseKey : 'en');
       const price = priceMap[matchKey] || priceMap.en;
-      const priceLabel =
-        matchKey === 'ja' || matchKey === 'ko' || matchKey.startsWith('zh')
-          ? `${price.currency} ${price.value}`
-          : `${price.currency} ${price.value}`;
+      const priceLabel = `${price.symbol}${price.value}`;
       proPriceEl.textContent = priceLabel;
       proPriceEl.setAttribute('aria-label', priceLabel);
     }

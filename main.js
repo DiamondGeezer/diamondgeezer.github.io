@@ -44,6 +44,8 @@ const i18n = (() => {
     'ko',
     'zh-Hans',
     'zh-Hant',
+    'zh-Hant-HK',
+    'zh-Hant-TW',
     'hi',
     'ar',
     'tr',
@@ -59,7 +61,13 @@ const i18n = (() => {
     const lower = lang.toLowerCase();
     if (lower.startsWith('pt')) return 'pt-BR';
     if (lower.startsWith('zh')) {
-      if (lower.includes('hant') || lower.includes('tw') || lower.includes('hk')) return 'zh-Hant';
+      const isHK = lower.includes('hk');
+      const isTW = lower.includes('tw');
+      if (lower.includes('hant') || isHK || isTW) {
+        if (isHK) return 'zh-Hant-HK';
+        if (isTW) return 'zh-Hant-TW';
+        return 'zh-Hant';
+      }
       return 'zh-Hans';
     }
     const base = lower.split('-')[0];
@@ -153,6 +161,8 @@ const i18n = (() => {
       ko: { currency: 'KRW', value: '9900', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '48.00', locale: 'zh-CN' },
       'zh-Hant': { currency: 'TWD', value: '220', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-HK': { currency: 'HKD', value: '58', locale: 'zh-HK', decimals: 0 },
+      'zh-Hant-TW': { currency: 'TWD', value: '220', locale: 'zh-TW', decimals: 0 },
       hi: { currency: 'INR', value: '699', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '29.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '299.99', locale: 'tr-TR' },
@@ -174,6 +184,8 @@ const i18n = (() => {
       ko: { currency: 'KRW', value: '44000', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '198.00', locale: 'zh-CN' },
       'zh-Hant': { currency: 'TWD', value: '990', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-HK': { currency: 'HKD', value: '228', locale: 'zh-HK', decimals: 0 },
+      'zh-Hant-TW': { currency: 'TWD', value: '990', locale: 'zh-TW', decimals: 0 },
       hi: { currency: 'INR', value: '2999', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '129.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '1299.99', locale: 'tr-TR' },
@@ -195,6 +207,8 @@ const i18n = (() => {
       ko: { currency: 'KRW', value: '14000', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '68.00', locale: 'zh-CN' },
       'zh-Hant': { currency: 'TWD', value: '320', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-HK': { currency: 'HKD', value: '88', locale: 'zh-HK', decimals: 0 },
+      'zh-Hant-TW': { currency: 'TWD', value: '320', locale: 'zh-TW', decimals: 0 },
       hi: { currency: 'INR', value: '999', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '39.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '449.99', locale: 'tr-TR' },
@@ -216,6 +230,8 @@ const i18n = (() => {
       ko: { currency: 'KRW', value: '55000', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '298.00', locale: 'zh-CN' },
       'zh-Hant': { currency: 'TWD', value: '1290', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-HK': { currency: 'HKD', value: '288', locale: 'zh-HK', decimals: 0 },
+      'zh-Hant-TW': { currency: 'TWD', value: '1290', locale: 'zh-TW', decimals: 0 },
       hi: { currency: 'INR', value: '3999', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '179.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '1799.99', locale: 'tr-TR' },
@@ -237,6 +253,8 @@ const i18n = (() => {
       ko: { currency: 'KRW', value: '88000', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '398.00', locale: 'zh-CN' },
       'zh-Hant': { currency: 'TWD', value: '1990', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-HK': { currency: 'HKD', value: '488', locale: 'zh-HK', decimals: 0 },
+      'zh-Hant-TW': { currency: 'TWD', value: '1990', locale: 'zh-TW', decimals: 0 },
       hi: { currency: 'INR', value: '5900', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '249.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '2999.99', locale: 'tr-TR' },
@@ -262,16 +280,21 @@ const i18n = (() => {
       const matchKey = map[langKey] ? langKey : (map[baseKey] ? baseKey : 'en');
       const priceInfo = map[matchKey] || map.en;
       const locale = priceInfo.locale || langKey || 'en-US';
+      const effLocale =
+        priceInfo.currency === 'TWD' && locale.toLowerCase().startsWith('zh')
+          ? 'en-US'
+          : locale;
       const numeric = parseFloat(String(priceInfo.value).replace(',', '.'));
       const fmtOpts = {
         style: 'currency',
-        currency: priceInfo.currency
+        currency: priceInfo.currency,
+        currencyDisplay: 'symbol'
       };
       if (typeof priceInfo.decimals === 'number') {
         fmtOpts.minimumFractionDigits = priceInfo.decimals;
         fmtOpts.maximumFractionDigits = priceInfo.decimals;
       }
-      const formatter = new Intl.NumberFormat(locale, fmtOpts);
+      const formatter = new Intl.NumberFormat(effLocale, fmtOpts);
       return formatter.format(Number.isFinite(numeric) ? numeric : Number(priceInfo.value) || 0);
     };
     const replacePriceToken = (text, newPrice) => {
@@ -363,7 +386,9 @@ const i18n = (() => {
     { code: 'ja', label: '🇯🇵 日本語' },
     { code: 'ko', label: '🇰🇷 한국어' },
     { code: 'zh-Hans', label: '🇨🇳 简体中文' },
-    { code: 'zh-Hant', label: '🇭🇰 繁體中文' },
+    { code: 'zh-Hant', label: '🇹🇼 繁體中文' },
+    { code: 'zh-Hant-HK', label: '🇭🇰 繁體中文 (香港)' },
+    { code: 'zh-Hant-TW', label: '🇹🇼 繁體中文 (台灣)' },
     { code: 'hi', label: '🇮🇳 हिन्दी' },
     { code: 'ar', label: '🇸🇦 العربية' },
     { code: 'tr', label: '🇹🇷 Türkçe' },

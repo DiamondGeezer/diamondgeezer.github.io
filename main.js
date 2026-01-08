@@ -48,6 +48,7 @@ const i18n = (() => {
     'zh-Hant',
     'zh-Hant-HK',
     'zh-Hant-TW',
+    'zh-Hant-MO',
     'hi',
     'ar',
     'tr',
@@ -58,24 +59,26 @@ const i18n = (() => {
     'pl'
   ];
 
-  const normalize = (lang) => {
-    if (!lang) return 'en';
-    const lower = lang.toLowerCase();
-    if (lower.startsWith('pt')) return 'pt-BR';
-    if (lower.startsWith('es')) {
+    const normalize = (lang) => {
+      if (!lang) return 'en';
+      const lower = lang.toLowerCase();
+      if (lower.startsWith('pt')) return 'pt-BR';
+      if (lower.startsWith('es')) {
       if (lower.includes('mx')) return 'es-MX';
       return 'es';
     }
-    if (lower.startsWith('zh')) {
-      const isHK = lower.includes('hk');
-      const isTW = lower.includes('tw');
-      if (lower.includes('hant') || isHK || isTW) {
-        if (isHK) return 'zh-Hant-HK';
-        if (isTW) return 'zh-Hant-TW';
-        return 'zh-Hant';
+      if (lower.startsWith('zh')) {
+        const isHK = lower.includes('hk');
+        const isTW = lower.includes('tw');
+        const isMO = lower.includes('mo');
+        if (lower.includes('hant') || isHK || isTW || isMO) {
+          if (isHK) return 'zh-Hant-HK';
+          if (isTW) return 'zh-Hant-TW';
+          if (isMO) return 'zh-Hant-MO';
+          return 'zh-Hant';
+        }
+        return 'zh-Hans';
       }
-      return 'zh-Hans';
-    }
     const base = lower.split('-')[0];
     const match = supported.find((l) => l.toLowerCase() === lower || l.split('-')[0] === base);
     return match || 'en';
@@ -175,6 +178,7 @@ const i18n = (() => {
       'zh-Hant': { currency: 'TWD', value: '220', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-HK': { currency: 'HKD', value: '58', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '220', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-MO': { currency: 'MOP', value: '6.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       hi: { currency: 'INR', value: '699', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '29.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '299.99', locale: 'tr-TR' },
@@ -200,6 +204,7 @@ const i18n = (() => {
       'zh-Hant': { currency: 'TWD', value: '990', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-HK': { currency: 'HKD', value: '228', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '990', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-MO': { currency: 'MOP', value: '29.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       hi: { currency: 'INR', value: '2999', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '129.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '1299.99', locale: 'tr-TR' },
@@ -225,6 +230,7 @@ const i18n = (() => {
       'zh-Hant': { currency: 'TWD', value: '320', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-HK': { currency: 'HKD', value: '88', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '320', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-MO': { currency: 'MOP', value: '9.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       hi: { currency: 'INR', value: '999', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '39.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '449.99', locale: 'tr-TR' },
@@ -250,6 +256,7 @@ const i18n = (() => {
       'zh-Hant': { currency: 'TWD', value: '1290', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-HK': { currency: 'HKD', value: '288', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '1290', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-MO': { currency: 'MOP', value: '39.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       hi: { currency: 'INR', value: '3999', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '179.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '1799.99', locale: 'tr-TR' },
@@ -275,6 +282,7 @@ const i18n = (() => {
       'zh-Hant': { currency: 'TWD', value: '1990', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-HK': { currency: 'HKD', value: '488', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '1990', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant-MO': { currency: 'MOP', value: '59.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       hi: { currency: 'INR', value: '5900', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '249.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '2999.99', locale: 'tr-TR' },

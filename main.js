@@ -41,6 +41,8 @@ const i18n = (() => {
     'en',
     'en-AU',
     'en-GB',
+    'en-IE',
+    'ga-IE',
     'de',
     'it',
     'pt-BR',
@@ -65,15 +67,17 @@ const i18n = (() => {
       if (!lang) return 'en';
       const lower = lang.toLowerCase();
       if (lower.startsWith('pt')) return 'pt-BR';
-      if (lower.startsWith('es')) {
-        if (lower.includes('mx')) return 'es-MX';
-        return 'es';
-      }
-      if (lower.startsWith('en')) {
-        if (lower.includes('au')) return 'en-AU';
-        if (lower.includes('gb') || lower.includes('uk')) return 'en-GB';
-        return 'en';
-      }
+    if (lower.startsWith('es')) {
+      if (lower.includes('mx')) return 'es-MX';
+      return 'es';
+    }
+    if (lower.startsWith('en')) {
+      if (lower.includes('au')) return 'en-AU';
+      if (lower.includes('gb') || lower.includes('uk')) return 'en-GB';
+      if (lower.includes('ie')) return 'en-IE';
+      return 'en';
+    }
+    if (lower.startsWith('ga')) return 'en-IE';
       if (lower.startsWith('zh')) {
         const isHK = lower.includes('hk');
         const isTW = lower.includes('tw');
@@ -172,7 +176,9 @@ const i18n = (() => {
     const priceEl = document.querySelector('[data-price-target="hero-price"]');
     const priceMapMonthly = {
       en: { currency: 'USD', value: '6.99', locale: 'en-US' },
-      'en-AU': { currency: 'AUD', value: '9.99', locale: 'en-AU' },
+      'en-AU': { currency: 'AUD', value: '9.99', locale: 'en-AU', customSymbol: 'A$ ' },
+      'en-GB': { currency: 'GBP', value: '6.99', locale: 'en-GB' },
+      'en-IE': { currency: 'EUR', value: '7.99', locale: 'en-IE' },
       'en-GB': { currency: 'GBP', value: '6.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '7.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '7.99', locale: 'es-ES' },
@@ -200,7 +206,9 @@ const i18n = (() => {
 
     const priceMapAnnual = {
       en: { currency: 'USD', value: '29.99', locale: 'en-US' },
-      'en-AU': { currency: 'AUD', value: '49.99', locale: 'en-AU' },
+      'en-AU': { currency: 'AUD', value: '49.99', locale: 'en-AU', customSymbol: 'A$ ' },
+      'en-GB': { currency: 'GBP', value: '29.99', locale: 'en-GB' },
+      'en-IE': { currency: 'EUR', value: '34.99', locale: 'en-IE' },
       'en-GB': { currency: 'GBP', value: '29.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '34.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '34.99', locale: 'es-ES' },
@@ -228,7 +236,9 @@ const i18n = (() => {
 
     const priceMapFamilyMonthly = {
       en: { currency: 'USD', value: '9.99', locale: 'en-US' },
-      'en-AU': { currency: 'AUD', value: '14.99', locale: 'en-AU' },
+      'en-AU': { currency: 'AUD', value: '14.99', locale: 'en-AU', customSymbol: 'A$ ' },
+      'en-GB': { currency: 'GBP', value: '9.99', locale: 'en-GB' },
+      'en-IE': { currency: 'EUR', value: '9.99', locale: 'en-IE' },
       'en-GB': { currency: 'GBP', value: '9.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '9.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '9.99', locale: 'es-ES' },
@@ -256,7 +266,9 @@ const i18n = (() => {
 
     const priceMapFamilyAnnual = {
       en: { currency: 'USD', value: '39.99', locale: 'en-US' },
-      'en-AU': { currency: 'AUD', value: '59.99', locale: 'en-AU' },
+      'en-AU': { currency: 'AUD', value: '59.99', locale: 'en-AU', customSymbol: 'A$ ' },
+      'en-GB': { currency: 'GBP', value: '39.99', locale: 'en-GB' },
+      'en-IE': { currency: 'EUR', value: '44.99', locale: 'en-IE' },
       'en-GB': { currency: 'GBP', value: '39.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '44.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '44.99', locale: 'es-ES' },
@@ -284,7 +296,9 @@ const i18n = (() => {
 
     const priceMapFamilyLifetime = {
       en: { currency: 'USD', value: '59.99', locale: 'en-US' },
-      'en-AU': { currency: 'AUD', value: '99.99', locale: 'en-AU' },
+      'en-AU': { currency: 'AUD', value: '99.99', locale: 'en-AU', customSymbol: 'A$ ' },
+      'en-GB': { currency: 'GBP', value: '59.99', locale: 'en-GB' },
+      'en-IE': { currency: 'EUR', value: '69.99', locale: 'en-IE' },
       'en-GB': { currency: 'GBP', value: '59.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '69.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '69.99', locale: 'es-ES' },
@@ -435,6 +449,7 @@ const i18n = (() => {
     { code: 'en', label: '🇺🇸 English' },
     { code: 'en-GB', label: '🇬🇧 English (UK)' },
     { code: 'en-AU', label: '🇦🇺 English (Australia)' },
+    { code: 'en-IE', label: '🇪🇺 English (Ireland)' },
     { code: 'fr', label: '🇫🇷 Français' },
     { code: 'es-ES', label: '🇪🇸 Español (España)' },
     { code: 'es-MX', label: '🇲🇽 Español (México)' },

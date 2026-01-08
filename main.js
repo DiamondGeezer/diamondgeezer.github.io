@@ -148,7 +148,7 @@ const i18n = (() => {
       es: { currency: 'EUR', symbol: '€', value: '7.99' },
       de: { currency: 'EUR', symbol: '€', value: '7.99' },
       it: { currency: 'EUR', symbol: '€', value: '7.99' },
-      'pt-BR': { currency: 'BRL', symbol: 'R$', value: '49.90' },
+      'pt-BR': { currency: 'BRL', symbol: 'R$', value: '49,90' },
       ja: { currency: 'JPY', symbol: '¥', value: '1100' },
       ko: { currency: 'KRW', symbol: '₩', value: '9900' },
       'zh-Hans': { currency: 'CNY', symbol: '¥', value: '48.00' },

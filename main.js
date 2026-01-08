@@ -156,9 +156,9 @@ const i18n = (() => {
     };
     const replacePriceToken = (text, newPrice) => {
       if (!text) return newPrice;
-      const tokenRegex = /([\\p{Sc}A-Z]{0,3}\\s?[\\d.,]+(?:\\s?[A-Z]{3})?)/gu;
+      const tokenRegex = /([\p{Sc}A-Z]{0,3}\s?[\d.,]+(?:\s?[A-Z]{3})?)/gu;
       if (tokenRegex.test(text)) return text.replace(tokenRegex, newPrice);
-      const numRegex = /[\\d][\\d.,]*/g;
+      const numRegex = /[\d][\d.,]*/g;
       if (numRegex.test(text)) return text.replace(numRegex, newPrice);
       return `${newPrice} ${text}`;
     };

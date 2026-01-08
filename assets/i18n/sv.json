@@ -55,7 +55,7 @@
   "faq.q7": "Hur hanterar ni integritet?",
   "faq.a7": "Vi samlar inte in personliga identifierare. Vi lagrar bara åtkomst som behövs för att läsa och skapa spellistor och matchningar. Du kan när som helst återkalla åtkomst genom att koppla från tjänsten i appen; då tas även sparade tokens bort.",
   "pricing.title": "Lås upp alla funktioner med Mixport Pro",
-  "pricing.subtitle": "Från $6.99/mån",
+  "pricing.subtitle": "Från $6.99/månad",
   "pricing.cta": "Läs mer om Pro →",
   "download.title": "Ladda ned Mixport",
   "download.subtitle": "Börja överföra och synka.",

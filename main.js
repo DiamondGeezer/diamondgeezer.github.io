@@ -39,6 +39,8 @@ const i18n = (() => {
     'es-ES',
     'es-MX',
     'en',
+    'en-AU',
+    'en-GB',
     'de',
     'it',
     'pt-BR',
@@ -64,9 +66,14 @@ const i18n = (() => {
       const lower = lang.toLowerCase();
       if (lower.startsWith('pt')) return 'pt-BR';
       if (lower.startsWith('es')) {
-      if (lower.includes('mx')) return 'es-MX';
-      return 'es';
-    }
+        if (lower.includes('mx')) return 'es-MX';
+        return 'es';
+      }
+      if (lower.startsWith('en')) {
+        if (lower.includes('au')) return 'en-AU';
+        if (lower.includes('gb') || lower.includes('uk')) return 'en-GB';
+        return 'en';
+      }
       if (lower.startsWith('zh')) {
         const isHK = lower.includes('hk');
         const isTW = lower.includes('tw');
@@ -75,7 +82,7 @@ const i18n = (() => {
           if (isHK) return 'zh-Hant-HK';
           if (isTW) return 'zh-Hant-TW';
           if (isMO) return 'zh-Hant-MO';
-          return 'zh-Hant';
+          return 'zh-Hant-MO';
         }
         return 'zh-Hans';
       }
@@ -165,6 +172,8 @@ const i18n = (() => {
     const priceEl = document.querySelector('[data-price-target="hero-price"]');
     const priceMapMonthly = {
       en: { currency: 'USD', value: '6.99', locale: 'en-US' },
+      'en-AU': { currency: 'AUD', value: '9.99', locale: 'en-AU' },
+      'en-GB': { currency: 'GBP', value: '6.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '7.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '7.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '7.99', locale: 'es-ES' },
@@ -175,7 +184,7 @@ const i18n = (() => {
       ja: { currency: 'JPY', value: '1100', locale: 'ja-JP', decimals: 0 },
       ko: { currency: 'KRW', value: '9900', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '48.00', locale: 'zh-CN' },
-      'zh-Hant': { currency: 'TWD', value: '220', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant': { currency: 'MOP', value: '6.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       'zh-Hant-HK': { currency: 'HKD', value: '58', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '220', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-MO': { currency: 'MOP', value: '6.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
@@ -191,6 +200,8 @@ const i18n = (() => {
 
     const priceMapAnnual = {
       en: { currency: 'USD', value: '29.99', locale: 'en-US' },
+      'en-AU': { currency: 'AUD', value: '49.99', locale: 'en-AU' },
+      'en-GB': { currency: 'GBP', value: '29.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '34.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '34.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '34.99', locale: 'es-ES' },
@@ -201,7 +212,7 @@ const i18n = (() => {
       ja: { currency: 'JPY', value: '5000', locale: 'ja-JP', decimals: 0 },
       ko: { currency: 'KRW', value: '44000', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '198.00', locale: 'zh-CN' },
-      'zh-Hant': { currency: 'TWD', value: '990', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant': { currency: 'MOP', value: '29.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       'zh-Hant-HK': { currency: 'HKD', value: '228', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '990', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-MO': { currency: 'MOP', value: '29.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
@@ -217,6 +228,8 @@ const i18n = (() => {
 
     const priceMapFamilyMonthly = {
       en: { currency: 'USD', value: '9.99', locale: 'en-US' },
+      'en-AU': { currency: 'AUD', value: '14.99', locale: 'en-AU' },
+      'en-GB': { currency: 'GBP', value: '9.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '9.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '9.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '9.99', locale: 'es-ES' },
@@ -227,7 +240,7 @@ const i18n = (() => {
       ja: { currency: 'JPY', value: '1500', locale: 'ja-JP', decimals: 0 },
       ko: { currency: 'KRW', value: '14000', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '68.00', locale: 'zh-CN' },
-      'zh-Hant': { currency: 'TWD', value: '320', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant': { currency: 'MOP', value: '9.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       'zh-Hant-HK': { currency: 'HKD', value: '88', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '320', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-MO': { currency: 'MOP', value: '9.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
@@ -243,6 +256,8 @@ const i18n = (() => {
 
     const priceMapFamilyAnnual = {
       en: { currency: 'USD', value: '39.99', locale: 'en-US' },
+      'en-AU': { currency: 'AUD', value: '59.99', locale: 'en-AU' },
+      'en-GB': { currency: 'GBP', value: '39.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '44.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '44.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '44.99', locale: 'es-ES' },
@@ -253,7 +268,7 @@ const i18n = (() => {
       ja: { currency: 'JPY', value: '6000', locale: 'ja-JP', decimals: 0 },
       ko: { currency: 'KRW', value: '55000', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '298.00', locale: 'zh-CN' },
-      'zh-Hant': { currency: 'TWD', value: '1290', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant': { currency: 'MOP', value: '39.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       'zh-Hant-HK': { currency: 'HKD', value: '288', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '1290', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-MO': { currency: 'MOP', value: '39.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
@@ -269,6 +284,8 @@ const i18n = (() => {
 
     const priceMapFamilyLifetime = {
       en: { currency: 'USD', value: '59.99', locale: 'en-US' },
+      'en-AU': { currency: 'AUD', value: '99.99', locale: 'en-AU' },
+      'en-GB': { currency: 'GBP', value: '59.99', locale: 'en-GB' },
       fr: { currency: 'EUR', value: '69.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '69.99', locale: 'es-ES' },
       'es-ES': { currency: 'EUR', value: '69.99', locale: 'es-ES' },
@@ -279,7 +296,7 @@ const i18n = (() => {
       ja: { currency: 'JPY', value: '10000', locale: 'ja-JP', decimals: 0 },
       ko: { currency: 'KRW', value: '88000', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '398.00', locale: 'zh-CN' },
-      'zh-Hant': { currency: 'TWD', value: '1990', locale: 'zh-TW', decimals: 0 },
+      'zh-Hant': { currency: 'MOP', value: '59.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
       'zh-Hant-HK': { currency: 'HKD', value: '488', locale: 'zh-HK', decimals: 0 },
       'zh-Hant-TW': { currency: 'TWD', value: '1990', locale: 'zh-TW', decimals: 0 },
       'zh-Hant-MO': { currency: 'MOP', value: '59.99', locale: 'zh-MO', decimals: 2, customSymbol: 'MOP$ ' },
@@ -416,6 +433,8 @@ const i18n = (() => {
 
   const langs = [
     { code: 'en', label: '🇺🇸 English' },
+    { code: 'en-GB', label: '🇬🇧 English (UK)' },
+    { code: 'en-AU', label: '🇦🇺 English (Australia)' },
     { code: 'fr', label: '🇫🇷 Français' },
     { code: 'es-ES', label: '🇪🇸 Español (España)' },
     { code: 'es-MX', label: '🇲🇽 Español (México)' },
@@ -425,7 +444,7 @@ const i18n = (() => {
     { code: 'ja', label: '🇯🇵 日本語' },
     { code: 'ko', label: '🇰🇷 한국어' },
     { code: 'zh-Hans', label: '🇨🇳 简体中文' },
-    { code: 'zh-Hant', label: '🇹🇼 繁體中文' },
+    { code: 'zh-Hant-MO', label: '🇲🇴 繁體中文 (澳門)' },
     { code: 'zh-Hant-HK', label: '🇭🇰 繁體中文 (香港)' },
     { code: 'zh-Hant-TW', label: '🇹🇼 繁體中文 (台灣)' },
     { code: 'hi', label: '🇮🇳 हिन्दी' },

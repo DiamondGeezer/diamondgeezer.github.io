@@ -392,9 +392,8 @@ const i18n = (() => {
   const ctaRow = document.querySelector('.cta-row');
   if (!title || !highlight || !subtitle) return;
 
-  const fullHighlight = highlight.textContent || '';
-  const fullTitleText = (title.textContent || '').trim();
-  const restText = fullTitleText.replace(fullHighlight, ''); // keep leading space before second sentence
+  let fullHighlight = '';
+  let restText = '';
 
   if (prefersReducedMotion) {
     subtitle.classList.add('typing-visible');
@@ -591,9 +590,17 @@ const i18n = (() => {
     if (typingStarted) return;
     typingStarted = true;
     try {
-      await i18n.ready;
+      const strings = await i18n.ready;
+      // Pull translated strings directly to avoid stale pre-i18n content
+      const hi = strings?.['hero.titleHighlight'] || 'Your Music.';
+      const rest = strings?.['hero.titleRest'] || ' Wherever you listen.';
+      fullHighlight = hi;
+      // Preserve the leading space before the second sentence
+      restText = rest.startsWith(' ') ? rest : ` ${rest}`;
     } catch (e) {
-      // ignore i18n failures
+      // ignore i18n failures; fall back to defaults
+      fullHighlight = 'Your Music.';
+      restText = ' Wherever you listen.';
     }
     startTyping();
   };

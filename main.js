@@ -115,9 +115,11 @@ const i18n = (() => {
   };
 
   const fetchLocale = async (locale) => {
+    const base = locale.split('-')[0];
     const tryPaths = [
       `assets/i18n/${locale}.json`,
-      `assets/i18n/${locale.toLowerCase()}.json`
+      `assets/i18n/${locale.toLowerCase()}.json`,
+      ...(base && base !== locale ? [`assets/i18n/${base}.json`] : [])
     ];
 
     for (const path of tryPaths) {

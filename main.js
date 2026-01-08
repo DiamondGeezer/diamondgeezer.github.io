@@ -101,22 +101,30 @@ const i18n = (() => {
   };
 
   const fetchLocale = async (locale) => {
-    try {
-      const res = await fetch(`assets/i18n/${locale}.json`, { cache: 'no-cache' });
-      if (!res.ok) throw new Error('load failed');
-      const data = await res.json();
-      return data;
-    } catch (e) {
-      if (locale !== 'en') {
-        try {
-          const res = await fetch('assets/i18n/en.json', { cache: 'no-cache' });
-          if (res.ok) return res.json();
-        } catch (err) {
-          // fall through
-        }
+    const tryPaths = [
+      `assets/i18n/${locale}.json`,
+      `assets/i18n/${locale.toLowerCase()}.json`
+    ];
+
+    for (const path of tryPaths) {
+      try {
+        const res = await fetch(path, { cache: 'no-cache' });
+        if (!res.ok) throw new Error('load failed');
+        return await res.json();
+      } catch (_) {
+        // try next path or fallback below
       }
-      return null;
     }
+
+    if (locale !== 'en') {
+      try {
+        const res = await fetch('assets/i18n/en.json', { cache: 'no-cache' });
+        if (res.ok) return res.json();
+      } catch (_) {
+        // fall through
+      }
+    }
+    return null;
   };
 
   // Temporary forced locale override (e.g., testing). Set to null/undefined to return to auto-detect.

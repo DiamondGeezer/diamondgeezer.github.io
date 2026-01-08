@@ -451,7 +451,7 @@ const i18n = (() => {
     { code: 'en', label: '🇺🇸 English' },
     { code: 'en-GB', label: '🇬🇧 English (UK)' },
     { code: 'en-AU', label: '🇦🇺 English (Australia)' },
-    { code: 'en-IE', label: '🇪🇺 English (Ireland)' },
+    { code: 'en-CA', label: '🇨🇦 English (Canada)' },
     { code: 'fr', label: '🇫🇷 Français' },
     { code: 'es-ES', label: '🇪🇸 Español (España)' },
     { code: 'es-MX', label: '🇲🇽 Español (México)' },

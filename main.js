@@ -184,14 +184,31 @@ const i18n = (() => {
   });
 
   const openMenu = () => {
+    // move menu to body to avoid parent clipping
+    if (menu.parentElement !== document.body) {
+      document.body.appendChild(menu);
+    }
     btn.setAttribute('aria-expanded', 'true');
     menu.classList.add('open');
+    // Ensure we measure after display is applied
+    menu.style.display = 'block';
+    menu.style.position = 'fixed';
+    const btnRect = btn.getBoundingClientRect();
+    const menuRect = menu.getBoundingClientRect();
+    const top = btnRect.bottom + 6 + window.scrollY;
+    const left = Math.min(
+      btnRect.left + window.scrollX,
+      window.scrollX + window.innerWidth - menuRect.width - 8
+    );
+    menu.style.top = `${top}px`;
+    menu.style.left = `${left}px`;
     document.addEventListener('click', handleOutside, { once: true });
   };
 
   const closeMenu = () => {
     btn.setAttribute('aria-expanded', 'false');
     menu.classList.remove('open');
+    menu.style.display = 'none';
   };
 
   const handleOutside = (e) => {

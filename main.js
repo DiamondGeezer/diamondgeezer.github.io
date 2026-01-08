@@ -36,6 +36,8 @@ const i18n = (() => {
   const supported = [
     'fr',
     'es',
+    'es-ES',
+    'es-MX',
     'en',
     'de',
     'it',
@@ -60,6 +62,10 @@ const i18n = (() => {
     if (!lang) return 'en';
     const lower = lang.toLowerCase();
     if (lower.startsWith('pt')) return 'pt-BR';
+    if (lower.startsWith('es')) {
+      if (lower.includes('mx')) return 'es-MX';
+      return 'es';
+    }
     if (lower.startsWith('zh')) {
       const isHK = lower.includes('hk');
       const isTW = lower.includes('tw');
@@ -154,6 +160,8 @@ const i18n = (() => {
       en: { currency: 'USD', value: '6.99', locale: 'en-US' },
       fr: { currency: 'EUR', value: '7.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '7.99', locale: 'es-ES' },
+      'es-ES': { currency: 'EUR', value: '7.99', locale: 'es-ES' },
+      'es-MX': { currency: 'MXN', value: '149', locale: 'es-MX' },
       de: { currency: 'EUR', value: '7.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '7.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '49,90', locale: 'pt-BR' },
@@ -177,6 +185,8 @@ const i18n = (() => {
       en: { currency: 'USD', value: '29.99', locale: 'en-US' },
       fr: { currency: 'EUR', value: '34.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '34.99', locale: 'es-ES' },
+      'es-ES': { currency: 'EUR', value: '34.99', locale: 'es-ES' },
+      'es-MX': { currency: 'MXN', value: '599', locale: 'es-MX' },
       de: { currency: 'EUR', value: '34.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '34.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '199.90', locale: 'pt-BR' },
@@ -200,6 +210,8 @@ const i18n = (() => {
       en: { currency: 'USD', value: '9.99', locale: 'en-US' },
       fr: { currency: 'EUR', value: '9.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '9.99', locale: 'es-ES' },
+      'es-ES': { currency: 'EUR', value: '9.99', locale: 'es-ES' },
+      'es-MX': { currency: 'MXN', value: '199', locale: 'es-MX' },
       de: { currency: 'EUR', value: '9.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '9.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '59.90', locale: 'pt-BR' },
@@ -223,6 +235,8 @@ const i18n = (() => {
       en: { currency: 'USD', value: '39.99', locale: 'en-US' },
       fr: { currency: 'EUR', value: '44.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '44.99', locale: 'es-ES' },
+      'es-ES': { currency: 'EUR', value: '44.99', locale: 'es-ES' },
+      'es-MX': { currency: 'MXN', value: '899', locale: 'es-MX' },
       de: { currency: 'EUR', value: '44.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '44.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '249.90', locale: 'pt-BR' },
@@ -246,6 +260,8 @@ const i18n = (() => {
       en: { currency: 'USD', value: '59.99', locale: 'en-US' },
       fr: { currency: 'EUR', value: '69.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '69.99', locale: 'es-ES' },
+      'es-ES': { currency: 'EUR', value: '69.99', locale: 'es-ES' },
+      'es-MX': { currency: 'MXN', value: '1299', locale: 'es-MX' },
       de: { currency: 'EUR', value: '69.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '69.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '399.90', locale: 'pt-BR' },
@@ -379,7 +395,8 @@ const i18n = (() => {
   const langs = [
     { code: 'en', label: '🇺🇸 English' },
     { code: 'fr', label: '🇫🇷 Français' },
-    { code: 'es', label: '🇪🇸 Español' },
+    { code: 'es-ES', label: '🇪🇸 Español (España)' },
+    { code: 'es-MX', label: '🇲🇽 Español (México)' },
     { code: 'de', label: '🇩🇪 Deutsch' },
     { code: 'it', label: '🇮🇹 Italiano' },
     { code: 'pt-BR', label: '🇧🇷 Português (Brasil)' },

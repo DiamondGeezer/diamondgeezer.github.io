@@ -120,14 +120,92 @@ const i18n = (() => {
   };
 
   // Temporary forced locale override (e.g., testing). Set to null/undefined to return to auto-detect.
-  const forcedLocale = 'ko';
+  const forcedLocale = null;
   const currentLocale = forcedLocale || getLocale();
   const ready = fetchLocale(currentLocale).then((strings) => {
     applyTranslations(strings);
     return strings;
   });
 
-  return { ready, currentLocale };
+  return {
+    ready,
+    currentLocale,
+    supported,
+    setLocale: (locale) => {
+      const url = new URL(window.location.href);
+      url.searchParams.set('lang', locale);
+      window.location.href = url.toString();
+    }
+  };
+})();
+
+// Language picker (home only)
+(() => {
+  const picker = document.querySelector('.lang-picker');
+  if (!picker) return;
+  const btn = picker.querySelector('.lang-button');
+  const menu = picker.querySelector('.lang-menu');
+  if (!btn || !menu) return;
+
+  const langs = [
+    { code: 'en', label: '🇺🇸 English' },
+    { code: 'fr', label: '🇫🇷 Français' },
+    { code: 'es', label: '🇪🇸 Español' },
+    { code: 'de', label: '🇩🇪 Deutsch' },
+    { code: 'it', label: '🇮🇹 Italiano' },
+    { code: 'pt-BR', label: '🇧🇷 Português (Brasil)' },
+    { code: 'ja', label: '🇯🇵 日本語' },
+    { code: 'ko', label: '🇰🇷 한국어' },
+    { code: 'zh-Hans', label: '🇨🇳 简体中文' },
+    { code: 'zh-Hant', label: '🇭🇰 繁體中文' },
+    { code: 'hi', label: '🇮🇳 हिन्दी' },
+    { code: 'ar', label: '🇸🇦 العربية' },
+    { code: 'tr', label: '🇹🇷 Türkçe' },
+    { code: 'nl', label: '🇳🇱 Nederlands' },
+    { code: 'sv', label: '🇸🇪 Svenska' },
+    { code: 'id', label: '🇮🇩 Bahasa Indonesia' },
+    { code: 'th', label: '🇹🇭 ไทย' },
+    { code: 'pl', label: '🇵🇱 Polski' }
+  ];
+
+  const current = i18n.currentLocale;
+
+  langs.forEach((lang) => {
+    const li = document.createElement('li');
+    li.setAttribute('role', 'option');
+    li.dataset.code = lang.code;
+    li.textContent = lang.label;
+    if (lang.code === current) li.classList.add('active');
+    li.addEventListener('click', () => {
+      closeMenu();
+      i18n.setLocale(lang.code);
+    });
+    menu.appendChild(li);
+  });
+
+  const openMenu = () => {
+    btn.setAttribute('aria-expanded', 'true');
+    menu.classList.add('open');
+    document.addEventListener('click', handleOutside, { once: true });
+  };
+
+  const closeMenu = () => {
+    btn.setAttribute('aria-expanded', 'false');
+    menu.classList.remove('open');
+  };
+
+  const handleOutside = (e) => {
+    if (!picker.contains(e.target)) closeMenu();
+  };
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (menu.classList.contains('open')) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  });
 })();
 
 // Hero wave subtle amplitude shift on scroll (clipped, no resize)
@@ -389,6 +467,7 @@ const i18n = (() => {
   const subtitle = document.querySelector('.hero-copy .hero-subtitle');
   const heroVisual = document.querySelector('.hero-visual');
   const heroDownload = document.querySelector('.hero-download');
+  const langPicker = document.querySelector('.lang-picker');
   const ctaRow = document.querySelector('.cta-row');
   if (!title || !highlight || !subtitle) return;
 
@@ -478,6 +557,10 @@ const i18n = (() => {
   if (heroDownload) {
     heroDownload.classList.remove('typing-visible');
     heroDownload.classList.add('typing-hidden');
+  }
+  if (langPicker) {
+    langPicker.classList.remove('typing-visible');
+    langPicker.classList.add('typing-hidden');
   }
 
   const typeText = (el, text, delay = 65) =>
@@ -572,6 +655,10 @@ const i18n = (() => {
           setTimeout(() => {
             heroDownload.classList.remove('typing-hidden');
             heroDownload.classList.add('typing-visible');
+            if (langPicker) {
+              langPicker.classList.remove('typing-hidden');
+              langPicker.classList.add('typing-visible');
+            }
             startNotes();
           }, 600);
         }

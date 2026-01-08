@@ -197,13 +197,94 @@ img {
   display: block;
 }
 
+.lang-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 12px;
+  align-self: flex-end;
+  z-index: 6;
+}
+
+.lang-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.lang-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lang-menu {
+  position: absolute;
+  top: 46px;
+  right: 0;
+  min-width: 190px;
+  padding: 8px 0;
+  background: rgba(12, 12, 14, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  list-style: none;
+  margin: 0;
+  display: none;
+  z-index: 100;
+  backdrop-filter: blur(12px);
+}
+
+.lang-menu.open {
+  display: block;
+}
+
+.lang-menu li {
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+  white-space: nowrap;
+}
+
+.lang-menu li:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lang-menu li.active {
+  color: #b8e7ff;
+  font-weight: 600;
+}
+
+.lang-picker.typing-hidden {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.lang-picker.typing-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 2s cubic-bezier(0.22, 0.61, 0.36, 1), transform 2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
 .hero {
   min-height: 70vh;
   display: flex;
   align-items: center;
   position: relative;
   background-attachment: fixed;
-  overflow: hidden;
+  overflow: visible;
   padding: 0;
   z-index: 2;
 }
@@ -290,6 +371,7 @@ img {
   gap: 0.9rem;
   margin-top: 2.84rem;
   position: relative;
+  align-items: flex-end;
 }
 
 .layout-tag {

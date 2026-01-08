@@ -142,7 +142,7 @@ const i18n = (() => {
     });
     // Localized pricing (shared map)
     const priceEl = document.querySelector('[data-price-target="hero-price"]');
-    const priceMap = {
+    const priceMapMonthly = {
       en: { currency: 'USD', value: '6.99', locale: 'en-US' },
       fr: { currency: 'EUR', value: '7.99', locale: 'fr-FR' },
       es: { currency: 'EUR', value: '7.99', locale: 'es-ES' },
@@ -163,10 +163,32 @@ const i18n = (() => {
       pl: { currency: 'PLN', value: '39.99', locale: 'pl-PL' }
     };
 
-    const formatPrice = (langKey) => {
+    const priceMapAnnual = {
+      en: { currency: 'USD', value: '29.99', locale: 'en-US' },
+      fr: { currency: 'EUR', value: '34.99', locale: 'fr-FR' },
+      es: { currency: 'EUR', value: '34.99', locale: 'es-ES' },
+      de: { currency: 'EUR', value: '34.99', locale: 'de-DE' },
+      it: { currency: 'EUR', value: '34.99', locale: 'it-IT' },
+      'pt-BR': { currency: 'BRL', value: '199.90', locale: 'pt-BR' },
+      ja: { currency: 'JPY', value: '5000', locale: 'ja-JP', decimals: 0 },
+      ko: { currency: 'KRW', value: '44000', locale: 'ko-KR', decimals: 0 },
+      'zh-Hans': { currency: 'CNY', value: '198.00', locale: 'zh-CN' },
+      'zh-Hant': { currency: 'TWD', value: '990', locale: 'zh-TW', decimals: 0 },
+      hi: { currency: 'INR', value: '2999', locale: 'hi-IN' },
+      ar: { currency: 'SAR', value: '129.99', locale: 'ar-SA' },
+      tr: { currency: 'TRY', value: '1299.99', locale: 'tr-TR' },
+      nl: { currency: 'EUR', value: '34.99', locale: 'nl-NL' },
+      sv: { currency: 'SEK', value: '399', locale: 'sv-SE' },
+      id: { currency: 'IDR', value: '499000', locale: 'id-ID', decimals: 0 },
+      th: { currency: 'THB', value: '999', locale: 'th-TH' },
+      pl: { currency: 'PLN', value: '149.99', locale: 'pl-PL' }
+    };
+
+    const formatPrice = (langKey, tier = 'monthly') => {
+      const map = tier === 'annual' ? priceMapAnnual : priceMapMonthly;
       const baseKey = langKey.split('-')[0];
-      const matchKey = priceMap[langKey] ? langKey : (priceMap[baseKey] ? baseKey : 'en');
-      const priceInfo = priceMap[matchKey] || priceMap.en;
+      const matchKey = map[langKey] ? langKey : (map[baseKey] ? baseKey : 'en');
+      const priceInfo = map[matchKey] || map.en;
       const locale = priceInfo.locale || langKey || 'en-US';
       const numeric = parseFloat(String(priceInfo.value).replace(',', '.'));
       const fmtOpts = {
@@ -190,7 +212,7 @@ const i18n = (() => {
     };
     if (priceEl) {
       const langKey = currentLocale || 'en';
-      const priceLabel = formatPrice(langKey);
+      const priceLabel = formatPrice(langKey, 'monthly');
       const baseText =
         (strings && strings['pricing.subtitle']) ||
         (strings && strings.pricing && strings.pricing.subtitle) ||
@@ -204,9 +226,16 @@ const i18n = (() => {
     const proPriceEl = document.querySelector('[data-price-target="pro-monthly"]');
     if (proPriceEl) {
       const langKey = currentLocale || 'en';
-      const priceLabel = formatPrice(langKey);
+      const priceLabel = formatPrice(langKey, 'monthly');
       proPriceEl.textContent = priceLabel;
       proPriceEl.setAttribute('aria-label', priceLabel);
+    }
+    const proAnnualEl = document.querySelector('[data-price-target="pro-annual"]');
+    if (proAnnualEl) {
+      const langKey = currentLocale || 'en';
+      const priceLabel = formatPrice(langKey, 'annual');
+      proAnnualEl.textContent = priceLabel;
+      proAnnualEl.setAttribute('aria-label', priceLabel);
     }
     return strings;
   });

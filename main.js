@@ -143,24 +143,38 @@ const i18n = (() => {
     // Localized pricing (shared map)
     const priceEl = document.querySelector('[data-price-target="hero-price"]');
     const priceMap = {
-      en: { currency: 'USD', symbol: '$', value: '6.99' },
-      fr: { currency: 'EUR', symbol: '€', value: '7.99' },
-      es: { currency: 'EUR', symbol: '€', value: '7.99' },
-      de: { currency: 'EUR', symbol: '€', value: '7.99' },
-      it: { currency: 'EUR', symbol: '€', value: '7.99' },
-      'pt-BR': { currency: 'BRL', symbol: 'R$', value: '49,90' },
-      ja: { currency: 'JPY', symbol: '¥', value: '1100' },
-      ko: { currency: 'KRW', symbol: '₩', value: '9900' },
-      'zh-Hans': { currency: 'CNY', symbol: '¥', value: '48.00' },
-      'zh-Hant': { currency: 'TWD', symbol: 'NT$', value: '220' },
-      hi: { currency: 'INR', symbol: '₹', value: '699' },
-      ar: { currency: 'SAR', symbol: '﷼', value: '29.99' },
-      tr: { currency: 'TRY', symbol: '₺', value: '299.99' },
-      nl: { currency: 'EUR', symbol: '€', value: '7.99' },
-      sv: { currency: 'SEK', symbol: 'kr', value: '99' },
-      id: { currency: 'IDR', symbol: 'Rp', value: '119000' },
-      th: { currency: 'THB', symbol: '฿', value: '249' },
-      pl: { currency: 'PLN', symbol: 'zł', value: '39.99' }
+      en: { currency: 'USD', value: '6.99', locale: 'en-US' },
+      fr: { currency: 'EUR', value: '7.99', locale: 'fr-FR' },
+      es: { currency: 'EUR', value: '7.99', locale: 'es-ES' },
+      de: { currency: 'EUR', value: '7.99', locale: 'de-DE' },
+      it: { currency: 'EUR', value: '7.99', locale: 'it-IT' },
+      'pt-BR': { currency: 'BRL', value: '49,90', locale: 'pt-BR' },
+      ja: { currency: 'JPY', value: '1100', locale: 'ja-JP' },
+      ko: { currency: 'KRW', value: '9900', locale: 'ko-KR' },
+      'zh-Hans': { currency: 'CNY', value: '48.00', locale: 'zh-CN' },
+      'zh-Hant': { currency: 'TWD', value: '220', locale: 'zh-TW' },
+      hi: { currency: 'INR', value: '699', locale: 'hi-IN' },
+      ar: { currency: 'SAR', value: '29.99', locale: 'ar-SA' },
+      tr: { currency: 'TRY', value: '299.99', locale: 'tr-TR' },
+      nl: { currency: 'EUR', value: '7.99', locale: 'nl-NL' },
+      sv: { currency: 'SEK', value: '99', locale: 'sv-SE' },
+      id: { currency: 'IDR', value: '119000', locale: 'id-ID' },
+      th: { currency: 'THB', value: '249', locale: 'th-TH' },
+      pl: { currency: 'PLN', value: '39.99', locale: 'pl-PL' }
+    };
+
+    const formatPrice = (langKey) => {
+      const baseKey = langKey.split('-')[0];
+      const matchKey = priceMap[langKey] ? langKey : (priceMap[baseKey] ? baseKey : 'en');
+      const priceInfo = priceMap[matchKey] || priceMap.en;
+      const locale = priceInfo.locale || langKey || 'en-US';
+      const numeric = parseFloat(String(priceInfo.value).replace(',', '.'));
+      const formatter = new Intl.NumberFormat(locale, {
+        style: 'currency',
+        currency: priceInfo.currency,
+        maximumFractionDigits: 2
+      });
+      return formatter.format(Number.isFinite(numeric) ? numeric : Number(priceInfo.value) || 0);
     };
     const replacePriceToken = (text, newPrice) => {
       if (!text) return newPrice;
@@ -172,10 +186,7 @@ const i18n = (() => {
     };
     if (priceEl) {
       const langKey = currentLocale || 'en';
-      const baseKey = langKey.split('-')[0];
-      const matchKey = priceMap[langKey] ? langKey : (priceMap[baseKey] ? baseKey : 'en');
-      const price = priceMap[matchKey] || priceMap.en;
-      const priceLabel = `${price.symbol}${price.value}`;
+      const priceLabel = formatPrice(langKey);
       const baseText =
         (strings && strings['pricing.subtitle']) ||
         (strings && strings.pricing && strings.pricing.subtitle) ||
@@ -189,10 +200,7 @@ const i18n = (() => {
     const proPriceEl = document.querySelector('[data-price-target="pro-monthly"]');
     if (proPriceEl) {
       const langKey = currentLocale || 'en';
-      const baseKey = langKey.split('-')[0];
-      const matchKey = priceMap[langKey] ? langKey : (priceMap[baseKey] ? baseKey : 'en');
-      const price = priceMap[matchKey] || priceMap.en;
-      const priceLabel = `${price.symbol}${price.value}`;
+      const priceLabel = formatPrice(langKey);
       proPriceEl.textContent = priceLabel;
       proPriceEl.setAttribute('aria-label', priceLabel);
     }

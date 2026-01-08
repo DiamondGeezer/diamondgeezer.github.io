@@ -414,19 +414,7 @@
       setTimeout(tick, interval);
     });
 
-  const typingNoteSprites = [
-    'mus_17',
-    'mus_06',
-    'mus_07',
-    'mus_08',
-    'mus_12',
-    'mus_26',
-    'mus_30',
-    'mus_31',
-    'mus_32',
-    'mus_33',
-    'mus_34',
-  ];
+  const typingNoteSprites = ['mus_17', 'mus_08', 'mus_12', 'mus_32', 'mus_33'];
 
   const emitTypingNote = () => {
     if (!cursor) return;
@@ -444,7 +432,7 @@
       el.style.setProperty('--note-rot', `${6 + Math.random() * 10}deg`);
       el.style.width = `${width}px`;
       el.style.height = `${height}px`;
-      el.style.animationDuration = `1s`;
+      el.style.animationDuration = `1.5s`;
       el.style.opacity = '1';
       const rect = cursor.getBoundingClientRect();
       el.style.position = 'fixed';

@@ -149,16 +149,16 @@ const i18n = (() => {
       de: { currency: 'EUR', value: '7.99', locale: 'de-DE' },
       it: { currency: 'EUR', value: '7.99', locale: 'it-IT' },
       'pt-BR': { currency: 'BRL', value: '49,90', locale: 'pt-BR' },
-      ja: { currency: 'JPY', value: '1100', locale: 'ja-JP' },
-      ko: { currency: 'KRW', value: '9900', locale: 'ko-KR' },
+      ja: { currency: 'JPY', value: '1100', locale: 'ja-JP', decimals: 0 },
+      ko: { currency: 'KRW', value: '9900', locale: 'ko-KR', decimals: 0 },
       'zh-Hans': { currency: 'CNY', value: '48.00', locale: 'zh-CN' },
-      'zh-Hant': { currency: 'TWD', value: '220', locale: 'zh-TW' },
+      'zh-Hant': { currency: 'TWD', value: '220', locale: 'zh-TW', decimals: 0 },
       hi: { currency: 'INR', value: '699', locale: 'hi-IN' },
       ar: { currency: 'SAR', value: '29.99', locale: 'ar-SA' },
       tr: { currency: 'TRY', value: '299.99', locale: 'tr-TR' },
       nl: { currency: 'EUR', value: '7.99', locale: 'nl-NL' },
       sv: { currency: 'SEK', value: '99', locale: 'sv-SE' },
-      id: { currency: 'IDR', value: '119000', locale: 'id-ID' },
+      id: { currency: 'IDR', value: '119000', locale: 'id-ID', decimals: 0 },
       th: { currency: 'THB', value: '249', locale: 'th-TH' },
       pl: { currency: 'PLN', value: '39.99', locale: 'pl-PL' }
     };
@@ -169,11 +169,15 @@ const i18n = (() => {
       const priceInfo = priceMap[matchKey] || priceMap.en;
       const locale = priceInfo.locale || langKey || 'en-US';
       const numeric = parseFloat(String(priceInfo.value).replace(',', '.'));
-      const formatter = new Intl.NumberFormat(locale, {
+      const fmtOpts = {
         style: 'currency',
-        currency: priceInfo.currency,
-        maximumFractionDigits: 2
-      });
+        currency: priceInfo.currency
+      };
+      if (typeof priceInfo.decimals === 'number') {
+        fmtOpts.minimumFractionDigits = priceInfo.decimals;
+        fmtOpts.maximumFractionDigits = priceInfo.decimals;
+      }
+      const formatter = new Intl.NumberFormat(locale, fmtOpts);
       return formatter.format(Number.isFinite(numeric) ? numeric : Number(priceInfo.value) || 0);
     };
     const replacePriceToken = (text, newPrice) => {

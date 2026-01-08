@@ -154,16 +154,21 @@ const i18n = (() => {
       th: { currency: 'THB', symbol: '฿', value: '249' },
       pl: { currency: 'PLN', symbol: 'zł', value: '39.99' }
     };
+    const replacePriceToken = (text, newPrice) => {
+      const tokenRegex = /([\\p{Sc}A-Z]{0,3}\\s?[\\d.,]+(?:\\s?[A-Z]{3})?)/u;
+      if (tokenRegex.test(text)) return text.replace(tokenRegex, newPrice);
+      const numRegex = /[\\d][\\d.,]*/;
+      if (numRegex.test(text)) return text.replace(numRegex, newPrice);
+      return `${newPrice} ${text}`;
+    };
     if (priceEl) {
       const langKey = currentLocale || 'en';
       const baseKey = langKey.split('-')[0];
       const matchKey = priceMap[langKey] ? langKey : (priceMap[baseKey] ? baseKey : 'en');
       const price = priceMap[matchKey] || priceMap.en;
-      const priceLabel =
-        matchKey === 'ja' || matchKey === 'ko' || matchKey.startsWith('zh')
-          ? `${price.symbol}${price.value}`
-          : `${price.symbol}${price.value}`;
-      const text = `Starting at ${priceLabel}/month`;
+      const priceLabel = `${price.symbol}${price.value}`;
+      const baseText = (strings && strings.pricing && strings.pricing.subtitle) || priceEl.textContent || '';
+      const text = replacePriceToken(baseText, priceLabel);
       priceEl.textContent = text;
       priceEl.setAttribute('aria-label', text);
     }

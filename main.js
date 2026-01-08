@@ -414,15 +414,31 @@
       setTimeout(tick, interval);
     });
 
+  const typingNoteSprites = [
+    'mus_17',
+    'mus_06',
+    'mus_07',
+    'mus_08',
+    'mus_12',
+    'mus_26',
+    'mus_30',
+    'mus_31',
+    'mus_32',
+    'mus_33',
+    'mus_34',
+  ];
+
   const emitTypingNote = () => {
     if (!cursor) return;
-      const img = new Image();
-      img.src = 'assets/music_symbols_chalk/mus_17.png';
-      img.onload = () => {
-        const aspect = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
-        const height = 72; // base height for the typing note
-        const width = height / aspect;
-        const el = document.createElement('img');
+    const img = new Image();
+    const sprite =
+      typingNoteSprites[Math.floor(Math.random() * typingNoteSprites.length)];
+    img.src = `assets/music_symbols_chalk/${sprite}.png`;
+    img.onload = () => {
+      const aspect = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
+      const height = 72; // base height for the typing note
+      const width = height / aspect;
+      const el = document.createElement('img');
       el.className = 'note-plume typing-note';
       el.src = img.src;
       el.style.setProperty('--note-rot', `${6 + Math.random() * 10}deg`);

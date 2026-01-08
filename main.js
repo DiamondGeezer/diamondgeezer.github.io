@@ -124,6 +124,14 @@ const i18n = (() => {
   const currentLocale = forcedLocale || getLocale();
   const ready = fetchLocale(currentLocale).then((strings) => {
     applyTranslations(strings);
+    // Preserve lang param on internal links marked for preservation
+    document.querySelectorAll('[data-lang-preserve]').forEach((a) => {
+      const href = a.getAttribute('href');
+      if (!href || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+      const url = new URL(href, window.location.origin);
+      url.searchParams.set('lang', currentLocale);
+      a.href = url.pathname + url.search + url.hash;
+    });
     return strings;
   });
 

@@ -1487,13 +1487,9 @@ img {
     opacity: 1;
     transform: translate(-20px, -30px) scale(0.9) rotate(-6deg) rotateY(-6deg);
   }
-  50% {
-    opacity: 0.6;
-    transform: translate(-20px, -30px) scale(3) rotate(0deg) rotateY(0deg);
-  }
   100% {
     opacity: 0;
-    transform: translate(-20px, -30px) scale(6) rotate(8deg) rotateY(4deg);
+    transform: translate(-20px, -30px) scale(72) rotate(8deg) rotateY(4deg);
   }
 }
 /* Scroll reveal helpers */

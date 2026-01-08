@@ -483,8 +483,15 @@
 
   // Wait for background image to load before starting typing animation
   const bg = new Image();
-  bg.onload = startTyping;
-  bg.onerror = startTyping; // fail-safe: still start typing if load fails
+  let typingStarted = false;
+  const startTypingOnce = () => {
+    if (typingStarted) return;
+    typingStarted = true;
+    startTyping();
+  };
+
+  bg.onload = startTypingOnce;
+  bg.onerror = startTypingOnce; // fail-safe: still start typing if load fails
   bg.src = 'assets/backgrounds/background.jpg';
-  if (bg.complete) startTyping();
+  if (bg.complete) startTypingOnce();
 })();

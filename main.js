@@ -201,15 +201,23 @@ const i18n = (() => {
     // Ensure we measure after display is applied
     menu.style.display = 'block';
     menu.style.position = 'fixed';
-    const btnRect = btn.getBoundingClientRect();
-    const menuRect = menu.getBoundingClientRect();
-    const top = btnRect.bottom + 6 + window.scrollY;
-    const left = Math.min(
-      btnRect.left + window.scrollX,
-      window.scrollX + window.innerWidth - menuRect.width - 8
-    );
-    menu.style.top = `${top}px`;
-    menu.style.left = `${left}px`;
+    // Re-measure after display so zoom/scroll placement is correct
+    requestAnimationFrame(() => {
+      const btnRect = btn.getBoundingClientRect();
+      const menuRect = menu.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const availableBelow = viewportHeight - btnRect.bottom - 12;
+      const maxHeight = Math.max(160, availableBelow);
+      menu.style.maxHeight = `${maxHeight}px`;
+      menu.style.overflowY = 'auto';
+      const top = btnRect.bottom + 6;
+      const left = Math.min(
+        btnRect.left,
+        window.innerWidth - menuRect.width - 8
+      );
+      menu.style.top = `${top}px`;
+      menu.style.left = `${left}px`;
+    });
     document.addEventListener('click', handleOutside, { once: true });
   };
 

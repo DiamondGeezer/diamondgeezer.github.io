@@ -31,6 +31,105 @@
   }
 })();
 
+// Lightweight i18n loader
+const i18n = (() => {
+  const supported = [
+    'fr',
+    'es',
+    'en',
+    'de',
+    'it',
+    'pt-BR',
+    'ja',
+    'ko',
+    'zh-Hans',
+    'zh-Hant',
+    'hi',
+    'ar',
+    'tr',
+    'nl',
+    'sv',
+    'id',
+    'th',
+    'pl'
+  ];
+
+  const normalize = (lang) => {
+    if (!lang) return 'en';
+    const lower = lang.toLowerCase();
+    if (lower.startsWith('pt')) return 'pt-BR';
+    if (lower.startsWith('zh')) {
+      if (lower.includes('hant') || lower.includes('tw') || lower.includes('hk')) return 'zh-Hant';
+      return 'zh-Hans';
+    }
+    const base = lower.split('-')[0];
+    const match = supported.find((l) => l.toLowerCase() === lower || l.split('-')[0] === base);
+    return match || 'en';
+  };
+
+  const getLocale = () => {
+    const params = new URLSearchParams(window.location.search);
+    const query = params.get('lang');
+    if (query) return normalize(query);
+    const navLangs = navigator.languages || [navigator.language];
+    for (const l of navLangs) {
+      const norm = normalize(l);
+      if (supported.includes(norm)) return norm;
+    }
+    return 'en';
+  };
+
+  const applyTranslations = (strings) => {
+    if (!strings) return;
+    document.documentElement.lang = strings.__lang || currentLocale;
+    document.querySelectorAll('[data-i18n]').forEach((el) => {
+      const key = el.dataset.i18n;
+      const val = strings[key];
+      if (!val) return;
+      el.innerHTML = val;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
+      const mappings = el.dataset.i18nAttr.split(',').map((s) => s.trim());
+      mappings.forEach((mapping) => {
+        const [attr, key] = mapping.split(':').map((s) => s.trim());
+        if (!attr || !key) return;
+        if (strings[key]) {
+          el.setAttribute(attr, strings[key]);
+        }
+      });
+    });
+  };
+
+  const fetchLocale = async (locale) => {
+    try {
+      const res = await fetch(`assets/i18n/${locale}.json`, { cache: 'no-cache' });
+      if (!res.ok) throw new Error('load failed');
+      const data = await res.json();
+      return data;
+    } catch (e) {
+      if (locale !== 'en') {
+        try {
+          const res = await fetch('assets/i18n/en.json', { cache: 'no-cache' });
+          if (res.ok) return res.json();
+        } catch (err) {
+          // fall through
+        }
+      }
+      return null;
+    }
+  };
+
+  // Temporary forced locale override (e.g., testing). Set to null/undefined to return to auto-detect.
+  const forcedLocale = 'ko';
+  const currentLocale = forcedLocale || getLocale();
+  const ready = fetchLocale(currentLocale).then((strings) => {
+    applyTranslations(strings);
+    return strings;
+  });
+
+  return { ready, currentLocale };
+})();
+
 // Hero wave subtle amplitude shift on scroll (clipped, no resize)
 (() => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -488,9 +587,14 @@
   // Wait for background image to load before starting typing animation
   const bg = new Image();
   let typingStarted = false;
-  const startTypingOnce = () => {
+  const startTypingOnce = async () => {
     if (typingStarted) return;
     typingStarted = true;
+    try {
+      await i18n.ready;
+    } catch (e) {
+      // ignore i18n failures
+    }
     startTyping();
   };
 

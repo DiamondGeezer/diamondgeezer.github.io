@@ -931,6 +931,18 @@ const i18n = (() => {
     return 'none';
   };
 
+  const buildTypingShadowFilter = (color) => {
+    const r = color?.r ?? 0;
+    const g = color?.g ?? 0;
+    const b = color?.b ?? 0;
+    // Very heavy, clearly visible drop shadow for the typing burst
+    return [
+      `drop-shadow(0 14px 30px rgba(${r}, ${g}, ${b}, 0.38))`,
+      `drop-shadow(0 10px 22px rgba(${r}, ${g}, ${b}, 0.44))`,
+      `drop-shadow(0 4px 12px rgba(${r}, ${g}, ${b}, 0.34))`
+    ].join(' ');
+  };
+
   const getShadowColorFromMap = (src) => {
     const id = noteIdFromSrc(src);
     if (!id) return null;
@@ -950,6 +962,7 @@ const i18n = (() => {
       trailCanvas.style.left = `${-trailPadLeft}px`;
       trailCanvas.style.pointerEvents = 'none';
       trailCanvas.style.zIndex = '29';
+      trailCanvas.style.willChange = 'opacity';
       trailCanvas.className = 'note-trail-canvas';
       ctaRow.appendChild(trailCanvas);
       trailCtx = trailCanvas.getContext('2d', { alpha: true });
@@ -1006,6 +1019,12 @@ const i18n = (() => {
   const drawCometTrail = (el, x, y, color) => {
     if (!ensureTrailCanvas()) return;
     const state = trailState.get(el) || {};
+    const now = performance.now();
+    // Throttle drawing to avoid jitters; rely on continuous fade loop for cleanup
+    if (state.lastTs && now - state.lastTs < 16) {
+      trailState.set(el, { ...state, x, y, lastTs: now });
+      return;
+    }
     const { r = 0, g = 0, b = 0 } = color || {};
     if (state.x == null || state.y == null) {
       trailState.set(el, { x, y });
@@ -1024,6 +1043,8 @@ const i18n = (() => {
     trailCtx.save();
     trailCtx.globalCompositeOperation = 'lighter';
     trailCtx.lineCap = 'round';
+    trailCtx.shadowBlur = 10;
+    trailCtx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.06)`;
     const makeGrad = (aStart, aEnd) => {
       const grad = trailCtx.createLinearGradient(state.x, state.y, tailX, tailY);
       grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${aStart})`);
@@ -1048,7 +1069,7 @@ const i18n = (() => {
     trailCtx.stroke();
 
     trailCtx.restore();
-    trailState.set(el, { x, y });
+    trailState.set(el, { x, y, lastTs: now });
   };
 
   const startNotes = () => {
@@ -1154,6 +1175,7 @@ const i18n = (() => {
         el.style.setProperty('--note-rot', `${6 + Math.random() * 10}deg`);
         el.style.width = `${width}px`;
         el.style.height = `${height}px`;
+        el.style.willChange = 'transform, opacity';
         const shadowColor = getShadowColor(img);
         el.style.filter = buildShadowFilter(shadowColor);
         if (!isMobile) {
@@ -1214,8 +1236,8 @@ const i18n = (() => {
         const rotStart = isMobile ? -20 : -40;
         const rotEnd = 45;
         const anchor = (px, py) => ({
-          x: px + (width / 2),
-          y: py + (height / 2) - 2
+          x: px + (width / 2) + 10,
+          y: py + (height / 2) - 7
         });
 
         const lerp = (a, b, t) => a + (b - a) * t;
@@ -1387,7 +1409,7 @@ const i18n = (() => {
       el.style.animationDuration = `1.5s`;
       el.style.opacity = '1';
       const shadowColor = getShadowColorFromMap(sprite ? `assets/music_symbols_chalk/${sprite}.png` : null);
-      el.style.filter = buildShadowFilter(shadowColor);
+      el.style.filter = buildTypingShadowFilter(shadowColor);
       const rect = cursor.getBoundingClientRect();
       el.style.position = 'fixed';
       el.style.left = `${rect.left + rect.width / 2 - 20}px`;

@@ -1053,7 +1053,7 @@ const i18n = (() => {
     };
 
     // Broad glow
-    trailCtx.strokeStyle = makeGrad(0.03, 0);
+    trailCtx.strokeStyle = makeGrad(0.08, 0);
     trailCtx.lineWidth = 36; // taller head, fades to point
     trailCtx.beginPath();
     trailCtx.moveTo(state.x, state.y);
@@ -1061,7 +1061,7 @@ const i18n = (() => {
     trailCtx.stroke();
 
     // Core streak
-    trailCtx.strokeStyle = makeGrad(0.02, 0);
+    trailCtx.strokeStyle = makeGrad(0.06, 0);
     trailCtx.lineWidth = 18;
     trailCtx.beginPath();
     trailCtx.moveTo(state.x, state.y);

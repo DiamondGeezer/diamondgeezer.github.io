@@ -888,17 +888,120 @@ const i18n = (() => {
         el.style.setProperty('--note-rot', `${6 + Math.random() * 10}deg`);
         el.style.width = `${width}px`;
         el.style.height = `${height}px`;
-        el.style.animationDuration = `${6 + Math.random() * 3}s`;
         // Position at top-right of the download button
         const ctaRect = ctaRow.getBoundingClientRect();
         const btnRect = heroDownload.getBoundingClientRect();
         const x = btnRect.right - ctaRect.left;
         const y = btnRect.top - ctaRect.top;
-        el.style.left = `${x}px`;
-        el.style.top = `${y}px`;
         el.style.transformOrigin = 'center';
+        el.style.zIndex = '30';
+
+        const isMobile = window.innerWidth <= 768; // mobile large/small/tiny: keep legacy
+        if (isMobile) {
+          el.style.left = `${x}px`;
+          el.style.top = `${y}px`;
+          el.style.animationDuration = `${6 + Math.random() * 3}s`;
+          ctaRow.appendChild(el);
+          el.addEventListener('animationend', () => el.remove(), { once: true });
+          return;
+        }
+
+        // Desktop/tablet: custom Bezier path targeting the subtitle gap
+        el.style.left = '0px';
+        el.style.top = '0px';
+        el.style.animation = 'none';
+        const subtitleRect = subtitle?.getBoundingClientRect();
+        const visualRect = heroVisual?.getBoundingClientRect();
+        const start = { x, y };
+        const mid = subtitleRect
+          ? {
+              x: subtitleRect.right - ctaRect.left,
+              y: subtitleRect.bottom - ctaRect.top
+            }
+          : { x: x + 60, y: y - 40 };
+
+        // Extend the vector beyond mid toward an elevated top-right endpoint
+        const dx = mid.x - start.x;
+        const dy = mid.y - start.y;
+        // extend toward top-right and lift well into banner space
+        const end = {
+          x: mid.x + dx * 1.7,
+          y: Math.min(mid.y - Math.max(340, Math.abs(dy) * 0.9), -260)
+        };
+
+        // Control points: stay low off the button, bulge near subtitle SE corner, then kick up ~50°
+        const c1 = {
+          x: start.x + dx * 0.4,
+          y: start.y + Math.max(120, Math.abs(dy) * 0.25)
+        };
+        const c2 = {
+          x: mid.x - 40,
+          y: mid.y - Math.max(200, Math.abs(dy) * 0.6)
+        };
+
+        const dur = 4200; // ms
+        const rot = 4 + Math.random() * 6;
+        const rotStart = -20;
+        const rotEnd = 90;
+
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const cubic = (p0, p1, p2, p3, t) => {
+          const u = 1 - t;
+          return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+        };
+
+        let startTs = null;
+        const tick = (ts) => {
+          if (startTs === null) startTs = ts;
+          const elapsed = ts - startTs;
+          const t = Math.min(1, elapsed / dur);
+          const xPos = cubic(start.x, c1.x, c2.x, end.x, t);
+          const yPos = cubic(start.y, c1.y, c2.y, end.y, t);
+          let opacity = 0.85;
+          if (t < 0.15) opacity = lerp(0, 0.85, t / 0.15);
+          else if (t > 0.82) opacity = lerp(0.85, 0.08, (t - 0.82) / 0.18);
+          const scale = 0.9 + t * 0.3;
+          const rotNow = rotStart + (rotEnd - rotStart) * t;
+          el.style.transform = `translate(${xPos}px, ${yPos}px) scale(${scale}) rotate(${rotNow}deg)`;
+          el.style.opacity = `${opacity}`;
+          if (t < 1) {
+            requestAnimationFrame(tick);
+          } else {
+            el.remove();
+          }
+        };
+        // initialize visible at start
+        el.style.opacity = '0';
+        el.style.transform = `translate(${start.x}px, ${start.y}px) scale(0.9) rotate(${rotStart}deg)`;
         ctaRow.appendChild(el);
-        el.addEventListener('animationend', () => el.remove(), { once: true });
+
+        // TEMP DEBUG: draw the path so we can see the curve
+        let debugSvg = ctaRow.querySelector('.note-debug');
+        if (!debugSvg) {
+          debugSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+          debugSvg.classList.add('note-debug');
+          debugSvg.style.position = 'absolute';
+          debugSvg.style.left = '0';
+          debugSvg.style.top = '0';
+          debugSvg.style.pointerEvents = 'none';
+          debugSvg.style.zIndex = '9999';
+          debugSvg.style.overflow = 'visible';
+          ctaRow.appendChild(debugSvg);
+        }
+        debugSvg.setAttribute('width', `${ctaRect.width}`);
+        debugSvg.setAttribute('height', `${ctaRect.height}`);
+        debugSvg.setAttribute('viewBox', `0 0 ${ctaRect.width} ${ctaRect.height}`);
+        const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        const d = `M ${start.x} ${start.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${end.x} ${end.y}`;
+        pathEl.setAttribute('d', d);
+        pathEl.setAttribute('stroke', 'rgba(0, 160, 255, 0)');
+        pathEl.setAttribute('fill', 'none');
+        pathEl.setAttribute('stroke-width', '2.5');
+        pathEl.setAttribute('stroke-dasharray', '6 6');
+        debugSvg.appendChild(pathEl);
+
+        requestAnimationFrame(tick);
+        setTimeout(() => pathEl.remove(), dur + 600);
       };
     };
     // initial delay ~3s after start, then every 4s

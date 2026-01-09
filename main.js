@@ -1055,8 +1055,8 @@ const i18n = (() => {
       return grad;
     };
 
-    const glowAlpha = isTrueMobileUser ? 0.2 : 0.08;
-    const coreAlpha = isTrueMobileUser ? 0.16 : 0.06;
+    const glowAlpha = isTrueMobileUser ? 0.8 : 0.08;
+    const coreAlpha = isTrueMobileUser ? 0.64 : 0.06;
 
     // Broad glow
     trailCtx.strokeStyle = makeGrad(glowAlpha, 0);

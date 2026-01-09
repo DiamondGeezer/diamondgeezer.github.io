@@ -880,8 +880,30 @@ const i18n = (() => {
       img.src = src;
       img.onload = () => {
         const aspect = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
-        const height = 40 + Math.random() * 20; // max 60px
-        const width = height / aspect;
+        const isMobile = window.innerWidth <= 768; // mobile large/small/tiny: keep legacy sizing/behavior
+        let width, height;
+        if (isMobile) {
+          const natW = img.naturalWidth || 40;
+          const natH = img.naturalHeight || 40;
+          const cap = 60; // legacy mobile max
+          if (natH >= natW) {
+            height = cap;
+            width = height / aspect;
+          } else {
+            width = cap;
+            height = width * aspect;
+          }
+        } else {
+          const natW = img.naturalWidth || 40;
+          const natH = img.naturalHeight || 40;
+          if (natH >= natW) {
+            height = 40;
+            width = height / aspect;
+          } else {
+            width = 40;
+            height = width * aspect;
+          }
+        }
         const el = document.createElement('img');
         el.className = 'note-plume';
         el.src = src;
@@ -895,8 +917,6 @@ const i18n = (() => {
         const y = btnRect.top - ctaRect.top;
         el.style.transformOrigin = 'center';
         el.style.zIndex = '30';
-
-        const isMobile = window.innerWidth <= 768; // mobile large/small/tiny: keep legacy
         if (isMobile) {
           el.style.left = `${x}px`;
           el.style.top = `${y}px`;
@@ -941,7 +961,7 @@ const i18n = (() => {
 
         const dur = 4200; // ms
         const rot = 4 + Math.random() * 6;
-        const rotStart = -20;
+        const rotStart = isMobile ? -20 : -40;
         const rotEnd = 45;
 
         const lerp = (a, b, t) => a + (b - a) * t;
@@ -1004,10 +1024,11 @@ const i18n = (() => {
         setTimeout(() => pathEl.remove(), dur + 600);
       };
     };
-    // initial delay ~3s after start, then every 4s
+    const interval = window.innerWidth <= 768 ? 4000 : 3000;
+    // initial delay ~1s after start, then based on layout
     setTimeout(() => {
       emit();
-      notesTimer = setInterval(emit, 4000);
+      notesTimer = setInterval(emit, interval);
     }, 1000);
     return;
   }

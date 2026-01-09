@@ -864,6 +864,7 @@ const i18n = (() => {
 
   const startNotes = () => {
     if (!ctaRow || notesTimer !== null) return;
+    const isMobileLayout = () => window.innerWidth <= 768;
     const emit = () => {
       let src;
       if (firstNote) {
@@ -880,7 +881,7 @@ const i18n = (() => {
       img.src = src;
       img.onload = () => {
         const aspect = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
-        const isMobile = window.innerWidth <= 768; // mobile large/small/tiny: keep legacy sizing/behavior
+        const isMobile = isMobileLayout(); // mobile large/small/tiny: keep legacy sizing/behavior
         let width, height;
         if (isMobile) {
           const natW = img.naturalWidth || 40;
@@ -1024,11 +1025,22 @@ const i18n = (() => {
         setTimeout(() => pathEl.remove(), dur + 600);
       };
     };
-    const interval = window.innerWidth <= 768 ? 4000 : 3000;
-    // initial delay ~1s after start, then based on layout
+    // initial delay ~1s after start, then desktop/tablet uses per-spawn random delay (1–5s), mobile stays fixed
+    const scheduleDesktop = () => {
+      const delay = 1000 + Math.random() * 4000; // 1–5s
+      notesTimer = setTimeout(() => {
+        emit();
+        scheduleDesktop();
+      }, delay);
+    };
+
     setTimeout(() => {
       emit();
-      notesTimer = setInterval(emit, interval);
+      if (isMobileLayout()) {
+        notesTimer = setInterval(emit, 4000);
+      } else {
+        scheduleDesktop();
+      }
     }, 1000);
     return;
   }

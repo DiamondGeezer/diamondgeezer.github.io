@@ -859,11 +859,254 @@ const i18n = (() => {
 
   let notesTimer = null;
   const musPaths = Array.from({ length: 34 }, (_, i) => `assets/music_symbols_chalk/mus_${String(i + 1).padStart(2, '0')}.png`);
+  const noteShadowHex = {
+    mus_01: '#cb3fa1',
+    mus_02: '#f6df18',
+    mus_03: '#ee6f0a',
+    mus_04: '#bb98fa',
+    mus_05: '#bb98fa',
+    mus_06: '#10bff6',
+    mus_07: '#f76f07',
+    mus_08: '#02d452',
+    mus_09: '#fb5bca',
+    mus_10: '#f7e315',
+    mus_11: '#0fcc4f',
+    mus_12: '#b997f7',
+    mus_13: '#ef69c8',
+    mus_14: '#fb7005',
+    mus_15: '#f9dc15',
+    mus_16: '#11bcf9',
+    mus_17: '#b196f3',
+    mus_18: '#15df54',
+    mus_19: '#f7dc18',
+    mus_20: '#f561c8',
+    mus_21: '#fb5cc7',
+    mus_22: '#fb5cc7',
+    mus_23: '#fb5cc7',
+    mus_24: '#06d454',
+    mus_25: '#15bbea',
+    mus_26: '#f2700a',
+    mus_27: '#bb9beb',
+    mus_28: '#f3dc21',
+    mus_29: '#ee5ac7',
+    mus_30: '#ea7c27',
+    mus_31: '#10dc51',
+    mus_32: '#b997fb',
+    mus_33: '#10bdf9',
+    mus_34: '#10dc51'
+  };
   let firstNote = true;
   let lastNote = null;
+  const shadowCanvas = document.createElement('canvas');
+  const shadowCtx = shadowCanvas.getContext('2d', { willReadFrequently: true });
+  let trailCanvas = null;
+  let trailCtx = null;
+  let trailFadeRAF = null;
+  let trailDpr = window.devicePixelRatio || 1;
+  const trailPadTop = 520;
+  const trailPadBottom = 220;
+  const trailPadLeft = 360;
+  const trailPadRight = 360;
+  const trailState = new WeakMap();
+
+  const noteIdFromSrc = (src) => {
+    if (!src) return null;
+    const match = src.match(/mus_(\d{2})\.png(?:$|[?#])/);
+    return match ? `mus_${match[1]}` : null;
+  };
+
+  const hexToRgb = (hex) => {
+    if (!hex) return null;
+    const normalized = hex.replace('#', '');
+    if (normalized.length !== 6) return null;
+    const r = parseInt(normalized.slice(0, 2), 16);
+    const g = parseInt(normalized.slice(2, 4), 16);
+    const b = parseInt(normalized.slice(4, 6), 16);
+    if ([r, g, b].some((v) => Number.isNaN(v))) return null;
+    return { r, g, b };
+  };
+
+  const buildShadowFilter = (color) => {
+    // Suppress visible glow on the note itself; tail handles color.
+    return 'none';
+  };
+
+  const getShadowColorFromMap = (src) => {
+    const id = noteIdFromSrc(src);
+    if (!id) return null;
+    return hexToRgb(noteShadowHex[id]);
+  };
+
+  const ensureTrailCanvas = () => {
+    if (!ctaRow) return null;
+    const rect = ctaRow.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    trailDpr = dpr;
+    if (!trailCanvas) {
+      trailCanvas = document.createElement('canvas');
+      trailCanvas.style.position = 'absolute';
+      trailCanvas.style.left = '0';
+      trailCanvas.style.top = `${-trailPadTop}px`;
+      trailCanvas.style.left = `${-trailPadLeft}px`;
+      trailCanvas.style.pointerEvents = 'none';
+      trailCanvas.style.zIndex = '29';
+      trailCanvas.className = 'note-trail-canvas';
+      ctaRow.appendChild(trailCanvas);
+      trailCtx = trailCanvas.getContext('2d', { alpha: true });
+    }
+    const cssW = Math.max(rect.width + trailPadLeft + trailPadRight, window.innerWidth + trailPadLeft + trailPadRight);
+    const cssH = Math.max(rect.height + trailPadTop + trailPadBottom, window.innerHeight + trailPadTop + trailPadBottom);
+    const targetW = Math.max(1, Math.round(cssW * dpr));
+    const targetH = Math.max(1, Math.round(cssH * dpr));
+    if (trailCanvas.width !== targetW || trailCanvas.height !== targetH) {
+      trailCanvas.width = targetW;
+      trailCanvas.height = targetH;
+      trailCanvas.style.width = `${cssW}px`;
+      trailCanvas.style.height = `${cssH}px`;
+      trailCtx.setTransform(dpr, 0, 0, dpr, trailPadLeft * dpr, trailPadTop * dpr);
+    }
+    return { rect, dpr };
+  };
+
+  const handleTrailResize = () => {
+    if (!trailCanvas) return;
+    ensureTrailCanvas();
+    trailCtx.setTransform(1, 0, 0, 1, 0, 0);
+    trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+    trailCtx.setTransform(trailDpr, 0, 0, trailDpr, trailPadLeft * trailDpr, trailPadTop * trailDpr);
+    trailState.clear?.();
+  };
+
+  window.addEventListener('resize', handleTrailResize, { passive: true });
+
+  const fadeTrail = (alpha = 0.12) => {
+    if (!trailCtx || !trailCanvas) return;
+    trailCtx.save();
+    trailCtx.setTransform(1, 0, 0, 1, 0, 0);
+    trailCtx.globalCompositeOperation = 'destination-out';
+    trailCtx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+    trailCtx.fillRect(0, 0, trailCanvas.width, trailCanvas.height);
+    trailCtx.restore();
+  };
+
+  const flushTrailForNote = () => {
+    fadeTrail(0.55);
+    setTimeout(() => fadeTrail(0.55), 80);
+  };
+
+  const startTrailFadeLoop = () => {
+    if (trailFadeRAF) return;
+    const step = () => {
+      fadeTrail();
+      trailFadeRAF = requestAnimationFrame(step);
+    };
+    step();
+  };
+
+  const drawCometTrail = (el, x, y, color) => {
+    if (!ensureTrailCanvas()) return;
+    const state = trailState.get(el) || {};
+    const { r = 0, g = 0, b = 0 } = color || {};
+    if (state.x == null || state.y == null) {
+      trailState.set(el, { x, y });
+      return;
+    }
+    const dx = x - state.x;
+    const dy = y - state.y;
+    const dist = Math.hypot(dx, dy);
+    if (!dist || dist < 2) {
+      trailState.set(el, { x, y });
+      return;
+    }
+    const trim = Math.min(18, dist * 0.55);
+    const tailX = x - (dx / dist) * trim;
+    const tailY = y - (dy / dist) * trim;
+    trailCtx.save();
+    trailCtx.globalCompositeOperation = 'lighter';
+    trailCtx.lineCap = 'round';
+    const makeGrad = (aStart, aEnd) => {
+      const grad = trailCtx.createLinearGradient(state.x, state.y, tailX, tailY);
+      grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${aStart})`);
+      grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, ${aEnd})`);
+      return grad;
+    };
+
+    // Broad glow
+    trailCtx.strokeStyle = makeGrad(0.03, 0);
+    trailCtx.lineWidth = 36; // taller head, fades to point
+    trailCtx.beginPath();
+    trailCtx.moveTo(state.x, state.y);
+    trailCtx.lineTo(tailX, tailY);
+    trailCtx.stroke();
+
+    // Core streak
+    trailCtx.strokeStyle = makeGrad(0.02, 0);
+    trailCtx.lineWidth = 18;
+    trailCtx.beginPath();
+    trailCtx.moveTo(state.x, state.y);
+    trailCtx.lineTo(tailX, tailY);
+    trailCtx.stroke();
+
+    trailCtx.restore();
+    trailState.set(el, { x, y });
+  };
 
   const startNotes = () => {
     if (!ctaRow || notesTimer !== null) return;
+    const getShadowColor = (img) => {
+      const mapped = getShadowColorFromMap(img?.src);
+      if (mapped) return mapped;
+      try {
+        const natW = img.naturalWidth || 32;
+        const natH = img.naturalHeight || 32;
+        // clamp canvas to keep cheap
+        const w = Math.min(natW, 128);
+        const h = Math.min(natH, 128);
+        shadowCanvas.width = w;
+        shadowCanvas.height = h;
+        shadowCtx.clearRect(0, 0, w, h);
+        shadowCtx.drawImage(img, 0, 0, w, h);
+
+        // try center pixel first
+        const cx = Math.floor(w / 2);
+        const cy = Math.floor(h / 2);
+        const center = shadowCtx.getImageData(cx, cy, 1, 1).data;
+        if (center[3] > 10) {
+          return { r: center[0], g: center[1], b: center[2] };
+        }
+
+        // fallback: search small cross around center for first opaque-ish pixel
+        const offsets = [
+          [0, 0], [1, 0], [-1, 0], [0, 1], [0, -1],
+          [2, 0], [-2, 0], [0, 2], [0, -2], [1, 1], [-1, -1], [1, -1], [-1, 1]
+        ];
+        for (const [ox, oy] of offsets) {
+          const px = Math.min(w - 1, Math.max(0, cx + ox));
+          const py = Math.min(h - 1, Math.max(0, cy + oy));
+          const d = shadowCtx.getImageData(px, py, 1, 1).data;
+          if (d[3] > 10) return { r: d[0], g: d[1], b: d[2] };
+        }
+
+        // final fallback: average all opaque pixels
+        const data = shadowCtx.getImageData(0, 0, w, h).data;
+        let rSum = 0, gSum = 0, bSum = 0, count = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          const a = data[i + 3];
+          if (a > 10) {
+            rSum += data[i];
+            gSum += data[i + 1];
+            bSum += data[i + 2];
+            count++;
+          }
+        }
+        if (count > 0) {
+          return { r: Math.round(rSum / count), g: Math.round(gSum / count), b: Math.round(bSum / count) };
+        }
+        return { r: 0, g: 0, b: 0 };
+      } catch (_) {
+        return { r: 0, g: 0, b: 0 };
+      }
+    };
     const isMobileLayout = () => window.innerWidth <= 768;
     const emit = () => {
       let src;
@@ -911,6 +1154,12 @@ const i18n = (() => {
         el.style.setProperty('--note-rot', `${6 + Math.random() * 10}deg`);
         el.style.width = `${width}px`;
         el.style.height = `${height}px`;
+        const shadowColor = getShadowColor(img);
+        el.style.filter = buildShadowFilter(shadowColor);
+        if (!isMobile) {
+          ensureTrailCanvas();
+          startTrailFadeLoop();
+        }
         // Position at top-right of the download button
         const ctaRect = ctaRow.getBoundingClientRect();
         const btnRect = heroDownload.getBoundingClientRect();
@@ -964,6 +1213,10 @@ const i18n = (() => {
         const rot = 4 + Math.random() * 6;
         const rotStart = isMobile ? -20 : -40;
         const rotEnd = 45;
+        const anchor = (px, py) => ({
+          x: px + (width / 2),
+          y: py + (height / 2) - 2
+        });
 
         const lerp = (a, b, t) => a + (b - a) * t;
         const cubic = (p0, p1, p2, p3, t) => {
@@ -985,10 +1238,16 @@ const i18n = (() => {
           const rotNow = rotStart + (rotEnd - rotStart) * t;
           el.style.transform = `translate(${xPos}px, ${yPos}px) scale(${scale}) rotate(${rotNow}deg)`;
           el.style.opacity = `${opacity}`;
+          if (!isMobile) {
+            const a = anchor(xPos, yPos);
+            drawCometTrail(el, a.x, a.y, shadowColor);
+          }
           if (t < 1) {
             requestAnimationFrame(tick);
           } else {
+            flushTrailForNote();
             el.remove();
+            trailState.delete(el);
           }
         };
         // initialize visible at start
@@ -1127,6 +1386,8 @@ const i18n = (() => {
       el.style.height = `${height}px`;
       el.style.animationDuration = `1.5s`;
       el.style.opacity = '1';
+      const shadowColor = getShadowColorFromMap(sprite ? `assets/music_symbols_chalk/${sprite}.png` : null);
+      el.style.filter = buildShadowFilter(shadowColor);
       const rect = cursor.getBoundingClientRect();
       el.style.position = 'fixed';
       el.style.left = `${rect.left + rect.width / 2 - 20}px`;

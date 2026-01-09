@@ -489,18 +489,27 @@ const i18n = (() => {
     menu.appendChild(li);
   });
 
+  const computeCollapse = () => {
+    const btnRect = btn.getBoundingClientRect();
+    const menuRect = menu.getBoundingClientRect();
+    const collapse = {
+      tx: (btnRect.left + btnRect.width / 2) - (menuRect.left + menuRect.width / 2),
+      ty: (btnRect.top + btnRect.height / 2) - (menuRect.top + menuRect.height / 2),
+      sx: Math.max(0.08, btnRect.width / Math.max(1, menuRect.width)),
+      sy: Math.max(0.08, btnRect.height / Math.max(1, menuRect.height))
+    };
+    return collapse;
+  };
+
   const openMenu = () => {
-    // move menu to body to avoid parent clipping
     if (menu.parentElement !== document.body) {
       document.body.appendChild(menu);
     }
     btn.setAttribute('aria-expanded', 'true');
     menu.classList.add('open');
-    // Ensure we measure after display is applied
     menu.style.display = 'block';
     menu.style.position = 'fixed';
-    // Re-measure after display so zoom/scroll placement is correct
-    requestAnimationFrame(() => {
+    const placeMenu = () => {
       const btnRect = btn.getBoundingClientRect();
       const menuRect = menu.getBoundingClientRect();
       const viewportHeight = window.innerHeight;
@@ -515,14 +524,50 @@ const i18n = (() => {
       );
       menu.style.top = `${top}px`;
       menu.style.left = `${left}px`;
+    };
+
+    placeMenu();
+    const collapse = computeCollapse();
+    menu.style.transition = 'none';
+    menu.style.transform = `translate(${collapse.tx}px, ${collapse.ty}px) scale(${collapse.sx}, ${collapse.sy})`;
+    menu.style.opacity = '0';
+    void menu.getBoundingClientRect();
+    menu.style.transition = 'transform 220ms ease, opacity 180ms ease';
+    requestAnimationFrame(() => {
+      placeMenu();
+      menu.style.transform = 'translate(0, 0) scale(1)';
+      menu.style.opacity = '1';
     });
+    const onReposition = () => {
+      if (!menu.classList.contains('open')) return;
+      placeMenu();
+    };
+    window.addEventListener('scroll', onReposition, { passive: true });
+    window.addEventListener('resize', onReposition);
+    menu._onReposition = onReposition;
     document.addEventListener('click', handleOutside, { once: true });
   };
 
   const closeMenu = () => {
     btn.setAttribute('aria-expanded', 'false');
-    menu.classList.remove('open');
-    menu.style.display = 'none';
+    const collapse = computeCollapse();
+    menu.style.transition = 'transform 180ms ease, opacity 150ms ease';
+    requestAnimationFrame(() => {
+      menu.style.transform = `translate(${collapse.tx}px, ${collapse.ty}px) scale(${collapse.sx}, ${collapse.sy})`;
+      menu.style.opacity = '0';
+    });
+    const onEnd = () => {
+      menu.classList.remove('open');
+      menu.style.display = 'none';
+      menu.style.transform = 'translate(0, 0) scale(1)';
+      menu.style.opacity = '0';
+      if (menu._onReposition) {
+        window.removeEventListener('scroll', menu._onReposition);
+        window.removeEventListener('resize', menu._onReposition);
+        menu._onReposition = null;
+      }
+    };
+    menu.addEventListener('transitionend', onEnd, { once: true });
   };
 
   const handleOutside = (e) => {

@@ -252,10 +252,16 @@ img {
   max-height: 70vh;
   overflow-y: auto;
   overflow-x: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(0, 0) scale(1);
+  transform-origin: center;
+  will-change: transform, opacity;
 }
 
 .lang-menu.open {
   display: block;
+  pointer-events: auto;
 }
 
 .lang-menu li {

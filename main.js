@@ -26,7 +26,9 @@
   const ua = navigator.userAgent || '';
   const isIOSWebKit = /iP(hone|od|ad).+AppleWebKit/i.test(ua);
   const isIPadMacSafari = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
-  if (isIOSWebKit || isIPadMacSafari) {
+  const trueMobile = isIOSWebKit || isIPadMacSafari;
+  window.__trueMobile = trueMobile;
+  if (trueMobile) {
     document.documentElement.classList.add('ios-fixed-bg');
   }
 })();
@@ -908,6 +910,7 @@ const i18n = (() => {
   const trailPadLeft = 360;
   const trailPadRight = 360;
   const trailState = new WeakMap();
+  const isTrueMobileUser = window.__trueMobile === true;
 
   const noteIdFromSrc = (src) => {
     if (!src) return null;
@@ -1052,8 +1055,11 @@ const i18n = (() => {
       return grad;
     };
 
+    const glowAlpha = isTrueMobileUser ? 0.2 : 0.08;
+    const coreAlpha = isTrueMobileUser ? 0.16 : 0.06;
+
     // Broad glow
-    trailCtx.strokeStyle = makeGrad(0.08, 0);
+    trailCtx.strokeStyle = makeGrad(glowAlpha, 0);
     trailCtx.lineWidth = 36; // taller head, fades to point
     trailCtx.beginPath();
     trailCtx.moveTo(state.x, state.y);
@@ -1061,7 +1067,7 @@ const i18n = (() => {
     trailCtx.stroke();
 
     // Core streak
-    trailCtx.strokeStyle = makeGrad(0.06, 0);
+    trailCtx.strokeStyle = makeGrad(coreAlpha, 0);
     trailCtx.lineWidth = 18;
     trailCtx.beginPath();
     trailCtx.moveTo(state.x, state.y);

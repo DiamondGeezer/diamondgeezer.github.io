@@ -942,7 +942,7 @@ const i18n = (() => {
         const dur = 4200; // ms
         const rot = 4 + Math.random() * 6;
         const rotStart = -20;
-        const rotEnd = 90;
+        const rotEnd = 45;
 
         const lerp = (a, b, t) => a + (b - a) * t;
         const cubic = (p0, p1, p2, p3, t) => {

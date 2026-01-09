@@ -33,6 +33,29 @@
   }
 })();
 
+// Estimate device refresh rate (best-effort; started once typing begins)
+let estimatedRefreshHz = 60;
+let refreshEstimatorStarted = false;
+const startRefreshEstimator = () => {
+  if (refreshEstimatorStarted) return;
+  refreshEstimatorStarted = true;
+  const sampleDuration = 220; // ms
+  let frames = 0;
+  let start = null;
+  const tick = (ts) => {
+    if (start === null) start = ts;
+    frames += 1;
+    const elapsed = ts - start;
+    if (elapsed >= sampleDuration) {
+      const hz = Math.round((frames - 1) / (elapsed / 1000));
+      estimatedRefreshHz = Math.min(240, Math.max(30, hz || 60));
+      return;
+    }
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+};
+
 // Lightweight i18n loader
 const i18n = (() => {
   const supported = [
@@ -899,6 +922,9 @@ const i18n = (() => {
   };
   let firstNote = true;
   let lastNote = null;
+  let notesPaused = false;
+  let notesSuspended = false;
+  let refreshBannerShown = false;
   const shadowCanvas = document.createElement('canvas');
   const shadowCtx = shadowCanvas.getContext('2d', { willReadFrequently: true });
   let trailCanvas = null;
@@ -995,7 +1021,7 @@ const i18n = (() => {
 
   window.addEventListener('resize', handleTrailResize, { passive: true });
 
-  const fadeTrail = (alpha = 0.12) => {
+  const fadeTrail = (alpha = 0.28) => {
     if (!trailCtx || !trailCanvas) return;
     trailCtx.save();
     trailCtx.setTransform(1, 0, 0, 1, 0, 0);
@@ -1005,15 +1031,36 @@ const i18n = (() => {
     trailCtx.restore();
   };
 
-  const flushTrailForNote = () => {
-    fadeTrail(0.55);
-    setTimeout(() => fadeTrail(0.55), 80);
+  const flushTrailForNote = (from, to) => {
+    if (!trailCtx || !trailCanvas || !from || !to) {
+      fadeTrail(0.55);
+      setTimeout(() => fadeTrail(0.55), 80);
+      return;
+    }
+    const { x: fx, y: fy } = from;
+    const { x: tx, y: ty } = to;
+    trailCtx.save();
+    trailCtx.setTransform(trailDpr, 0, 0, trailDpr, trailPadLeft * trailDpr, trailPadTop * trailDpr);
+    trailCtx.globalCompositeOperation = 'destination-out';
+    const grad = trailCtx.createLinearGradient(fx, fy, tx, ty);
+    grad.addColorStop(0, 'rgba(0,0,0,0.7)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    trailCtx.strokeStyle = grad;
+    trailCtx.lineCap = 'round';
+    trailCtx.lineWidth = 80;
+    trailCtx.beginPath();
+    trailCtx.moveTo(fx, fy);
+    trailCtx.lineTo(tx, ty);
+    trailCtx.stroke();
+    trailCtx.restore();
   };
 
   const startTrailFadeLoop = () => {
     if (trailFadeRAF) return;
     const step = () => {
       fadeTrail();
+      // Apply a second light pass to accelerate decay toward ~1s lifetime
+      fadeTrail(0.08);
       trailFadeRAF = requestAnimationFrame(step);
     };
     step();
@@ -1023,56 +1070,58 @@ const i18n = (() => {
     if (!ensureTrailCanvas()) return;
     const state = trailState.get(el) || {};
     const now = performance.now();
-    // Throttle drawing to avoid jitters; rely on continuous fade loop for cleanup
-    if (state.lastTs && now - state.lastTs < 16) {
-      trailState.set(el, { ...state, x, y, lastTs: now });
-      return;
-    }
     const { r = 0, g = 0, b = 0 } = color || {};
     if (state.x == null || state.y == null) {
-      trailState.set(el, { x, y });
+      trailState.set(el, { x, y, lastTs: now });
       return;
     }
     const dx = x - state.x;
     const dy = y - state.y;
     const dist = Math.hypot(dx, dy);
-    if (!dist || dist < 2) {
-      trailState.set(el, { x, y });
+    if (!dist || dist < 0.5) {
+      trailState.set(el, { x, y, lastTs: now });
       return;
     }
-    const trim = Math.min(18, dist * 0.55);
-    const tailX = x - (dx / dist) * trim;
-    const tailY = y - (dy / dist) * trim;
+    const targetDt = estimatedRefreshHz > 64 ? 1000 / 90 : 1000 / 60;
+    const dt = state.lastTs ? now - state.lastTs : targetDt;
+    const slices = Math.max(1, Math.min(5, Math.round(dt / targetDt)));
     trailCtx.save();
     trailCtx.globalCompositeOperation = 'lighter';
     trailCtx.lineCap = 'round';
-    trailCtx.shadowBlur = 10;
-    trailCtx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.06)`;
-    const makeGrad = (aStart, aEnd) => {
-      const grad = trailCtx.createLinearGradient(state.x, state.y, tailX, tailY);
-      grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${aStart})`);
-      grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, ${aEnd})`);
-      return grad;
-    };
+    trailCtx.shadowBlur = 14;
+    trailCtx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.08)`;
+    const glowAlpha = isTrueMobileUser ? 0.2 : 0.1;
+    const coreAlpha = isTrueMobileUser ? 0.16 : 0.08;
+    let prevX = state.x;
+    let prevY = state.y;
+    for (let i = 1; i <= slices; i++) {
+      const t = i / slices;
+      const ix = state.x + dx * t;
+      const iy = state.y + dy * t;
+      const makeGrad = (aStart, aEnd) => {
+        const grad = trailCtx.createLinearGradient(prevX, prevY, ix, iy);
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${aStart})`);
+        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, ${aEnd})`);
+        return grad;
+      };
 
-    const glowAlpha = isTrueMobileUser ? 0.8 : 0.08;
-    const coreAlpha = isTrueMobileUser ? 0.64 : 0.06;
+      trailCtx.strokeStyle = makeGrad(glowAlpha, 0);
+      trailCtx.lineWidth = 34;
+      trailCtx.beginPath();
+      trailCtx.moveTo(prevX, prevY);
+      trailCtx.lineTo(ix, iy);
+      trailCtx.stroke();
 
-    // Broad glow
-    trailCtx.strokeStyle = makeGrad(glowAlpha, 0);
-    trailCtx.lineWidth = 36; // taller head, fades to point
-    trailCtx.beginPath();
-    trailCtx.moveTo(state.x, state.y);
-    trailCtx.lineTo(tailX, tailY);
-    trailCtx.stroke();
+      trailCtx.strokeStyle = makeGrad(coreAlpha, 0);
+      trailCtx.lineWidth = 16;
+      trailCtx.beginPath();
+      trailCtx.moveTo(prevX, prevY);
+      trailCtx.lineTo(ix, iy);
+      trailCtx.stroke();
 
-    // Core streak
-    trailCtx.strokeStyle = makeGrad(coreAlpha, 0);
-    trailCtx.lineWidth = 18;
-    trailCtx.beginPath();
-    trailCtx.moveTo(state.x, state.y);
-    trailCtx.lineTo(tailX, tailY);
-    trailCtx.stroke();
+      prevX = ix;
+      prevY = iy;
+    }
 
     trailCtx.restore();
     trailState.set(el, { x, y, lastTs: now });
@@ -1080,6 +1129,45 @@ const i18n = (() => {
 
   const startNotes = () => {
     if (!ctaRow || notesTimer !== null) return;
+    const showRefreshBanner = () => {
+      if (refreshBannerShown) return;
+      const label = document.querySelector('.logo span');
+      if (!label) return;
+      refreshBannerShown = true;
+      const original = label.textContent || 'Mixport';
+      label.textContent = `${original} (${estimatedRefreshHz}Hz)`;
+      setTimeout(() => {
+        label.textContent = original;
+      }, 1000);
+    };
+    let notesTimerType = null;
+    const clearNotesTimer = () => {
+      if (!notesTimer) return;
+      if (notesTimerType === 'interval') {
+        clearInterval(notesTimer);
+      } else {
+        clearTimeout(notesTimer);
+      }
+      notesTimer = null;
+    };
+    const pauseNotes = () => {
+      notesPaused = true;
+      clearNotesTimer();
+    };
+    const resumeNotes = () => {
+      if (!notesPaused) return;
+      notesPaused = false;
+      if (notesTimer) return;
+      emit();
+      if (isMobileLayout()) {
+        notesTimerType = 'interval';
+        notesTimer = setInterval(() => {
+          if (!notesPaused) emit();
+        }, 4000);
+      } else {
+        scheduleDesktop();
+      }
+    };
     const getShadowColor = (img) => {
       const mapped = getShadowColorFromMap(img?.src);
       if (mapped) return mapped;
@@ -1136,6 +1224,7 @@ const i18n = (() => {
     };
     const isMobileLayout = () => window.innerWidth <= 768;
     const emit = () => {
+      if (notesPaused || notesSuspended) return;
       let src;
       if (firstNote) {
         const firstChoices = ['assets/music_symbols_chalk/mus_09.png', 'assets/music_symbols_chalk/mus_21.png'];
@@ -1253,10 +1342,10 @@ const i18n = (() => {
         };
 
         let startTs = null;
-        const tick = (ts) => {
-          if (startTs === null) startTs = ts;
-          const elapsed = ts - startTs;
-          const t = Math.min(1, elapsed / dur);
+      const tick = (ts) => {
+        if (startTs === null) startTs = ts;
+        const elapsed = ts - startTs;
+        const t = Math.min(1, elapsed / dur);
           const xPos = cubic(start.x, c1.x, c2.x, end.x, t);
           const yPos = cubic(start.y, c1.y, c2.y, end.y, t);
           let opacity = 0.85;
@@ -1273,7 +1362,7 @@ const i18n = (() => {
           if (t < 1) {
             requestAnimationFrame(tick);
           } else {
-            flushTrailForNote();
+            flushTrailForNote(start, end);
             el.remove();
             trailState.delete(el);
           }
@@ -1314,22 +1403,108 @@ const i18n = (() => {
     };
     // initial delay ~1s after start, then desktop/tablet uses per-spawn random delay (1–5s), mobile stays fixed
     const scheduleDesktop = () => {
+      if (notesPaused || notesSuspended) {
+        notesTimer = null;
+        return;
+      }
       const delay = 1000 + Math.random() * 4000; // 1–5s
+      notesTimerType = 'timeout';
       notesTimer = setTimeout(() => {
         emit();
         scheduleDesktop();
       }, delay);
     };
 
+    const handleVisibility = () => {
+      if (document.visibilityState === 'hidden') {
+        notesSuspended = true;
+        clearNotesTimer();
+        // Clear trail canvas to avoid stale strokes on return
+        if (trailCtx && trailCanvas) {
+          trailCtx.setTransform(1, 0, 0, 1, 0, 0);
+          trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+          trailCtx.setTransform(trailDpr, 0, 0, trailDpr, trailPadLeft * trailDpr, trailPadTop * trailDpr);
+        }
+      } else {
+        if (!notesSuspended) return;
+        notesSuspended = false;
+        // Restart scheduling fresh; avoid backlogged emits
+        if (notesTimer) clearNotesTimer();
+        setTimeout(() => {
+          emit();
+          if (isMobileLayout()) {
+            notesTimerType = 'interval';
+            notesTimer = setInterval(() => {
+              if (!notesPaused && !notesSuspended) emit();
+            }, 4000);
+          } else {
+            scheduleDesktop();
+          }
+        }, 300);
+      }
+    };
+
     setTimeout(() => {
+      showRefreshBanner();
       emit();
       if (isMobileLayout()) {
-        notesTimer = setInterval(emit, 4000);
+        notesTimerType = 'interval';
+        notesTimer = setInterval(() => {
+          if (!notesPaused && !notesSuspended) emit();
+        }, 4000);
       } else {
         scheduleDesktop();
       }
+      document.addEventListener('visibilitychange', handleVisibility);
+      window.addEventListener('blur', handleVisibility);
+      window.addEventListener('focus', handleVisibility);
     }, 1000);
-    return;
+
+    // Observe scroll targets to pause/resume spawn
+    const howHeading = document.querySelector('#how-it-works h2');
+    const perksLead = document.querySelector('.perks-row p[data-i18n=\"perks.transfer.body\"]');
+    let lastScrollY = window.scrollY || 0;
+    let scrollDir = 'down';
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY || 0;
+      const delta = y - lastScrollY;
+      if (delta > 2) scrollDir = 'down';
+      else if (delta < -2) scrollDir = 'up';
+      lastScrollY = y;
+    }, { passive: true });
+
+    if (howHeading) {
+      const pauseObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && scrollDir === 'down') {
+              pauseNotes();
+            }
+          });
+        },
+        { rootMargin: '-10% 0px -55% 0px', threshold: [0, 0.25, 0.5] }
+      );
+      pauseObserver.observe(howHeading);
+    }
+
+    const resumeAnchor = document.querySelector('[data-i18n="transfer.title"]');
+    if (resumeAnchor) {
+      let lastResumeCheck = 0;
+      const resumeObserver = new IntersectionObserver(
+        (entries) => {
+          const now = performance.now();
+          if (now - lastResumeCheck < 320) return;
+          lastResumeCheck = now;
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && scrollDir === 'up') {
+              resumeNotes();
+            }
+          });
+        },
+        { rootMargin: '-10% 0px -70% 0px', threshold: [0, 0.4, 0.8] }
+      );
+      resumeObserver.observe(resumeAnchor);
+    }
   }
 
   // Build structure: highlight span, rest span, cursor
@@ -1477,6 +1652,7 @@ const i18n = (() => {
   const startTypingOnce = async () => {
     if (typingStarted) return;
     typingStarted = true;
+    startRefreshEstimator();
     try {
       const strings = await i18n.ready;
       // Pull translated strings directly to avoid stale pre-i18n content

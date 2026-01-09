@@ -1134,7 +1134,7 @@ const i18n = (() => {
         return { r: 0, g: 0, b: 0 };
       }
     };
-    const isMobileLayout = () => window.innerWidth <= 768 || isTrueMobileUser;
+    const isMobileLayout = () => window.innerWidth <= 768;
     const emit = () => {
       let src;
       if (firstNote) {

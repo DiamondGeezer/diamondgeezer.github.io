@@ -935,7 +935,7 @@ const i18n = (() => {
   const shadowCanvas = document.createElement('canvas');
   const shadowCtx = shadowCanvas.getContext('2d', { willReadFrequently: true });
   const isTrueMobileUser = window.__trueMobile === true;
-  const screenshotMap = {
+  const screenshot3Map = {
     'en': 'assets/screenshots/screenshot3 - en.png',
     'ar': 'assets/screenshots/screenshot3 - ar.png',
     'de': 'assets/screenshots/screenshot3 - de.png',
@@ -956,25 +956,49 @@ const i18n = (() => {
     'zh-Hant': 'assets/screenshots/screenshot3 - zh-Hant.png'
   };
 
-  const pickScreenshotForLocale = (locale) => {
-    if (!locale) return screenshotMap['en'];
-    if (screenshotMap[locale]) return screenshotMap[locale];
+  const screenshot0Map = {
+    'en': 'assets/screenshots/screenshot0 - en.png',
+    'ar': 'assets/screenshots/screenshot0 - ar.png',
+    'de': 'assets/screenshots/screenshot0 - de.png',
+    'es': 'assets/screenshots/screenshot0 - es.png',
+    'fr': 'assets/screenshots/screenshot0 - fr.png',
+    'hi': 'assets/screenshots/screenshot0 - hi.png',
+    'id': 'assets/screenshots/screenshot0 - id.png',
+    'it': 'assets/screenshots/screenshot0 - it.png',
+    'ja': 'assets/screenshots/screenshot0 - ja.png',
+    'ko': 'assets/screenshots/screenshot0 - ko.png',
+    'nl': 'assets/screenshots/screenshot0 - nl.png',
+    'pl': 'assets/screenshots/screenshot0 - pl.png',
+    'pt-BR': 'assets/screenshots/screenshot0 - pt-BR.png',
+    'sv': 'assets/screenshots/screenshot0 - sv.png',
+    'th': 'assets/screenshots/screenshot0 - th.png',
+    'tr': 'assets/screenshots/screenshot0 - tr.png',
+    'zh-Hans': 'assets/screenshots/screenshot0 - zh-Hans.png',
+    'zh-Hant': 'assets/screenshots/screenshot0 - zh-Hant.png'
+  };
+
+  const pickScreenshotForLocale = (map, locale) => {
+    if (!locale) return map['en'];
+    if (map[locale]) return map[locale];
     const base = locale.split('-')[0];
-    if (base === 'pt') return screenshotMap['pt-BR'] || screenshotMap['en'];
+    if (base === 'pt') return map['pt-BR'] || map['en'];
     if (base === 'zh') {
-      if (locale.toLowerCase().includes('hant')) return screenshotMap['zh-Hant'] || screenshotMap['en'];
-      return screenshotMap['zh-Hans'] || screenshotMap['en'];
+      if (locale.toLowerCase().includes('hant')) return map['zh-Hant'] || map['en'];
+      return map['zh-Hans'] || map['en'];
     }
-    return screenshotMap[base] || screenshotMap['en'];
+    return map[base] || map['en'];
   };
 
   const applyLocalizedScreenshots = (locale) => {
-    const src = pickScreenshotForLocale(locale);
+    const src3 = pickScreenshotForLocale(screenshot3Map, locale);
+    const src0 = pickScreenshotForLocale(screenshot0Map, locale);
     document.querySelectorAll('.hero-screenshot').forEach((img) => {
-      img.src = src;
+      img.src = src3;
     });
     const howCard4Img = document.querySelector('.how-cards article:nth-of-type(4) .how-card-clip img');
-    if (howCard4Img) howCard4Img.src = src;
+    if (howCard4Img) howCard4Img.src = src3;
+    const howCard1Img = document.querySelector('.how-cards article:nth-of-type(1) .how-card-clip img');
+    if (howCard1Img) howCard1Img.src = src0;
   };
 
   const noteIdFromSrc = (src) => {

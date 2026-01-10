@@ -977,6 +977,27 @@ const i18n = (() => {
     'zh-Hant': 'assets/screenshots/screenshot0 - zh-Hant.png'
   };
 
+  const screenshot1Map = {
+    'en': 'assets/screenshots/screenshot1 - en.png',
+    'ar': 'assets/screenshots/screenshot1 - ar.png',
+    'de': 'assets/screenshots/screenshot1 - de.png',
+    'es': 'assets/screenshots/screenshot1 - es.png',
+    'fr': 'assets/screenshots/screenshot1 - fr.png',
+    'hi': 'assets/screenshots/screenshot1 - hi.png',
+    'id': 'assets/screenshots/screenshot1 - id.png',
+    'it': 'assets/screenshots/screenshot1 - it.png',
+    'ja': 'assets/screenshots/screenshot1 - ja.png',
+    'ko': 'assets/screenshots/screenshot1 - ko.png',
+    'nl': 'assets/screenshots/screenshot1 - nl.png',
+    'pl': 'assets/screenshots/screenshot1 - pl.png',
+    'pt-BR': 'assets/screenshots/screenshot1 - pt-BR.png',
+    'sv': 'assets/screenshots/screenshot1 - sv.png',
+    'th': 'assets/screenshots/screenshot1 - th.png',
+    'tr': 'assets/screenshots/screenshot1 - tr.png',
+    'zh-Hans': 'assets/screenshots/screenshot1 - zh-Hans.png',
+    'zh-Hant': 'assets/screenshots/screenshot1 - zh-Hant.png'
+  };
+
   const pickScreenshotForLocale = (map, locale) => {
     if (!locale) return map['en'];
     if (map[locale]) return map[locale];
@@ -992,6 +1013,7 @@ const i18n = (() => {
   const applyLocalizedScreenshots = (locale) => {
     const src3 = pickScreenshotForLocale(screenshot3Map, locale);
     const src0 = pickScreenshotForLocale(screenshot0Map, locale);
+    const src1 = pickScreenshotForLocale(screenshot1Map, locale);
     document.querySelectorAll('.hero-screenshot').forEach((img) => {
       img.src = src3;
     });
@@ -999,6 +1021,8 @@ const i18n = (() => {
     if (howCard4Img) howCard4Img.src = src3;
     const howCard1Img = document.querySelector('.how-cards article:nth-of-type(1) .how-card-clip img');
     if (howCard1Img) howCard1Img.src = src0;
+    const howCard2Img = document.querySelector('.how-cards article:nth-of-type(2) .how-card-clip img');
+    if (howCard2Img) howCard2Img.src = src1;
   };
 
   const noteIdFromSrc = (src) => {

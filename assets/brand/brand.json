@@ -35,7 +35,25 @@
       "screenshot0": "assets/screenshots/screenshot0.png",
       "screenshot1": "assets/screenshots/screenshot1.png",
       "screenshot2": "assets/screenshots/screenshot2.png",
-      "screenshot3": "assets/screenshots/screenshot3.png"
+      "screenshot3": "assets/screenshots/screenshot3 - en.png",
+      "screenshot3_en": "assets/screenshots/screenshot3 - en.png",
+      "screenshot3_ar": "assets/screenshots/screenshot3 - ar.png",
+      "screenshot3_de": "assets/screenshots/screenshot3 - de.png",
+      "screenshot3_es": "assets/screenshots/screenshot3 - es.png",
+      "screenshot3_fr": "assets/screenshots/screenshot3 - fr.png",
+      "screenshot3_hi": "assets/screenshots/screenshot3 - hi.png",
+      "screenshot3_id": "assets/screenshots/screenshot3 - id.png",
+      "screenshot3_it": "assets/screenshots/screenshot3 - it.png",
+      "screenshot3_ja": "assets/screenshots/screenshot3 - ja.png",
+      "screenshot3_ko": "assets/screenshots/screenshot3 - ko.png",
+      "screenshot3_nl": "assets/screenshots/screenshot3 - nl.png",
+      "screenshot3_pl": "assets/screenshots/screenshot3 - pl.png",
+      "screenshot3_pt_BR": "assets/screenshots/screenshot3 - pt-BR.png",
+      "screenshot3_sv": "assets/screenshots/screenshot3 - sv.png",
+      "screenshot3_th": "assets/screenshots/screenshot3 - th.png",
+      "screenshot3_tr": "assets/screenshots/screenshot3 - tr.png",
+      "screenshot3_zh_Hans": "assets/screenshots/screenshot3 - zh-Hans.png",
+      "screenshot3_zh_Hant": "assets/screenshots/screenshot3 - zh-Hant.png"
     },
     "svgs": {
       "downloadOnAppStore": "assets/svgs/downloadOnAppStore.svg"

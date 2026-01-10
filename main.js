@@ -189,6 +189,7 @@ const i18n = (() => {
   // Temporary forced locale override (e.g., testing). Set to null/undefined to return to auto-detect.
   const forcedLocale = null;
   const currentLocale = forcedLocale || getLocale();
+  window.__currentLocale = currentLocale;
   const ready = fetchLocale(currentLocale).then((strings) => {
     applyTranslations(strings);
     // Preserve lang param on internal links marked for preservation
@@ -933,16 +934,48 @@ const i18n = (() => {
   let cachedPathKey = null;
   const shadowCanvas = document.createElement('canvas');
   const shadowCtx = shadowCanvas.getContext('2d', { willReadFrequently: true });
-  let trailCanvas = null;
-  let trailCtx = null;
-  let trailFadeRAF = null;
-  let trailDpr = window.devicePixelRatio || 1;
-  const trailPadTop = 520;
-  const trailPadBottom = 220;
-  const trailPadLeft = 360;
-  const trailPadRight = 360;
-  const trailState = new WeakMap();
   const isTrueMobileUser = window.__trueMobile === true;
+  const screenshotMap = {
+    'en': 'assets/screenshots/screenshot3 - en.png',
+    'ar': 'assets/screenshots/screenshot3 - ar.png',
+    'de': 'assets/screenshots/screenshot3 - de.png',
+    'es': 'assets/screenshots/screenshot3 - es.png',
+    'fr': 'assets/screenshots/screenshot3 - fr.png',
+    'hi': 'assets/screenshots/screenshot3 - hi.png',
+    'id': 'assets/screenshots/screenshot3 - id.png',
+    'it': 'assets/screenshots/screenshot3 - it.png',
+    'ja': 'assets/screenshots/screenshot3 - ja.png',
+    'ko': 'assets/screenshots/screenshot3 - ko.png',
+    'nl': 'assets/screenshots/screenshot3 - nl.png',
+    'pl': 'assets/screenshots/screenshot3 - pl.png',
+    'pt-BR': 'assets/screenshots/screenshot3 - pt-BR.png',
+    'sv': 'assets/screenshots/screenshot3 - sv.png',
+    'th': 'assets/screenshots/screenshot3 - th.png',
+    'tr': 'assets/screenshots/screenshot3 - tr.png',
+    'zh-Hans': 'assets/screenshots/screenshot3 - zh-Hans.png',
+    'zh-Hant': 'assets/screenshots/screenshot3 - zh-Hant.png'
+  };
+
+  const pickScreenshotForLocale = (locale) => {
+    if (!locale) return screenshotMap['en'];
+    if (screenshotMap[locale]) return screenshotMap[locale];
+    const base = locale.split('-')[0];
+    if (base === 'pt') return screenshotMap['pt-BR'] || screenshotMap['en'];
+    if (base === 'zh') {
+      if (locale.toLowerCase().includes('hant')) return screenshotMap['zh-Hant'] || screenshotMap['en'];
+      return screenshotMap['zh-Hans'] || screenshotMap['en'];
+    }
+    return screenshotMap[base] || screenshotMap['en'];
+  };
+
+  const applyLocalizedScreenshots = (locale) => {
+    const src = pickScreenshotForLocale(locale);
+    document.querySelectorAll('.hero-screenshot').forEach((img) => {
+      img.src = src;
+    });
+    const howCard4Img = document.querySelector('.how-cards article:nth-of-type(4) .how-card-clip img');
+    if (howCard4Img) howCard4Img.src = src;
+  };
 
   const noteIdFromSrc = (src) => {
     if (!src) return null;
@@ -962,8 +995,10 @@ const i18n = (() => {
   };
 
   const buildShadowFilter = (color) => {
-    // Suppress visible glow on the note itself; tail handles color.
-    return 'none';
+    const r = color?.r ?? 0;
+    const g = color?.g ?? 0;
+    const b = color?.b ?? 0;
+    return `drop-shadow(0 8px 14px rgba(${r}, ${g}, ${b}, 0.26)) drop-shadow(0 4px 8px rgba(${r}, ${g}, ${b}, 0.32)) drop-shadow(0 2px 4px rgba(${r}, ${g}, ${b}, 0.22))`;
   };
 
   const buildTypingShadowFilter = (color) => {
@@ -984,209 +1019,6 @@ const i18n = (() => {
     return hexToRgb(noteShadowHex[id]);
   };
 
-  const ensureTrailCanvas = () => {
-    if (!ctaRow) return null;
-    const rect = ctaRow.getBoundingClientRect();
-    const dpr = window.devicePixelRatio || 1;
-    trailDpr = dpr;
-    if (!showCometTail) return null;
-    if (!trailCanvas) {
-      trailCanvas = document.createElement('canvas');
-      trailCanvas.style.position = 'absolute';
-      trailCanvas.style.left = '0';
-      trailCanvas.style.top = `${-trailPadTop}px`;
-      trailCanvas.style.left = `${-trailPadLeft}px`;
-      trailCanvas.style.pointerEvents = 'none';
-      trailCanvas.style.zIndex = '29';
-      trailCanvas.style.willChange = 'opacity';
-      trailCanvas.className = 'note-trail-canvas';
-      ctaRow.appendChild(trailCanvas);
-      trailCtx = trailCanvas.getContext('2d', { alpha: true });
-    }
-    const cssW = Math.max(rect.width + trailPadLeft + trailPadRight, window.innerWidth + trailPadLeft + trailPadRight);
-    const cssH = Math.max(rect.height + trailPadTop + trailPadBottom, window.innerHeight + trailPadTop + trailPadBottom);
-    const targetW = Math.max(1, Math.round(cssW * dpr));
-    const targetH = Math.max(1, Math.round(cssH * dpr));
-    if (trailCanvas.width !== targetW || trailCanvas.height !== targetH) {
-      trailCanvas.width = targetW;
-      trailCanvas.height = targetH;
-      trailCanvas.style.width = `${cssW}px`;
-      trailCanvas.style.height = `${cssH}px`;
-      trailCtx.setTransform(dpr, 0, 0, dpr, trailPadLeft * dpr, trailPadTop * dpr);
-    }
-    return { rect, dpr };
-  };
-
-  const handleTrailResize = () => {
-    if (!trailCanvas) return;
-    ensureTrailCanvas();
-    trailCtx.setTransform(1, 0, 0, 1, 0, 0);
-    trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
-    trailCtx.setTransform(trailDpr, 0, 0, trailDpr, trailPadLeft * trailDpr, trailPadTop * trailDpr);
-    trailState.clear?.();
-  };
-
-  window.addEventListener('resize', handleTrailResize, { passive: true });
-
-  const fadeTrail = (alpha = 0.28) => {
-    if (!showCometTail || !trailCtx || !trailCanvas) return;
-    trailCtx.save();
-    trailCtx.setTransform(1, 0, 0, 1, 0, 0);
-    trailCtx.globalCompositeOperation = 'destination-out';
-    trailCtx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
-    trailCtx.fillRect(0, 0, trailCanvas.width, trailCanvas.height);
-    trailCtx.restore();
-  };
-
-  const flushTrailForNote = (from, to) => {
-    if (!trailCtx || !trailCanvas || !from || !to) {
-      fadeTrail(0.55);
-      setTimeout(() => fadeTrail(0.55), 80);
-      return;
-    }
-    const { x: fx, y: fy } = from;
-    const { x: tx, y: ty } = to;
-    trailCtx.save();
-    trailCtx.setTransform(trailDpr, 0, 0, trailDpr, trailPadLeft * trailDpr, trailPadTop * trailDpr);
-    trailCtx.globalCompositeOperation = 'destination-out';
-    const grad = trailCtx.createLinearGradient(fx, fy, tx, ty);
-    grad.addColorStop(0, 'rgba(0,0,0,0.7)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    trailCtx.strokeStyle = grad;
-    trailCtx.lineCap = 'round';
-    trailCtx.lineWidth = 80;
-    trailCtx.beginPath();
-    trailCtx.moveTo(fx, fy);
-    trailCtx.lineTo(tx, ty);
-    trailCtx.stroke();
-    trailCtx.restore();
-  };
-
-  const startTrailFadeLoop = () => {
-    if (!showCometTail) return;
-    if (trailFadeRAF) return;
-    const step = () => {
-      if (!showCometTail) {
-        cancelAnimationFrame(trailFadeRAF);
-        trailFadeRAF = null;
-        return;
-      }
-      fadeTrail();
-      // Apply a second light pass to accelerate decay toward ~1s lifetime
-      fadeTrail(0.08);
-      trailFadeRAF = requestAnimationFrame(step);
-    };
-    trailFadeRAF = requestAnimationFrame(step);
-  };
-
-  const stopTrailFadeLoop = () => {
-    if (trailFadeRAF) {
-      cancelAnimationFrame(trailFadeRAF);
-      trailFadeRAF = null;
-    }
-  };
-
-  const drawCometTrail = (el, x, y, color) => {
-    if (!showCometTail || !ensureTrailCanvas()) return;
-    const state = trailState.get(el) || {};
-    const now = performance.now();
-    const { r = 0, g = 0, b = 0 } = color || {};
-    if (state.x == null || state.y == null) {
-      trailState.set(el, { x, y, lastTs: now });
-      return;
-    }
-    const dx = x - state.x;
-    const dy = y - state.y;
-    const dist = Math.hypot(dx, dy);
-    if (!dist || dist < 0.5) {
-      trailState.set(el, { x, y, lastTs: now });
-      return;
-    }
-    const targetDt = estimatedRefreshHz > 64 ? 1000 / 90 : 1000 / 60;
-    const dt = state.lastTs ? now - state.lastTs : targetDt;
-    const slices = 1; // single stroke per frame for smoother rendering
-    trailCtx.save();
-    trailCtx.globalCompositeOperation = 'lighter';
-    trailCtx.lineCap = 'round';
-    trailCtx.shadowBlur = 8;
-    trailCtx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.05)`;
-    const glowAlpha = isTrueMobileUser ? 0.2 : 0.1;
-    const coreAlpha = isTrueMobileUser ? 0.16 : 0.08;
-    let prevX = state.x;
-    let prevY = state.y;
-    for (let i = 1; i <= slices; i++) {
-      const t = i / slices;
-      const ix = state.x + dx * t;
-      const iy = state.y + dy * t;
-      const segDx = ix - prevX;
-      const segDy = iy - prevY;
-      const segLen = Math.hypot(segDx, segDy) || 1;
-      const ux = segDx / segLen;
-      const uy = segDy / segLen;
-      const px = -uy;
-      const py = ux;
-      const headLenGlow = 18; // start tail farther back
-      const headLenCore = 10;
-      const tipBack = Math.min(14, segLen * 0.6);
-      const bodyEndGlowX = ix - ux * headLenGlow;
-      const bodyEndGlowY = iy - uy * headLenGlow;
-      const bodyEndCoreX = ix - ux * headLenCore;
-      const bodyEndCoreY = iy - uy * headLenCore;
-
-      // Body stroke (glow)
-      const makeGrad = (aStart, aEnd) => {
-        const grad = trailCtx.createLinearGradient(prevX, prevY, ix, iy);
-        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${aStart})`);
-        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, ${aEnd})`);
-        return grad;
-      };
-      trailCtx.strokeStyle = makeGrad(glowAlpha, 0);
-      trailCtx.lineWidth = 32;
-      trailCtx.beginPath();
-      trailCtx.moveTo(prevX, prevY);
-      trailCtx.lineTo(bodyEndGlowX, bodyEndGlowY);
-      trailCtx.stroke();
-
-      // Body stroke (core)
-      trailCtx.strokeStyle = makeGrad(coreAlpha, 0);
-      trailCtx.lineWidth = 14;
-      trailCtx.beginPath();
-      trailCtx.moveTo(prevX, prevY);
-      trailCtx.lineTo(bodyEndCoreX, bodyEndCoreY);
-      trailCtx.stroke();
-
-      // Head wedge (glow/core) with ~45° taper from midpoint
-      const drawHead = (halfWidth, alpha, len) => {
-        const tipX = ix - ux * tipBack;
-        const tipY = iy - uy * tipBack;
-        const baseCenterX = ix - ux * len;
-        const baseCenterY = iy - uy * len;
-        const leftX = baseCenterX + px * halfWidth;
-        const leftY = baseCenterY + py * halfWidth;
-        const rightX = baseCenterX - px * halfWidth;
-        const rightY = baseCenterY - py * halfWidth;
-        const grad = trailCtx.createLinearGradient(tipX, tipY, baseCenterX, baseCenterY);
-        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.65})`);
-        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-        trailCtx.fillStyle = grad;
-        trailCtx.beginPath();
-        trailCtx.moveTo(tipX, tipY);
-        trailCtx.lineTo(leftX, leftY);
-        trailCtx.lineTo(rightX, rightY);
-        trailCtx.closePath();
-        trailCtx.fill();
-      };
-
-      drawHead(12, glowAlpha, headLenGlow);
-      drawHead(6, coreAlpha, headLenCore);
-
-      prevX = ix;
-      prevY = iy;
-    }
-
-    trailCtx.restore();
-    trailState.set(el, { x, y, lastTs: now });
-  };
 
   const startNotes = () => {
     if (!ctaRow || notesTimer !== null) return;
@@ -1334,10 +1166,7 @@ const i18n = (() => {
         el.style.willChange = 'transform, opacity';
         const shadowColor = getShadowColor(img);
         el.style.filter = buildShadowFilter(shadowColor);
-        if (!isMobile && showCometTail) {
-          ensureTrailCanvas();
-          startTrailFadeLoop();
-        }
+        // comet tail disabled/removed
         // Position at top-right of the download button
         const ctaRect = ctaRow.getBoundingClientRect();
         const btnRect = heroDownload.getBoundingClientRect();
@@ -1411,11 +1240,6 @@ const i18n = (() => {
         const rot = 4 + Math.random() * 6;
         const rotStart = isMobile ? -20 : -40;
         const rotEnd = 45;
-        const anchor = (px, py) => ({
-          x: px + (width / 2) + 10,
-          y: py + (height / 2) - 7
-        });
-
         const lerp = (a, b, t) => a + (b - a) * t;
         const cubic = (p0, p1, p2, p3, t) => {
           const u = 1 - t;
@@ -1436,16 +1260,11 @@ const i18n = (() => {
           const rotNow = rotStart + (rotEnd - rotStart) * t;
           el.style.transform = `translate(${xPos}px, ${yPos}px) scale(${scale}) rotate(${rotNow}deg)`;
           el.style.opacity = `${opacity}`;
-          if (!isMobile) {
-            const a = anchor(xPos, yPos);
-            drawCometTrail(el, a.x, a.y, shadowColor);
-          }
+          // comet tail disabled/removed
           if (t < 1) {
             requestAnimationFrame(tick);
           } else {
-            flushTrailForNote(start, end);
             el.remove();
-            trailState.delete(el);
           }
         };
         // initialize visible at start
@@ -1476,12 +1295,6 @@ const i18n = (() => {
         clearNotesTimer();
         cachedPathKey = null;
         cachedPaths = null;
-        // Clear trail canvas to avoid stale strokes on return
-        if (trailCtx && trailCanvas) {
-          trailCtx.setTransform(1, 0, 0, 1, 0, 0);
-          trailCtx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
-          trailCtx.setTransform(trailDpr, 0, 0, trailDpr, trailPadLeft * trailDpr, trailPadTop * trailDpr);
-        }
       } else {
         if (!notesSuspended) return;
         notesSuspended = false;
@@ -1749,6 +1562,7 @@ const i18n = (() => {
     typingStarted = true;
     startRefreshEstimator();
     preloadTypingSprites();
+    applyLocalizedScreenshots(window.__currentLocale || 'en');
     try {
       const strings = await i18n.ready;
       // Pull translated strings directly to avoid stale pre-i18n content

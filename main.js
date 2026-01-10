@@ -920,6 +920,7 @@ const i18n = (() => {
     mus_33: '#10bdf9',
     mus_34: '#10dc51'
   };
+  const showCometTail = false;
   let firstNote = true;
   let lastNote = null;
   let notesPaused = false;
@@ -964,11 +965,11 @@ const i18n = (() => {
     const r = color?.r ?? 0;
     const g = color?.g ?? 0;
     const b = color?.b ?? 0;
-    // Very heavy, clearly visible drop shadow for the typing burst
+    // Thick, color-matched shadow for the typing burst
     return [
-      `drop-shadow(0 14px 30px rgba(${r}, ${g}, ${b}, 0.38))`,
-      `drop-shadow(0 10px 22px rgba(${r}, ${g}, ${b}, 0.44))`,
-      `drop-shadow(0 4px 12px rgba(${r}, ${g}, ${b}, 0.34))`
+      `drop-shadow(0 12px 24px rgba(${r}, ${g}, ${b}, 0.34))`,
+      `drop-shadow(0 6px 14px rgba(${r}, ${g}, ${b}, 0.36))`,
+      `drop-shadow(0 2px 6px rgba(${r}, ${g}, ${b}, 0.28))`
     ].join(' ');
   };
 
@@ -983,6 +984,7 @@ const i18n = (() => {
     const rect = ctaRow.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
     trailDpr = dpr;
+    if (!showCometTail) return null;
     if (!trailCanvas) {
       trailCanvas = document.createElement('canvas');
       trailCanvas.style.position = 'absolute';
@@ -1022,7 +1024,7 @@ const i18n = (() => {
   window.addEventListener('resize', handleTrailResize, { passive: true });
 
   const fadeTrail = (alpha = 0.28) => {
-    if (!trailCtx || !trailCanvas) return;
+    if (!showCometTail || !trailCtx || !trailCanvas) return;
     trailCtx.save();
     trailCtx.setTransform(1, 0, 0, 1, 0, 0);
     trailCtx.globalCompositeOperation = 'destination-out';
@@ -1056,18 +1058,31 @@ const i18n = (() => {
   };
 
   const startTrailFadeLoop = () => {
+    if (!showCometTail) return;
     if (trailFadeRAF) return;
     const step = () => {
+      if (!showCometTail) {
+        cancelAnimationFrame(trailFadeRAF);
+        trailFadeRAF = null;
+        return;
+      }
       fadeTrail();
       // Apply a second light pass to accelerate decay toward ~1s lifetime
       fadeTrail(0.08);
       trailFadeRAF = requestAnimationFrame(step);
     };
-    step();
+    trailFadeRAF = requestAnimationFrame(step);
+  };
+
+  const stopTrailFadeLoop = () => {
+    if (trailFadeRAF) {
+      cancelAnimationFrame(trailFadeRAF);
+      trailFadeRAF = null;
+    }
   };
 
   const drawCometTrail = (el, x, y, color) => {
-    if (!ensureTrailCanvas()) return;
+    if (!showCometTail || !ensureTrailCanvas()) return;
     const state = trailState.get(el) || {};
     const now = performance.now();
     const { r = 0, g = 0, b = 0 } = color || {};
@@ -1084,12 +1099,12 @@ const i18n = (() => {
     }
     const targetDt = estimatedRefreshHz > 64 ? 1000 / 90 : 1000 / 60;
     const dt = state.lastTs ? now - state.lastTs : targetDt;
-    const slices = Math.max(1, Math.min(5, Math.round(dt / targetDt)));
+    const slices = 1; // single stroke per frame for smoother rendering
     trailCtx.save();
     trailCtx.globalCompositeOperation = 'lighter';
     trailCtx.lineCap = 'round';
-    trailCtx.shadowBlur = 14;
-    trailCtx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.08)`;
+    trailCtx.shadowBlur = 8;
+    trailCtx.shadowColor = `rgba(${r}, ${g}, ${b}, 0.05)`;
     const glowAlpha = isTrueMobileUser ? 0.2 : 0.1;
     const coreAlpha = isTrueMobileUser ? 0.16 : 0.08;
     let prevX = state.x;
@@ -1098,26 +1113,67 @@ const i18n = (() => {
       const t = i / slices;
       const ix = state.x + dx * t;
       const iy = state.y + dy * t;
+      const segDx = ix - prevX;
+      const segDy = iy - prevY;
+      const segLen = Math.hypot(segDx, segDy) || 1;
+      const ux = segDx / segLen;
+      const uy = segDy / segLen;
+      const px = -uy;
+      const py = ux;
+      const headLenGlow = 18; // start tail farther back
+      const headLenCore = 10;
+      const tipBack = Math.min(14, segLen * 0.6);
+      const bodyEndGlowX = ix - ux * headLenGlow;
+      const bodyEndGlowY = iy - uy * headLenGlow;
+      const bodyEndCoreX = ix - ux * headLenCore;
+      const bodyEndCoreY = iy - uy * headLenCore;
+
+      // Body stroke (glow)
       const makeGrad = (aStart, aEnd) => {
         const grad = trailCtx.createLinearGradient(prevX, prevY, ix, iy);
         grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${aStart})`);
         grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, ${aEnd})`);
         return grad;
       };
-
       trailCtx.strokeStyle = makeGrad(glowAlpha, 0);
-      trailCtx.lineWidth = 34;
+      trailCtx.lineWidth = 32;
       trailCtx.beginPath();
       trailCtx.moveTo(prevX, prevY);
-      trailCtx.lineTo(ix, iy);
+      trailCtx.lineTo(bodyEndGlowX, bodyEndGlowY);
       trailCtx.stroke();
 
+      // Body stroke (core)
       trailCtx.strokeStyle = makeGrad(coreAlpha, 0);
-      trailCtx.lineWidth = 16;
+      trailCtx.lineWidth = 14;
       trailCtx.beginPath();
       trailCtx.moveTo(prevX, prevY);
-      trailCtx.lineTo(ix, iy);
+      trailCtx.lineTo(bodyEndCoreX, bodyEndCoreY);
       trailCtx.stroke();
+
+      // Head wedge (glow/core) with ~45° taper from midpoint
+      const drawHead = (halfWidth, alpha, len) => {
+        const tipX = ix - ux * tipBack;
+        const tipY = iy - uy * tipBack;
+        const baseCenterX = ix - ux * len;
+        const baseCenterY = iy - uy * len;
+        const leftX = baseCenterX + px * halfWidth;
+        const leftY = baseCenterY + py * halfWidth;
+        const rightX = baseCenterX - px * halfWidth;
+        const rightY = baseCenterY - py * halfWidth;
+        const grad = trailCtx.createLinearGradient(tipX, tipY, baseCenterX, baseCenterY);
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${alpha * 0.65})`);
+        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        trailCtx.fillStyle = grad;
+        trailCtx.beginPath();
+        trailCtx.moveTo(tipX, tipY);
+        trailCtx.lineTo(leftX, leftY);
+        trailCtx.lineTo(rightX, rightY);
+        trailCtx.closePath();
+        trailCtx.fill();
+      };
+
+      drawHead(12, glowAlpha, headLenGlow);
+      drawHead(6, coreAlpha, headLenCore);
 
       prevX = ix;
       prevY = iy;
@@ -1273,7 +1329,7 @@ const i18n = (() => {
         el.style.willChange = 'transform, opacity';
         const shadowColor = getShadowColor(img);
         el.style.filter = buildShadowFilter(shadowColor);
-        if (!isMobile) {
+        if (!isMobile && showCometTail) {
           ensureTrailCanvas();
           startTrailFadeLoop();
         }
@@ -1570,26 +1626,46 @@ const i18n = (() => {
     });
 
   const typingNoteSprites = ['mus_17', 'mus_08', 'mus_12', 'mus_32', 'mus_33'];
+  const typingNoteCache = new Map();
+  const showTypingBurst = true;
+
+  const preloadTypingSprites = () => {
+    if (typingNoteCache.size) return;
+    typingNoteSprites.forEach((id) => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = `assets/music_symbols_chalk/${id}.png`;
+      img.onload = () => {
+        const aspect =
+          img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
+        typingNoteCache.set(id, { aspect });
+      };
+      img.onerror = () => {
+        // leave uncached on failure; fallback path will load on demand
+      };
+    });
+  };
 
   const emitTypingNote = () => {
+    if (!showTypingBurst) return;
     if (!cursor) return;
-    const img = new Image();
     const sprite =
       typingNoteSprites[Math.floor(Math.random() * typingNoteSprites.length)];
-    img.src = `assets/music_symbols_chalk/${sprite}.png`;
-    img.onload = () => {
-      const aspect = img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
+    const cached = typingNoteCache.get(sprite);
+    const spawn = (aspect) => {
       const height = 72; // base height for the typing note
-      const width = height / aspect;
+      const width = height / (aspect || 1);
       const el = document.createElement('img');
       el.className = 'note-plume typing-note';
-      el.src = img.src;
+      el.src = `assets/music_symbols_chalk/${sprite}.png`;
       el.style.setProperty('--note-rot', `${6 + Math.random() * 10}deg`);
       el.style.width = `${width}px`;
       el.style.height = `${height}px`;
       el.style.animationDuration = `1.5s`;
       el.style.opacity = '1';
-      const shadowColor = getShadowColorFromMap(sprite ? `assets/music_symbols_chalk/${sprite}.png` : null);
+      const shadowColor = getShadowColorFromMap(
+        sprite ? `assets/music_symbols_chalk/${sprite}.png` : null
+      );
       el.style.filter = buildTypingShadowFilter(shadowColor);
       const rect = cursor.getBoundingClientRect();
       el.style.position = 'fixed';
@@ -1599,6 +1675,24 @@ const i18n = (() => {
       el.style.transform = 'scale(0.9)';
       document.body.appendChild(el);
       el.addEventListener('animationend', () => el.remove(), { once: true });
+    };
+
+    if (cached && cached.aspect) {
+      spawn(cached.aspect);
+      return;
+    }
+
+    const img = new Image();
+    img.decoding = 'async';
+    img.src = `assets/music_symbols_chalk/${sprite}.png`;
+    img.onload = () => {
+      const aspect =
+        img.naturalWidth > 0 ? img.naturalHeight / img.naturalWidth : 1;
+      typingNoteCache.set(sprite, { aspect });
+      spawn(aspect);
+    };
+    img.onerror = () => {
+      spawn(1);
     };
   };
 
@@ -1653,6 +1747,7 @@ const i18n = (() => {
     if (typingStarted) return;
     typingStarted = true;
     startRefreshEstimator();
+    preloadTypingSprites();
     try {
       const strings = await i18n.ready;
       // Pull translated strings directly to avoid stale pre-i18n content

@@ -926,6 +926,11 @@ const i18n = (() => {
   let notesPaused = false;
   let notesSuspended = false;
   let refreshBannerShown = false;
+  let debugSvg = null;
+  let debugPaths = [];
+  let debugPathKey = null;
+  let cachedPaths = null;
+  let cachedPathKey = null;
   const shadowCanvas = document.createElement('canvas');
   const shadowCtx = shadowCanvas.getContext('2d', { willReadFrequently: true });
   let trailCanvas = null;
@@ -1349,7 +1354,7 @@ const i18n = (() => {
           return;
         }
 
-        // Desktop/tablet: custom Bezier path targeting the subtitle gap
+        // Desktop/tablet: custom Bezier path targeting the subtitle gap (cached per layout)
         el.style.left = '0px';
         el.style.top = '0px';
         el.style.animation = 'none';
@@ -1382,6 +1387,26 @@ const i18n = (() => {
           y: mid.y - Math.max(200, Math.abs(dy) * 0.6)
         };
 
+        const pathKey = `${ctaRect.width}x${ctaRect.height}`;
+        const baseBezier = { start, c1, c2, end, color: 'rgba(255, 0, 0, 1)' };
+        if (!cachedPaths || cachedPathKey !== pathKey) {
+          const diverge = (dyC1, dyC2, dyEnd, color, dx = 0, extraEndX = 0) => ({
+            start,
+            c1: { x: c1.x + 12 + dx, y: c1.y + dyC1 },
+            c2: { x: c2.x + 18 + dx, y: c2.y + dyC2 },
+            end: { x: end.x + 10 + extraEndX, y: end.y + dyEnd },
+            color
+          });
+          const orange = diverge(-60, -140, -160, 'rgba(255, 136, 0, 1)');
+          const yellow = diverge(-20, -60, -90, 'rgba(255, 214, 0, 1)');
+          const green = diverge(40, 30, 20, 'rgba(0, 200, 70, 1)', -8, -20);
+          const blue = diverge(80, 90, 120, 'rgba(30, 120, 255, 1)', -12, -30);
+          cachedPaths = [baseBezier, orange, yellow, green, blue];
+          cachedPathKey = pathKey;
+        }
+        const chosen = cachedPaths[Math.floor(Math.random() * cachedPaths.length)] || baseBezier;
+        const { start: p0, c1: p1, c2: p2, end: p3 } = chosen;
+
         const dur = 4200; // ms
         const rot = 4 + Math.random() * 6;
         const rotStart = isMobile ? -20 : -40;
@@ -1402,8 +1427,8 @@ const i18n = (() => {
         if (startTs === null) startTs = ts;
         const elapsed = ts - startTs;
         const t = Math.min(1, elapsed / dur);
-          const xPos = cubic(start.x, c1.x, c2.x, end.x, t);
-          const yPos = cubic(start.y, c1.y, c2.y, end.y, t);
+          const xPos = cubic(p0.x, p1.x, p2.x, p3.x, t);
+          const yPos = cubic(p0.y, p1.y, p2.y, p3.y, t);
           let opacity = 0.85;
           if (t < 0.15) opacity = lerp(0, 0.85, t / 0.15);
           else if (t > 0.82) opacity = lerp(0.85, 0.08, (t - 0.82) / 0.18);
@@ -1428,33 +1453,7 @@ const i18n = (() => {
         el.style.transform = `translate(${start.x}px, ${start.y}px) scale(0.9) rotate(${rotStart}deg)`;
         ctaRow.appendChild(el);
 
-        // TEMP DEBUG: draw the path so we can see the curve
-        let debugSvg = ctaRow.querySelector('.note-debug');
-        if (!debugSvg) {
-          debugSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-          debugSvg.classList.add('note-debug');
-          debugSvg.style.position = 'absolute';
-          debugSvg.style.left = '0';
-          debugSvg.style.top = '0';
-          debugSvg.style.pointerEvents = 'none';
-          debugSvg.style.zIndex = '9999';
-          debugSvg.style.overflow = 'visible';
-          ctaRow.appendChild(debugSvg);
-        }
-        debugSvg.setAttribute('width', `${ctaRect.width}`);
-        debugSvg.setAttribute('height', `${ctaRect.height}`);
-        debugSvg.setAttribute('viewBox', `0 0 ${ctaRect.width} ${ctaRect.height}`);
-        const pathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        const d = `M ${start.x} ${start.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${end.x} ${end.y}`;
-        pathEl.setAttribute('d', d);
-        pathEl.setAttribute('stroke', 'rgba(0, 160, 255, 0)');
-        pathEl.setAttribute('fill', 'none');
-        pathEl.setAttribute('stroke-width', '2.5');
-        pathEl.setAttribute('stroke-dasharray', '6 6');
-        debugSvg.appendChild(pathEl);
-
         requestAnimationFrame(tick);
-        setTimeout(() => pathEl.remove(), dur + 600);
       };
     };
     // initial delay ~1s after start, then desktop/tablet uses per-spawn random delay (1–5s), mobile stays fixed
@@ -1475,6 +1474,8 @@ const i18n = (() => {
       if (document.visibilityState === 'hidden') {
         notesSuspended = true;
         clearNotesTimer();
+        cachedPathKey = null;
+        cachedPaths = null;
         // Clear trail canvas to avoid stale strokes on return
         if (trailCtx && trailCanvas) {
           trailCtx.setTransform(1, 0, 0, 1, 0, 0);

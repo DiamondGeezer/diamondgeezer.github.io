@@ -1053,11 +1053,11 @@ const i18n = (() => {
     const r = color?.r ?? 0;
     const g = color?.g ?? 0;
     const b = color?.b ?? 0;
-    // Thick, color-matched shadow for the typing burst
+    // Color-matched shadow for the typing burst (slightly lighter opacity)
     return [
-      `drop-shadow(0 12px 24px rgba(${r}, ${g}, ${b}, 0.34))`,
-      `drop-shadow(0 6px 14px rgba(${r}, ${g}, ${b}, 0.36))`,
-      `drop-shadow(0 2px 6px rgba(${r}, ${g}, ${b}, 0.28))`
+      `drop-shadow(0 12px 24px rgba(${r}, ${g}, ${b}, 0.14))`,
+      `drop-shadow(0 6px 14px rgba(${r}, ${g}, ${b}, 0.16))`,
+      `drop-shadow(0 2px 6px rgba(${r}, ${g}, ${b}, 0.12))`
     ].join(' ');
   };
 
@@ -1528,7 +1528,7 @@ const i18n = (() => {
       const shadowColor = getShadowColorFromMap(
         sprite ? `assets/music_symbols_chalk/${sprite}.png` : null
       );
-      el.style.filter = buildTypingShadowFilter(shadowColor);
+      el.style.setProperty('--typing-shadow', buildTypingShadowFilter(shadowColor));
       const rect = cursor.getBoundingClientRect();
       el.style.position = 'fixed';
       el.style.left = `${rect.left + rect.width / 2 - 20}px`;
@@ -1561,7 +1561,7 @@ const i18n = (() => {
   const run = async () => {
     await typeText(highlight, fullHighlight, 65);
     emitTypingNote();
-    await new Promise((r) => setTimeout(r, 600)); // start note 0.4s sooner relative to resume
+    await new Promise((r) => setTimeout(r, 1500)); // start note 0.4s sooner relative to resume
     // Fade out any active typing-note immediately before resuming sentence two
     document.querySelectorAll('.note-plume.typing-note').forEach((el) => {
       // Let the drift continue; overlay a smooth fade to 0 over 1s

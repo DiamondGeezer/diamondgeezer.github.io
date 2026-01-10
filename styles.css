@@ -1204,7 +1204,7 @@ img {
 }
 
 .pro-page .hero-wave-chaos path {
-  fill: #121212; /* slightly lighter than pure black */
+  fill: #1a1a1a; /* lighten to sit closer to back row for better front contrast */
 }
 
 .pro-page .hero-wave-back path {

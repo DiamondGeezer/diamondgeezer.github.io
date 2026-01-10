@@ -33,6 +33,59 @@
   }
 })();
 
+// Minimal web traffic logging → Parse Cloud Code (no secrets exposed)
+const WEBTRAFFIC_ENDPOINT = 'https://parseapi.back4app.com/functions/logWebTraffic';
+const WEBTRAFFIC_HEADERS = {
+  'X-Parse-Application-Id': 'snfm0bn6MSUIS73ZfLI7hFGjFrfTd5fp4p19YnIL',
+  'X-Parse-REST-API-Key': 'qv4Cw01r2aCv4MiWJQ6v0MUjXi4XlFAI5cscWUyg',
+  'Content-Type': 'application/json'
+};
+
+let webTrafficSent = false;
+const getAnonId = () => {
+  try {
+    const key = 'mp_anon_id';
+    const existing = localStorage.getItem(key);
+    if (existing) return existing;
+    const uuid =
+      (window.crypto && typeof window.crypto.randomUUID === 'function'
+        ? window.crypto.randomUUID()
+        : Math.random().toString(36).slice(2));
+    localStorage.setItem(key, uuid);
+    return uuid;
+  } catch (e) {
+    return null;
+  }
+};
+
+const sendWebTrafficLog = () => {
+  if (webTrafficSent) return;
+  webTrafficSent = true;
+  if (!WEBTRAFFIC_ENDPOINT) return;
+
+  const locale = window.__currentLocale || (navigator.language || 'en');
+  const payload = {
+    anonId: getAnonId(),
+    ua: navigator.userAgent || '',
+    lang: locale,
+    screen: {
+      w: window.innerWidth || null,
+      h: window.innerHeight || null,
+      dpr: window.devicePixelRatio || null
+    },
+    referrer: document.referrer || '',
+    path: `${window.location.pathname || ''}${window.location.search || ''}`
+  };
+
+  fetch(WEBTRAFFIC_ENDPOINT, {
+    method: 'POST',
+    headers: WEBTRAFFIC_HEADERS,
+    body: JSON.stringify(payload)
+  }).catch(() => {
+    // logging is best-effort; ignore failures
+  });
+};
+
 // Estimate device refresh rate (best-effort; started once typing begins)
 let estimatedRefreshHz = 60;
 let refreshEstimatorStarted = false;
@@ -1611,6 +1664,7 @@ const i18n = (() => {
     startRefreshEstimator();
     preloadTypingSprites();
     applyLocalizedScreenshots(window.__currentLocale || 'en');
+    sendWebTrafficLog();
     try {
       const strings = await i18n.ready;
       // Pull translated strings directly to avoid stale pre-i18n content

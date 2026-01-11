@@ -42,6 +42,19 @@ const WEBTRAFFIC_HEADERS = {
 };
 
 let webTrafficSent = false;
+const blocklistedIPs = new Set(['2600:1700:34d0:5ad0:617e:19ce:64d1:2aa6']);
+
+const fetchClientIP = async () => {
+  try {
+    const resp = await fetch('https://api64.ipify.org?format=json', { cache: 'no-store' });
+    if (!resp.ok) return null;
+    const data = await resp.json();
+    return (data && data.ip) ? String(data.ip) : null;
+  } catch (e) {
+    return null;
+  }
+};
+
 const getAnonId = () => {
   try {
     const key = 'mp_anon_id';
@@ -58,10 +71,15 @@ const getAnonId = () => {
   }
 };
 
-const sendWebTrafficLog = () => {
+const sendWebTrafficLog = async () => {
   if (webTrafficSent) return;
   webTrafficSent = true;
   if (!WEBTRAFFIC_ENDPOINT) return;
+
+  const clientIP = await fetchClientIP();
+  if (clientIP && blocklistedIPs.has(clientIP)) {
+    return;
+  }
 
   const locale = window.__currentLocale || (navigator.language || 'en');
   const payload = {

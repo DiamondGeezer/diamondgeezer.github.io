@@ -147,6 +147,9 @@
     "cards": {
       "card1": "assets/cards/card1.jpg",
       "card_small": "assets/cards/card_small.jpg"
+    },
+    "videos": {
+      "iPhone": "assets/videos/iPhone.mp4"
     }
   },
 

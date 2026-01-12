@@ -42,7 +42,10 @@ const WEBTRAFFIC_HEADERS = {
 };
 
 let webTrafficSent = false;
-const blocklistedIPs = new Set(['2600:1700:34d0:5ad0:617e:19ce:64d1:2aa6']);
+const blocklistedIPs = new Set([
+  '2600:1700:34d0:5ad0:617e:19ce:64d1:2aa6',
+  '2600:1700:34d0:5ad0:b8bf:e206:ee99:5e60'
+]);
 
 const fetchClientIP = async () => {
   try {

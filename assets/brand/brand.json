@@ -92,7 +92,7 @@
       "screenshot3_zh_Hant": "assets/screenshots/screenshot3 - zh-Hant.png"
     },
     "svgs": {
-      "downloadOnAppStore": "assets/svgs/downloadOnAppStore.svg"
+      "downloadOnAppStore": "assets/svgs/downloadOnAppStore_en.svg"
     },
     "perks": {
       "perk0": "assets/perks/perk0.png",

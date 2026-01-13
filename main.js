@@ -539,6 +539,63 @@ const i18n = (() => {
   };
 })();
 
+i18n.ready.then((strings) => {
+  const appStoreBadges = {
+    ar: 'assets/svgs/downloadOnAppStore_ar.svg',
+    de: 'assets/svgs/downloadOnAppStore_de.svg',
+    en: 'assets/svgs/downloadOnAppStore_en.svg',
+    es: 'assets/svgs/downloadOnAppStore_es.svg',
+    fr: 'assets/svgs/downloadOnAppStore_fr.svg',
+    hi: 'assets/svgs/downloadOnAppStore_hi.svg',
+    id: 'assets/svgs/downloadOnAppStore_id.svg',
+    it: 'assets/svgs/downloadOnAppStore_it.svg',
+    ja: 'assets/svgs/downloadOnAppStore_ja.svg',
+    ko: 'assets/svgs/downloadOnAppStore_ko.svg',
+    nl: 'assets/svgs/downloadOnAppStore_nl.svg',
+    pl: 'assets/svgs/downloadOnAppStore_pl.svg',
+    'pt-BR': 'assets/svgs/downloadOnAppStore_pt-BR.svg',
+    sv: 'assets/svgs/downloadOnAppStore_sv.svg',
+    th: 'assets/svgs/downloadOnAppStore_th.svg',
+    tr: 'assets/svgs/downloadOnAppStore_tr.svg',
+    'zh-Hans': 'assets/svgs/downloadOnAppStore_zh-Hans.svg',
+    'zh-Hant': 'assets/svgs/downloadOnAppStore_zh-Hant.svg'
+  };
+
+  const resolveBadgeSrc = (locale) => {
+    if (!locale) return appStoreBadges.en;
+    const lc = locale.toLowerCase();
+    if (lc.startsWith('zh-hant')) return appStoreBadges['zh-Hant'] || appStoreBadges.en;
+    if (lc.startsWith('zh')) return appStoreBadges['zh-Hans'] || appStoreBadges.en;
+    const exact = appStoreBadges[locale];
+    if (exact) return exact;
+    const base = locale.split('-')[0];
+    if (appStoreBadges[base]) return appStoreBadges[base];
+    if (lc.startsWith('pt')) return appStoreBadges['pt-BR'] || appStoreBadges.en;
+    return appStoreBadges.en;
+  };
+
+  const updateAppStoreBadges = (locale, label) => {
+    const badgeSrc = resolveBadgeSrc(locale);
+    document.querySelectorAll('.app-store-badge').forEach((anchor) => {
+      const img = anchor.querySelector('img');
+      if (!img) return;
+      if (img.getAttribute('src') !== badgeSrc) {
+        img.setAttribute('src', badgeSrc);
+      }
+      if (label) {
+        anchor.setAttribute('aria-label', label);
+        img.setAttribute('alt', label);
+      }
+    });
+  };
+
+  const downloadLabel =
+    (strings && strings['cta.downloadAria']) ||
+    (strings && strings.cta && strings.cta.downloadAria) ||
+    'Download on the App Store';
+  updateAppStoreBadges(i18n.currentLocale, downloadLabel);
+});
+
 // Language picker (home only)
 (() => {
   const picker = document.querySelector('.lang-picker');

@@ -58,6 +58,31 @@ const fetchClientIP = async () => {
   }
 };
 
+const extractSearchQuery = (referrer) => {
+  try {
+    const url = new URL(referrer);
+    const host = (url.hostname || '').toLowerCase();
+    const params = url.searchParams;
+    const isSearchHost =
+      host.includes('google.') ||
+      host.includes('bing.') ||
+      host.includes('duckduckgo.') ||
+      host.includes('yahoo.') ||
+      host.includes('ecosia.') ||
+      host.includes('brave.') ||
+      host.includes('startpage.');
+    if (!isSearchHost) return null;
+    const keys = ['q', 'query', 'p', 'text', 'search'];
+    for (const key of keys) {
+      const val = params.get(key);
+      if (val) return val;
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
+
 const getAnonId = () => {
   try {
     const key = 'mp_anon_id';
@@ -84,6 +109,8 @@ const sendWebTrafficLog = async () => {
     return;
   }
 
+  const referrer = document.referrer || '';
+  const searchQuery = extractSearchQuery(referrer);
   const locale = window.__currentLocale || (navigator.language || 'en');
   const payload = {
     anonId: getAnonId(),
@@ -94,7 +121,8 @@ const sendWebTrafficLog = async () => {
       h: window.innerHeight || null,
       dpr: window.devicePixelRatio || null
     },
-    referrer: document.referrer || '',
+    referrer,
+    searchQuery,
     path: `${window.location.pathname || ''}${window.location.search || ''}`
   };
 

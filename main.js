@@ -540,6 +540,8 @@ const i18n = (() => {
 })();
 
 i18n.ready.then((strings) => {
+  const appStoreBase = 'https://apps.apple.com';
+  const appStorePath = 'app/mixport/id6754185508';
   const appStoreBadges = {
     ar: 'assets/svgs/downloadOnAppStore_ar.svg',
     de: 'assets/svgs/downloadOnAppStore_de.svg',
@@ -560,6 +562,39 @@ i18n.ready.then((strings) => {
     'zh-Hans': 'assets/svgs/downloadOnAppStore_zh-Hans.svg',
     'zh-Hant': 'assets/svgs/downloadOnAppStore_zh-Hant.svg'
   };
+  const storeCountryByLocale = {
+    'en-gb': 'gb',
+    'en-au': 'au',
+    'en-ca': 'ca',
+    'en-ie': 'ie',
+    'es-es': 'es',
+    'es-mx': 'mx',
+    'pt-br': 'br',
+    'zh-hant-hk': 'hk',
+    'zh-hant-tw': 'tw',
+    'zh-hant-mo': 'mo',
+    'zh-hant': 'hk',
+    'zh-hans': 'cn'
+  };
+  const storeCountryByBase = {
+    en: 'us',
+    fr: 'fr',
+    es: 'es',
+    de: 'de',
+    it: 'it',
+    pt: 'br',
+    ja: 'jp',
+    ko: 'kr',
+    zh: 'cn',
+    hi: 'in',
+    ar: 'sa',
+    tr: 'tr',
+    nl: 'nl',
+    sv: 'se',
+    id: 'id',
+    th: 'th',
+    pl: 'pl'
+  };
 
   const resolveBadgeSrc = (locale) => {
     if (!locale) return appStoreBadges.en;
@@ -574,8 +609,32 @@ i18n.ready.then((strings) => {
     return appStoreBadges.en;
   };
 
+  const resolveStoreCountry = (locale) => {
+    if (!locale) return 'us';
+    const lc = locale.toLowerCase();
+    const explicit = storeCountryByLocale[lc];
+    if (explicit) return explicit;
+    const parts = lc.split('-');
+    if (parts.length > 1 && parts[1].length === 2) {
+      return parts[1];
+    }
+    const base = parts[0];
+    if (storeCountryByBase[base]) return storeCountryByBase[base];
+    if (lc.startsWith('pt')) return 'br';
+    return 'us';
+  };
+
+  const buildStoreUrl = (locale) => {
+    const country = resolveStoreCountry(locale);
+    return `${appStoreBase}/${country}/${appStorePath}`;
+  };
+
   const updateAppStoreBadges = (locale, label) => {
     const badgeSrc = resolveBadgeSrc(locale);
+    const storeUrl = buildStoreUrl(locale);
+    document.querySelectorAll('[data-app-store-link]').forEach((anchor) => {
+      anchor.setAttribute('href', storeUrl);
+    });
     document.querySelectorAll('.app-store-badge').forEach((anchor) => {
       const img = anchor.querySelector('img');
       if (!img) return;

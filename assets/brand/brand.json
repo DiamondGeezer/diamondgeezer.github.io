@@ -21,7 +21,8 @@
       "glyphTransparent": "assets/icons/icon_transparent.png",
       "appleMusic": "assets/icons/appleMusic.png",
       "spotify": "assets/icons/spotify.png",
-      "youtube": "assets/icons/youtube.png"
+      "youtube": "assets/icons/youtube.png",
+      "burnerPhone" : "assets/icons/burnerPhone_icon1.png"
     },
     "mockups": {
       "iphoneEn1": "assets/mockups/iPhone_en_1.PNG",

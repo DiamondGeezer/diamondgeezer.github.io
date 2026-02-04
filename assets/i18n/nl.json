@@ -6,9 +6,9 @@
   "nav.pro": "Pro",
   "nav.support": "Support",
   "nav.download": "Downloaden",
-  "hero.titleHighlight": "Jouw muziek.",
+  "hero.titleHighlight": "Playlistoverdracht.",
   "hero.titleRest": "Waar je ook luistert.",
-  "hero.subtitle": "Playlist-overdracht en -sync tussen Apple Music, Spotify en YouTube Music — stap over van Spotify naar Apple of andersom, en houd alles automatisch in lijn.",
+  "hero.subtitle": "Zet playlists over en synchroniseer Apple Music, Spotify en YouTube Music — stap snel over van Spotify naar Apple of een andere dienst en houd alles automatisch gelijk.",
   "cta.downloadAria": "Download in de App Store",
   "lede.mixportIs": "Mixport is de <em>eenvoudigste</em> manier om...",
   "perks.transfer.title": "Verplaats je muziek",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "Wijzigingen in deze Voorwaarden",
   "terms.changes.body": "We kunnen deze Voorwaarden van tijd tot tijd bijwerken. Voortgezet gebruik van de Service geldt als acceptatie van de bijgewerkte Voorwaarden.",
   "terms.contact.heading": "Contact",
-  "terms.contact.body": "Vragen? Stuur een e-mail naar <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>."
+  "terms.contact.body": "Vragen? Stuur een e-mail naar <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>.",
+  "seo.home.title": "Mixport — Playlists overzetten en muziek synchroniseren",
+  "seo.home.description": "Zet playlists over en synchroniseer muziek tussen Apple Music, Spotify en YouTube Music. Stap snel over van Spotify naar Apple, gebruik cloudtransfers en houd playlists automatisch gelijk.",
+  "seo.pro.title": "Mixport Pro — Snellere playlistoverdracht",
+  "seo.pro.description": "Mixport Pro ontgrendelt snelle cloudtransfers, playlistmonitoring en premiumtools voor Apple Music, Spotify en YouTube Music."
 }

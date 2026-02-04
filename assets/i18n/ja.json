@@ -6,9 +6,9 @@
   "nav.pro": "Pro",
   "nav.support": "サポート",
   "nav.download": "ダウンロード",
-  "hero.titleHighlight": "あなたの音楽を。",
+  "hero.titleHighlight": "プレイリスト転送。",
   "hero.titleRest": "どこで聴いても。",
-  "hero.subtitle": "Apple Music、Spotify、YouTube Music 間でプレイリストを転送・同期 — Spotify から Apple へ、またはその逆もスムーズに。すべてを自動で整合します。",
+  "hero.subtitle": "Apple Music、Spotify、YouTube Musicの間でプレイリストを転送・同期 — SpotifyからAppleへ、または他のサービスへ移行して、すべてを自動で同期します。",
   "cta.downloadAria": "App Store でダウンロード",
   "lede.mixportIs": "Mixport は<em>いちばん簡単</em>な方法です...",
   "perks.transfer.title": "音楽を転送",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "本規約の変更",
   "terms.changes.body": "当社は随時本規約を更新することがあります。サービスの継続利用により、更新後の規約に同意したものとみなされます。",
   "terms.contact.heading": "連絡先",
-  "terms.contact.body": "ご質問がありますか？<a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a> までメールでご連絡ください。"
+  "terms.contact.body": "ご質問がありますか？<a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a> までメールでご連絡ください。",
+  "seo.home.title": "Mixport — プレイリスト転送と音楽同期",
+  "seo.home.description": "Apple Music、Spotify、YouTube Music間でプレイリストを転送・同期。SpotifyからAppleへ素早く移行し、クラウド転送でプレイリストを自動同期。",
+  "seo.pro.title": "Mixport Pro — より速いプレイリスト転送",
+  "seo.pro.description": "Mixport Proは高速クラウド転送、プレイリスト監視、Apple Music、Spotify、YouTube Music向けのプレミアム機能を提供します。"
 }

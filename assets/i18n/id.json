@@ -6,9 +6,9 @@
   "nav.pro": "Pro",
   "nav.support": "Dukungan",
   "nav.download": "Unduh",
-  "hero.titleHighlight": "Musikmu.",
-  "hero.titleRest": "Di mana pun kamu mendengar.",
-  "hero.subtitle": "Transfer dan sinkronkan playlist antara Apple Music, Spotify, dan YouTube Music — pindah dari Spotify ke Apple atau sebaliknya, lalu jaga semuanya tetap selaras otomatis.",
+  "hero.titleHighlight": "Transfer playlist.",
+  "hero.titleRest": "Di mana pun kamu mendengarkan.",
+  "hero.subtitle": "Transfer playlist dan sinkronkan Apple Music, Spotify, dan YouTube Music — pindah dari Spotify ke Apple atau layanan lain, lalu jaga semuanya tetap selaras otomatis.",
   "cta.downloadAria": "Unduh di App Store",
   "lede.mixportIs": "Mixport adalah cara <em>termudah</em> untuk...",
   "perks.transfer.title": "Transfer musikmu",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "Perubahan Ketentuan",
   "terms.changes.body": "Kami dapat memperbarui Ketentuan ini dari waktu ke waktu. Penggunaan berkelanjutan atas Layanan dianggap sebagai penerimaan atas Ketentuan yang diperbarui.",
   "terms.contact.heading": "Kontak",
-  "terms.contact.body": "Ada pertanyaan? Kirim email ke <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>."
+  "terms.contact.body": "Ada pertanyaan? Kirim email ke <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>.",
+  "seo.home.title": "Mixport — Transfer playlist & sinkronkan musik",
+  "seo.home.description": "Transfer playlist dan sinkronkan musik antara Apple Music, Spotify, dan YouTube Music. Pindah cepat dari Spotify ke Apple, gunakan transfer cloud, dan jaga playlist tetap selaras otomatis.",
+  "seo.pro.title": "Mixport Pro — Transfer playlist lebih cepat",
+  "seo.pro.description": "Mixport Pro membuka transfer cloud cepat, pemantauan playlist, dan alat premium untuk Apple Music, Spotify, dan YouTube Music."
 }

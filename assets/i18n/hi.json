@@ -6,9 +6,9 @@
   "nav.pro": "प्रो",
   "nav.support": "सपोर्ट",
   "nav.download": "डाउनलोड",
-  "hero.titleHighlight": "आपका संगीत.",
-  "hero.titleRest": "जहाँ भी आप सुनें।",
-  "hero.subtitle": "Apple Music, Spotify और YouTube Music के बीच प्लेलिस्ट ट्रांसफर और सिंक — Spotify से Apple या कहीं भी जाएँ, और सब कुछ अपने आप सही बनाए रखें।",
+  "hero.titleHighlight": "प्लेलिस्ट ट्रांसफर.",
+  "hero.titleRest": "जहाँ भी आप सुनें.",
+  "hero.subtitle": "Apple Music, Spotify और YouTube Music के बीच प्लेलिस्ट ट्रांसफर करें और सिंक करें — Spotify से Apple या किसी भी अन्य सेवा पर जाएँ और सब कुछ अपने-आप सिंक रखें।",
   "cta.downloadAria": "ऐप स्टोर पर डाउनलोड करें",
   "lede.mixportIs": "मिक्सपोर्ट <em>सबसे आसान</em> तरीका है...",
   "perks.transfer.title": "अपना संगीत ट्रांसफर करें",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "इन शर्तों में परिवर्तन",
   "terms.changes.body": "हम समय-समय पर इन शर्तों को अपडेट कर सकते हैं। सेवा का निरंतर उपयोग अपडेटेड शर्तों की स्वीकृति माना जाएगा।",
   "terms.contact.heading": "संपर्क",
-  "terms.contact.body": "प्रश्न? <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a> पर ईमेल करें।"
+  "terms.contact.body": "प्रश्न? <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a> पर ईमेल करें।",
+  "seo.home.title": "Mixport — प्लेलिस्ट ट्रांसफर और म्यूज़िक सिंक",
+  "seo.home.description": "Apple Music, Spotify और YouTube Music के बीच प्लेलिस्ट ट्रांसफर करें और म्यूज़िक सिंक करें। Spotify से Apple पर तेज़ी से जाएँ, क्लाउड ट्रांसफर का उपयोग करें और प्लेलिस्ट अपने-आप सिंक रखें।",
+  "seo.pro.title": "Mixport Pro — तेज़ प्लेलिस्ट ट्रांसफर",
+  "seo.pro.description": "Mixport Pro तेज़ क्लाउड ट्रांसफर, प्लेलिस्ट मॉनिटरिंग और Apple Music, Spotify और YouTube Music के लिए प्रीमियम टूल्स खोलता है।"
 }

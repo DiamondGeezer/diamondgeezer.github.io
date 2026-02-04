@@ -6,9 +6,9 @@
   "nav.pro": "Pro",
   "nav.support": "Destek",
   "nav.download": "İndir",
-  "hero.titleHighlight": "Müziğin.",
+  "hero.titleHighlight": "Çalma listesi transferi.",
   "hero.titleRest": "Nerede dinlersen dinle.",
-  "hero.subtitle": "Apple Music, Spotify ve YouTube Music arasında çalma listelerini taşıyın ve senkronize edin — Spotify’dan Apple’a ya da tam tersi geçin, her şey otomatik olarak hizalı kalsın.",
+  "hero.subtitle": "Apple Music, Spotify ve YouTube Music arasında çalma listelerini aktarın ve senkronize edin — Spotify'dan Apple'a ya da başka bir servise geçin ve her şeyi otomatik olarak senkron tutun.",
   "cta.downloadAria": "App Store’dan indir",
   "lede.mixportIs": "Mixport <em>en kolay</em> yoldur...",
   "perks.transfer.title": "Müziğini taşı",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "Bu Şartlardaki değişiklikler",
   "terms.changes.body": "Bu Şartları zaman zaman güncelleyebiliriz. Hizmeti kullanmaya devam etmeniz, güncellenmiş Şartları kabul ettiğiniz anlamına gelir.",
   "terms.contact.heading": "İletişim",
-  "terms.contact.body": "Sorularınız mı var? <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a> adresine e-posta gönderin."
+  "terms.contact.body": "Sorularınız mı var? <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a> adresine e-posta gönderin.",
+  "seo.home.title": "Mixport — Çalma listesi aktarımı ve müzik senkronu",
+  "seo.home.description": "Apple Music, Spotify ve YouTube Music arasında çalma listelerini aktarın ve müziği senkronize edin. Spotify'dan Apple'a hızlıca geçin, bulut transferlerini kullanın ve çalma listelerini otomatik olarak senkron tutun.",
+  "seo.pro.title": "Mixport Pro — Daha hızlı çalma listesi transferi",
+  "seo.pro.description": "Mixport Pro hızlı bulut transferleri, çalma listesi izleme ve Apple Music, Spotify ve YouTube Music için premium araçlar sunar."
 }

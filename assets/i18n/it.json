@@ -6,9 +6,9 @@
   "nav.pro": "Pro",
   "nav.support": "Supporto",
   "nav.download": "Scarica",
-  "hero.titleHighlight": "La tua musica.",
-  "hero.titleRest": "Ovunque tu ascolti.",
-  "hero.subtitle": "Trasferisci e sincronizza playlist tra Apple Music, Spotify e YouTube Music — passa da Spotify ad Apple o viceversa e mantieni tutto allineato automaticamente.",
+  "hero.titleHighlight": "Trasferimento playlist.",
+  "hero.titleRest": "Ovunque ascolti.",
+  "hero.subtitle": "Trasferisci playlist e sincronizza Apple Music, Spotify e YouTube Music — passa da Spotify ad Apple o a qualsiasi altro servizio e mantieni tutto allineato automaticamente.",
   "cta.downloadAria": "Scarica su App Store",
   "lede.mixportIs": "Mixport è il modo <em>più semplice</em> per...",
   "perks.transfer.title": "Trasferisci la tua musica",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "Modifiche a questi Termini",
   "terms.changes.body": "Possiamo aggiornare periodicamente questi Termini. L'uso continuato del Servizio costituisce accettazione dei Termini aggiornati.",
   "terms.contact.heading": "Contatto",
-  "terms.contact.body": "Domande? Invia un'e-mail a <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>."
+  "terms.contact.body": "Domande? Invia un'e-mail a <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>.",
+  "seo.home.title": "Mixport — Trasferisci playlist e sincronizza musica",
+  "seo.home.description": "Trasferisci playlist e sincronizza la musica tra Apple Music, Spotify e YouTube Music. Passa rapidamente da Spotify ad Apple, usa trasferimenti cloud e mantieni le playlist allineate automaticamente.",
+  "seo.pro.title": "Mixport Pro — Trasferimenti playlist più rapidi",
+  "seo.pro.description": "Mixport Pro sblocca trasferimenti cloud rapidi, monitoraggio playlist e strumenti premium per Apple Music, Spotify e YouTube Music."
 }

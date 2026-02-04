@@ -6,9 +6,9 @@
   "nav.pro": "Pro",
   "nav.support": "Support",
   "nav.download": "Ladda ned",
-  "hero.titleHighlight": "Din musik.",
+  "hero.titleHighlight": "Playlistöverföring.",
   "hero.titleRest": "Var du än lyssnar.",
-  "hero.subtitle": "Överför och synka spellistor mellan Apple Music, Spotify och YouTube Music — byt från Spotify till Apple eller tvärtom och håll allt synkat automatiskt.",
+  "hero.subtitle": "Överför spellistor och synka Apple Music, Spotify och YouTube Music – flytta från Spotify till Apple eller någon annan tjänst och håll allt automatiskt i synk.",
   "cta.downloadAria": "Ladda ned i App Store",
   "lede.mixportIs": "Mixport är det <em>enklaste</em> sättet att...",
   "perks.transfer.title": "Överför din musik",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "Ändringar av dessa Villkor",
   "terms.changes.body": "Vi kan uppdatera dessa Villkor då och då. Om du fortsätter använda Tjänsten innebär det att du accepterar de uppdaterade Villkoren.",
   "terms.contact.heading": "Kontakt",
-  "terms.contact.body": "Frågor? Skicka e-post till <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>."
+  "terms.contact.body": "Frågor? Skicka e-post till <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>.",
+  "seo.home.title": "Mixport — Överför spellistor och synka musik",
+  "seo.home.description": "Överför spellistor och synka musik mellan Apple Music, Spotify och YouTube Music. Flytta snabbt från Spotify till Apple, använd molnöverföringar och håll spellistor automatiskt i synk.",
+  "seo.pro.title": "Mixport Pro — Snabbare spellisteöverföring",
+  "seo.pro.description": "Mixport Pro låser upp snabba molnöverföringar, spellistövervakning och premiumverktyg för Apple Music, Spotify och YouTube Music."
 }

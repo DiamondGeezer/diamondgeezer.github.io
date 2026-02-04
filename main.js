@@ -567,7 +567,119 @@ const i18n = (() => {
   };
 })();
 
+const SEO_BASE_URL = 'https://www.hagerlabs.com';
+const SEO_LOCALES = [
+  'en',
+  'fr',
+  'es',
+  'es-MX',
+  'de',
+  'it',
+  'pt-BR',
+  'ja',
+  'ko',
+  'zh-Hans',
+  'zh-Hant',
+  'zh-Hant-HK',
+  'zh-Hant-TW',
+  'zh-Hant-MO',
+  'hi',
+  'ar',
+  'tr',
+  'nl',
+  'sv',
+  'id',
+  'th',
+  'pl'
+];
+
+const resolveSeoLocale = (strings, fallbackLocale) => {
+  const candidate = (strings && strings.__lang) || fallbackLocale || 'en';
+  return SEO_LOCALES.includes(candidate) ? candidate : 'en';
+};
+
+const buildLocalizedUrl = (path, locale) => {
+  const url = new URL(path, SEO_BASE_URL);
+  if (locale && locale !== 'en') {
+    url.searchParams.set('lang', locale);
+  }
+  return url.toString();
+};
+
+const updateMetaTag = (selector, content) => {
+  if (!content) return;
+  const el = document.querySelector(selector);
+  if (el) el.setAttribute('content', content);
+};
+
+const updateLinkTag = (selector, href) => {
+  if (!href) return;
+  const el = document.querySelector(selector);
+  if (el) el.setAttribute('href', href);
+};
+
+const getSeoString = (strings, key, fallback) => {
+  if (strings && strings[key]) return strings[key];
+  return fallback;
+};
+
+const applySeoMeta = (strings) => {
+  const isHome = document.body.classList.contains('home-page');
+  const isPro = document.body.classList.contains('pro-page');
+  if (!isHome && !isPro) return;
+
+  const seoLocale = resolveSeoLocale(strings, window.__currentLocale);
+  const pageKey = isHome ? 'home' : 'pro';
+  const fallbackTitle =
+    pageKey === 'home'
+      ? 'Mixport — Transfer Playlists & Sync Music'
+      : 'Mixport Pro — Faster Playlist Transfer & Sync';
+  const fallbackDescription =
+    pageKey === 'home'
+      ? 'Transfer playlists and sync music between Apple Music, Spotify, and YouTube Music. Move from Spotify to Apple fast, use cloud transfers, and keep playlists aligned automatically.'
+      : 'Mixport Pro unlocks fast cloud transfers, playlist monitoring, and premium tools for Apple Music, Spotify, and YouTube Music.';
+
+  const title = getSeoString(strings, `seo.${pageKey}.title`, fallbackTitle);
+  const description = getSeoString(strings, `seo.${pageKey}.description`, fallbackDescription);
+  document.title = title;
+  updateMetaTag('meta[name="description"]', description);
+  updateMetaTag('meta[property="og:title"]', title);
+  updateMetaTag('meta[property="og:description"]', description);
+  updateMetaTag('meta[name="twitter:title"]', title);
+  updateMetaTag('meta[name="twitter:description"]', description);
+
+  const canonical = buildLocalizedUrl(isHome ? '/' : '/pro.html', seoLocale);
+  updateLinkTag('link[rel="canonical"]', canonical);
+  updateMetaTag('meta[property="og:url"]', canonical);
+
+  const ogImagePath = pickScreenshotForLocale(screenshot3Map, seoLocale);
+  if (ogImagePath) {
+    const ogImage = new URL(ogImagePath, SEO_BASE_URL).toString();
+    updateMetaTag('meta[property="og:image"]', ogImage);
+    updateMetaTag('meta[property="og:image:secure_url"]', ogImage);
+    updateMetaTag('meta[name="twitter:image"]', ogImage);
+  }
+
+  if (isHome) {
+    const schemaEl = document.getElementById('seo-software-schema');
+    if (schemaEl) {
+      const schema = {
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        name: 'Mixport',
+        operatingSystem: 'iOS',
+        applicationCategory: 'MultimediaApplication',
+        inLanguage: seoLocale,
+        url: canonical,
+        description
+      };
+      schemaEl.textContent = JSON.stringify(schema);
+    }
+  }
+};
+
 i18n.ready.then((strings) => {
+  applySeoMeta(strings);
   const appStoreBase = 'https://apps.apple.com';
   const appStorePath = 'app/mixport/id6754185508';
   const appStoreBadges = {

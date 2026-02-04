@@ -6,9 +6,9 @@
   "nav.pro": "Pro",
   "nav.support": "支援",
   "nav.download": "下載",
-  "hero.titleHighlight": "你的音樂。",
-  "hero.titleRest": "隨時隨地聆聽。",
-  "hero.subtitle": "在 Apple Music、Spotify、YouTube Music 之間轉移並同步播放清單——無論是從 Spotify 轉到 Apple，或反向切換，都能自動保持一致。",
+  "hero.titleHighlight": "播放清單轉移。",
+  "hero.titleRest": "隨時隨地聽。",
+  "hero.subtitle": "在 Apple Music、Spotify 與 YouTube Music 之間轉移並同步播放清單 — 從 Spotify 快速轉到 Apple 或其他服務，並自動保持一致。",
   "cta.downloadAria": "在 App Store 下載",
   "lede.mixportIs": "Mixport 是<em>最簡單</em>的方式……",
   "perks.transfer.title": "轉移你的音樂",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "條款變更",
   "terms.changes.body": "我們可能不時更新本條款。繼續使用本服務即表示你接受更新後的條款。",
   "terms.contact.heading": "聯絡",
-  "terms.contact.body": "有問題嗎？請電郵至 <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>。"
+  "terms.contact.body": "有問題嗎？請電郵至 <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>。",
+  "seo.home.title": "Mixport — 播放清單轉移與音樂同步",
+  "seo.home.description": "在 Apple Music、Spotify 與 YouTube Music 之間轉移播放清單並同步音樂。快速從 Spotify 轉到 Apple，使用雲端轉移並自動保持播放清單一致。",
+  "seo.pro.title": "Mixport Pro — 更快的播放清單轉移",
+  "seo.pro.description": "Mixport Pro 解鎖快速雲端轉移、播放清單監控，以及適用於 Apple Music、Spotify、YouTube Music 的進階工具。"
 }

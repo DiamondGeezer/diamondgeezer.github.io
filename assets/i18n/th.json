@@ -6,9 +6,9 @@
   "nav.pro": "Pro",
   "nav.support": "ช่วยเหลือ",
   "nav.download": "ดาวน์โหลด",
-  "hero.titleHighlight": "เพลงของคุณ",
-  "hero.titleRest": "ไม่ว่าคุณจะฟังที่ไหน",
-  "hero.subtitle": "โอนและซิงก์เพลย์ลิสต์ระหว่าง Apple Music, Spotify และ YouTube Music — ย้ายจาก Spotify ไป Apple หรือกลับกัน และคงความสอดคล้องโดยอัตโนมัติ",
+  "hero.titleHighlight": "ย้ายเพลย์ลิสต์.",
+  "hero.titleRest": "ฟังที่ไหนก็ได้.",
+  "hero.subtitle": "ย้ายเพลย์ลิสต์และซิงค์ระหว่าง Apple Music, Spotify และ YouTube Music — ย้ายจาก Spotify ไป Apple หรือบริการอื่น แล้วให้ทุกอย่างซิงค์กันอัตโนมัติ.",
   "cta.downloadAria": "ดาวน์โหลดบน App Store",
   "lede.mixportIs": "Mixport คือวิธีที่ <em>ง่ายที่สุด</em> ในการ...",
   "perks.transfer.title": "โอนเพลงของคุณ",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "การเปลี่ยนแปลงข้อกำหนด",
   "terms.changes.body": "เราอาจอัปเดตข้อกำหนดนี้เป็นระยะ ๆ การใช้งานบริการอย่างต่อเนื่องถือว่าเป็นการยอมรับข้อกำหนดที่อัปเดตแล้ว",
   "terms.contact.heading": "ติดต่อ",
-  "terms.contact.body": "มีคำถาม? ส่งอีเมลไปที่ <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>"
+  "terms.contact.body": "มีคำถาม? ส่งอีเมลไปที่ <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>",
+  "seo.home.title": "Mixport — ย้ายเพลย์ลิสต์และซิงค์เพลง",
+  "seo.home.description": "ย้ายเพลย์ลิสต์และซิงค์เพลงระหว่าง Apple Music, Spotify และ YouTube Music ย้ายจาก Spotify ไป Apple ได้รวดเร็ว ใช้การย้ายแบบคลาวด์ และให้เพลย์ลิสต์ซิงค์กันอัตโนมัติ.",
+  "seo.pro.title": "Mixport Pro — ย้ายเพลย์ลิสต์ได้เร็วขึ้น",
+  "seo.pro.description": "Mixport Pro ปลดล็อกการย้ายแบบคลาวด์ที่รวดเร็ว การติดตามเพลย์ลิสต์ และเครื่องมือพรีเมียมสำหรับ Apple Music, Spotify และ YouTube Music."
 }

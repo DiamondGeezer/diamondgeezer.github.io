@@ -6,9 +6,9 @@
   "nav.pro": "برو",
   "nav.support": "الدعم",
   "nav.download": "تنزيل",
-  "hero.titleHighlight": "موسيقاك.",
+  "hero.titleHighlight": "نقل قوائم التشغيل.",
   "hero.titleRest": "أينما تستمع.",
-  "hero.subtitle": "نقل ومزامنة قوائم التشغيل بين Apple Music وSpotify وYouTube Music — انقل من سبوتيفاي إلى أبل أو أي اتجاه آخر، ثم حافظ على التوافق تلقائياً.",
+  "hero.subtitle": "انقل قوائم التشغيل وزامن بين Apple Music وSpotify وYouTube Music — انتقل من Spotify إلى Apple أو أي خدمة أخرى وابقِ كل شيء متزامنًا تلقائيًا.",
   "cta.downloadAria": "تنزيل من متجر التطبيقات",
   "lede.mixportIs": "ميكس بورت هو <em>أسهل</em> طريقة لـ...",
   "perks.transfer.title": "انقل موسيقاك",
@@ -133,5 +133,9 @@
   "terms.changes.heading": "تغييرات على هذه الشروط",
   "terms.changes.body": "قد نقوم بتحديث هذه الشروط من وقت لآخر. استمرار استخدامك للخدمة يعني قبول الشروط المحدثة.",
   "terms.contact.heading": "اتصال",
-  "terms.contact.body": "أسئلة؟ أرسل بريدًا إلى <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>."
+  "terms.contact.body": "أسئلة؟ أرسل بريدًا إلى <a href=\"mailto:wes@hagerlabs.com\">support@hagerlabs.com</a>.",
+  "seo.home.title": "Mixport — نقل قوائم التشغيل ومزامنة الموسيقى",
+  "seo.home.description": "انقل قوائم التشغيل وزامن الموسيقى بين Apple Music وSpotify وYouTube Music. انتقل سريعًا من Spotify إلى Apple، واستخدم النقل السحابي، وابقِ قوائم التشغيل متزامنة تلقائيًا.",
+  "seo.pro.title": "Mixport Pro — نقل أسرع لقوائم التشغيل",
+  "seo.pro.description": "يفتح Mixport Pro نقلًا سحابيًا سريعًا، ومراقبة قوائم التشغيل، وأدوات متميزة لـ Apple Music وSpotify وYouTube Music."
 }
